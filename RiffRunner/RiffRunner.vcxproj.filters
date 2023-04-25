@@ -13,16 +13,22 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Arquivos de Origem\dependencies">
+      <UniqueIdentifier>{7c3a9c1f-9e10-4b50-83e3-7c292847300f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\stb.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="src\menu.cpp">
       <Filter>Arquivos de Origem</Filter>
+    </ClCompile>
+    <ClCompile Include="src\stb.cpp">
+      <Filter>Arquivos de Origem\dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\glad.c">
+      <Filter>Arquivos de Origem\dependencies</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
