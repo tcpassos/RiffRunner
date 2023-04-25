@@ -134,7 +134,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\stb.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\menu.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
