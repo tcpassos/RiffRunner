@@ -34,3 +34,7 @@
 # Project files
 .vs
 x64
+*.pdb
+*.idb
+*.tlog
+*.log
