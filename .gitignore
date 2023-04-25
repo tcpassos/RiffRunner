@@ -38,3 +38,8 @@ x64
 *.idb
 *.tlog
 *.log
+*.db
+*.recipe
+*.ilk
+*.log
+*.tlog
