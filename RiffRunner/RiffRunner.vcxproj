@@ -136,10 +136,18 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
+    <ClCompile Include="src\resource_manager.cpp" />
+    <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\stb.cpp" />
+    <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\resource_manager.h" />
+    <ClInclude Include="include\shader.h" />
+    <ClInclude Include="include\texture.h" />
+    <ClInclude Include="include\text_renderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <text_renderer.h>
 
 #define MAX_NUMBER_OF_ITEMS 3
 
@@ -22,6 +23,8 @@ public:
     int getItem() { return selectedItem; }
 
 private:
+    TextRenderer* textRenderer;
+
     int selectedItem;
     vector<string> menuItens;
 

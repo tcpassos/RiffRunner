@@ -8,6 +8,8 @@ Menu::Menu(int screenWidth, int screenHeigth, int initialPosX, int initialPosY) 
     posX = initialPosX;
     posY = initialPosY;
     selectedItem = 0;
+    textRenderer = new TextRenderer(width, heigth);
+    textRenderer->Load("resources/fonts/TribalBox.ttf", 24);
 }
 
 void Menu::addItem(string item) {
@@ -26,7 +28,7 @@ void Menu::init() {
 
 void Menu::draw()
 {
-    // TODO: Implement
+    // textRenderer->RenderText("test", 0, 0, 1.0f);
 }
 void Menu::moveUp()
 {
