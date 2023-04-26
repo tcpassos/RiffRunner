@@ -3,7 +3,7 @@
 #include <stb/stb_image.h>
 #include "text_renderer.h"
 #include "resource_manager.h"
-#include "menu.h"
+#include "scenes.h"
 
 int main(void) {
     glfwInit();
@@ -32,28 +32,12 @@ int main(void) {
     glfwSetWindowIcon(window, 1, icons);
     stbi_image_free(icons[0].pixels);
 
-    //TextRenderer* textRenderer;
-    //textRenderer = new TextRenderer(800, 600);
-    //textRenderer->Load("resources/fonts/TribalBox.TTF", 40);
+    // Start the game from the main menu
+    SceneId sceneId = SceneMenu;
 
     // Run in loop until window is closed
-    while (!glfwWindowShouldClose(window)) {
-        // Render
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //textRenderer->RenderText("Batata e bom d+", 5.0f, 5.0f, 1.0f);
-
-        Menu menu(800, 600, 0, 0);
-        menu.addItem("<Iniciar>");
-        menu.addItem("<Opcoes>");
-        menu.addItem("<Sair>");
-        menu.draw();
-
-        // Swap front and back buffers
-        glfwSwapBuffers(window);
-        // Poll for and process events
-        glfwPollEvents();
+    while (!glfwWindowShouldClose(window) && sceneId != SceneExit) {
+        sceneId = acceptMenu(window);
     }
 
     // Delete all resources as loaded using the resource manager

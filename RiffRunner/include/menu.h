@@ -16,8 +16,7 @@ public:
     void addItem(string item);
     void setString(string str, int pos);
     void setSize(int newSize) { size = newSize; }
-    void init();
-    void draw(/* receive window */);
+    void draw();
     void moveUp();
     void moveDown();
     int getItem() { return selectedItem; }
