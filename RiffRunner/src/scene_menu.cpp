@@ -7,27 +7,36 @@
 void key_callback_menu(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
 
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, GL_TRUE);
-    }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
         menu->moveUp();
     }
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
         menu->moveDown();
     }
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+        menu->enter(menu->getItem());
+    }
+    if ((key == GLFW_KEY_ESCAPE || key == GLFW_KEY_BACKSPACE) && action == GLFW_PRESS) {
+        menu->back();
+    }
 }
 
 SceneId acceptMenu(GLFWwindow* window) {
-    // Menu config
-    Menu menu(800, 600, 0, 0);
-    menu.addItem("<Iniciar>");
-    menu.addItem("<Opcoes>");
-    menu.addItem("<Sair>");
+    // Settings menu
+    Menu settingsMenu(800, 600, 0, 0);
+    settingsMenu.addItem("<Opcoes graficas>");
+    settingsMenu.addItem("<Audio>");
+    settingsMenu.addItem("<Voltar>");
+
+    // Main menu
+    Menu mainMenu(800, 600, 0, 0);
+    mainMenu.addItem("<Iniciar>");
+    mainMenu.addItem("<Opcoes>", settingsMenu);
+    mainMenu.addItem("<Sair>");
 
     // Menu key callback
     glfwSetKeyCallback(window, key_callback_menu);
-    glfwSetWindowUserPointer(window, &menu);
+    glfwSetWindowUserPointer(window, &mainMenu);
 
     // Render loop
     while (!glfwWindowShouldClose(window)) {
@@ -35,7 +44,7 @@ SceneId acceptMenu(GLFWwindow* window) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        menu.draw();
+        mainMenu.draw();
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
