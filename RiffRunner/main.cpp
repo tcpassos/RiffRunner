@@ -3,6 +3,7 @@
 #include <stb/stb_image.h>
 #include "text_renderer.h"
 #include "resource_manager.h"
+#include "menu.h"
 
 int main(void) {
     glfwInit();
@@ -31,9 +32,9 @@ int main(void) {
     glfwSetWindowIcon(window, 1, icons);
     stbi_image_free(icons[0].pixels);
 
-    TextRenderer* textRenderer;
-    textRenderer = new TextRenderer(800, 600);
-    textRenderer->Load("resources/fonts/OCRAEXT.TTF", 40);
+    //TextRenderer* textRenderer;
+    //textRenderer = new TextRenderer(800, 600);
+    //textRenderer->Load("resources/fonts/TribalBox.TTF", 40);
 
     // Run in loop until window is closed
     while (!glfwWindowShouldClose(window)) {
@@ -41,7 +42,13 @@ int main(void) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        textRenderer->RenderText("Test", 5.0f, 5.0f, 1.0f);
+        //textRenderer->RenderText("Batata e bom d+", 5.0f, 5.0f, 1.0f);
+
+        Menu menu(800, 600, 0, 0);
+        menu.addItem("<Iniciar>");
+        menu.addItem("<Opcoes>");
+        menu.addItem("<Sair>");
+        menu.draw();
 
         // Swap front and back buffers
         glfwSwapBuffers(window);

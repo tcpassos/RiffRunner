@@ -37,4 +37,6 @@ public:
 private:
     // render state
     unsigned int VAO, VBO;
+    
+    unsigned int getCentralizedPosX(unsigned int posX, std::string text, float scale);
 };

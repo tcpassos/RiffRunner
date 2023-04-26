@@ -55,6 +55,13 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
         unsigned int texture;
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
+
+        // set texture options
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
         glTexImage2D(
             GL_TEXTURE_2D,
             0,
@@ -66,11 +73,7 @@ void TextRenderer::Load(std::string font, unsigned int fontSize)
             GL_UNSIGNED_BYTE,
             face->glyph->bitmap.buffer
         );
-        // set texture options
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        
 
         // now store character for later use
         Character character = {
@@ -92,8 +95,17 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
     // activate corresponding render state	
     this->TextShader.Use();
     this->TextShader.SetVector3f("textColor", color);
+
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(this->VAO);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    x = getCentralizedPosX(x, text, scale);
 
     // iterate through all characters
     std::string::const_iterator c;
@@ -123,10 +135,25 @@ void TextRenderer::RenderText(std::string text, float x, float y, float scale, g
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // be sure to use glBufferSubData and not glBufferData
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         // render quad
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 6);
         // now advance cursors for next glyph
         x += (ch.Advance >> 6) * scale; // bitshift by 6 to get value in pixels (1/64th times 2^6 = 64)
     }
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+unsigned int TextRenderer::getCentralizedPosX(unsigned int posX, std::string text, float scale) {
+
+    unsigned int textWidth = 0;
+
+    std::string::const_iterator c;
+    for (c = text.begin(); c != text.end(); c++)
+    {
+        Character ch = Characters[*c];
+        textWidth += ch.Size.x * scale;
+    }
+
+    return (posX - (textWidth / 2));
+
 }
