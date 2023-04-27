@@ -3,6 +3,7 @@
 
 #include "scenes.h"
 #include "menu.h"
+#include "audio_player.h"
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -49,6 +50,11 @@ SceneId acceptMenu(GLFWwindow* window) {
     // Menu key callback
     glfwSetKeyCallback(window, key_callback_menu);
     glfwSetWindowUserPointer(window, &menu);
+
+    // Menu music
+    AudioPlayer player;
+    player.loadAudio("resources/sound/menu.wav");
+    player.play();
 
     // Indicates that an item has been selected from the menu with enter
     bool enterKeyPressed = false;

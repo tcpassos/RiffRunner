@@ -110,7 +110,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;OpenAL\OpenAL32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -129,11 +129,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;OpenAL\OpenAL32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\audio_player.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="src\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\audio_player.h" />
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scenes.h" />
