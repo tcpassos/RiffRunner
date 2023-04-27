@@ -114,8 +114,8 @@ SceneId acceptMenu(GLFWwindow* window) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        menu->draw();
         menuImage->draw(window);
+        menu->draw();
 
         // Swap front and back buffers
         glfwSwapBuffers(window);

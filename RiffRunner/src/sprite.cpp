@@ -11,7 +11,7 @@ Sprite::Sprite() {
 }
 
 Sprite::~Sprite() {
-    glDeleteVertexArrays(1, &this->quadVAO);
+    glDeleteVertexArrays(1, &this->VAO);
 }
 
 void Sprite::draw(GLFWwindow* window) {
@@ -21,9 +21,9 @@ void Sprite::draw(GLFWwindow* window) {
     // Prepare transformations
     glm::mat4 model = glm::mat4(1.0f);
     model = glm::translate(model, glm::vec3(this->position, 0.0f));
-    //model = glm::translate(model, glm::vec3(0.5f * width, 0.5f * height, 0.0f)); // move origin of rotation to center of quad
-    //model = glm::rotate(model, glm::radians(rotate), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
-    //model = glm::translate(model, glm::vec3(-0.5f * width, -0.5f * height, 0.0f)); // move origin back
+    model = glm::translate(model, glm::vec3(0.5f * width, 0.5f * height, 0.0f)); // move origin of rotation to center of quad
+    model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.0f, 0.0f, 1.0f)); // then rotate
+    model = glm::translate(model, glm::vec3(-0.5f * width, -0.5f * height, 0.0f)); // move origin back
     model = glm::scale(model, glm::vec3(this->scale, 1.0f)); // last scale
 
     // Prepare shader
@@ -38,7 +38,7 @@ void Sprite::draw(GLFWwindow* window) {
     this->texture.Bind();
 
     // Render textured quad
-    glBindVertexArray(this->quadVAO);
+    glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
 }
@@ -57,15 +57,15 @@ void Sprite::initRenderData() {
         1.0f, 0.0f, 1.0f, 0.0f
     };
 
-    glGenVertexArrays(1, &this->quadVAO);
+    glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindVertexArray(this->quadVAO);
-    glEnableVertexAttribArray(0);
+    glBindVertexArray(this->VAO);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
