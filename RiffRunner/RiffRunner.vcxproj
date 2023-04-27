@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="src\audio_player.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="include\shader.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\text_renderer.h" />
+    <ClInclude Include="SpriteRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
