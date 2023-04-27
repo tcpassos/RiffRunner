@@ -140,7 +140,7 @@
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene_menu.cpp" />
     <ClCompile Include="src\shader.cpp" />
-    <ClCompile Include="src\sprite_renderer.cpp" />
+    <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\stb.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\text_renderer.cpp" />
@@ -151,7 +151,7 @@
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scenes.h" />
     <ClInclude Include="include\shader.h" />
-    <ClInclude Include="include\sprite_renderer.h" />
+    <ClInclude Include="include\sprite.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\text_renderer.h" />
   </ItemGroup>

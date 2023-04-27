@@ -1,9 +1,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "scenes.h"
 #include "menu.h"
 #include "audio_player.h"
+#include "resource_manager.h"
+#include "sprite.h"
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -56,6 +60,11 @@ SceneId acceptMenu(GLFWwindow* window) {
     menuMusic.loadAudio("resources/sound/menu.wav");
     menuMusic.play();
 
+    // Background image
+    Sprite* menuImage = new Sprite();
+    ResourceManager::LoadTexture("resources/img/menu.jpg", "menu");
+    menuImage->setTexture(ResourceManager::GetTexture("menu"));
+
     // Indicates that an item has been selected from the menu with enter
     bool enterKeyPressed = false;
 
@@ -106,6 +115,7 @@ SceneId acceptMenu(GLFWwindow* window) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         menu->draw();
+        menuImage->draw(window);
 
         // Swap front and back buffers
         glfwSwapBuffers(window);
