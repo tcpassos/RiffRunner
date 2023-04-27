@@ -44,11 +44,11 @@ bool AudioPlayer::loadAudio(const char* filePath) {
 
     char header[44];
     fread(header, 1, 44, file);
-    // Obter as informações de frequência e canais do cabeçalho do arquivo
+    // Get the frequency and channel information from the file header
     frequency = *(int*)(header + 24);
     channels = *(short*)(header + 22);
 
-   unsigned char* data = new unsigned char[size];
+    unsigned char* data = new unsigned char[size];
     fread(data, sizeof(char), size, file);
     fclose(file);
     // Configures OpenAL buffer parameters
@@ -58,7 +58,8 @@ bool AudioPlayer::loadAudio(const char* filePath) {
     } else {
         format = AL_FORMAT_MONO16;
     }
-    alBufferData(buffer, format, data, size, frequency);
+    size_t aligned_size = size - (size % 4);
+    alBufferData(buffer, format, data, aligned_size, frequency);
     delete[] data;
     // Generate the OpenAL source
     alGenSources(1, &source);
@@ -78,6 +79,10 @@ void AudioPlayer::play() {
 
 void AudioPlayer::pause() {
     alSourcePause(source);
+}
+
+void AudioPlayer::stop() {
+    alSourceStop(source);
 }
 
 void AudioPlayer::setVolume(float volume) {

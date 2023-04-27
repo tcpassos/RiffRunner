@@ -9,7 +9,7 @@ Menu::Menu(int screenWidth, int screenHeigth, int initialPosX, int initialPosY) 
     posY = initialPosY;
     selectedItem = 0;
     textRenderer = new TextRenderer(width, heigth);
-    textRenderer->Load("resources/fonts/TribalBox.ttf", 52);
+    textRenderer->Load("resources/fonts/TribalBox.ttf", 52);   
 }
 
 int Menu::addItem(string label) {
@@ -38,11 +38,17 @@ void Menu::draw() {
 }
 
 void Menu::moveUp() {
-    if (selectedItem - 1 >= 0)
+    if (selectedItem - 1 >= 0) {
         selectedItem--;
+        clickSound.loadAudio("resources/sound/click.wav");
+        clickSound.play();
+    }
 }
 
 void Menu::moveDown() {
-    if (selectedItem + 1 < menuItens.size())
+    if (selectedItem + 1 < menuItens.size()) {
         selectedItem++;
+        clickSound.loadAudio("resources/sound/click.wav");
+        clickSound.play();
+    }
 }

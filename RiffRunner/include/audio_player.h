@@ -11,6 +11,7 @@ public:
 	bool loadAudio(const char* filePath);
 	void play();
 	void pause();
+	void stop();
 	void setVolume(float volume);
 
 private:

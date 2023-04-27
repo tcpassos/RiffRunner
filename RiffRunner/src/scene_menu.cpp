@@ -52,9 +52,9 @@ SceneId acceptMenu(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &menu);
 
     // Menu music
-    AudioPlayer player;
-    player.loadAudio("resources/sound/menu.wav");
-    player.play();
+    AudioPlayer menuMusic;
+    menuMusic.loadAudio("resources/sound/menu.wav");
+    menuMusic.play();
 
     // Indicates that an item has been selected from the menu with enter
     bool enterKeyPressed = false;
