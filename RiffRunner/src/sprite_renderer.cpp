@@ -1,6 +1,6 @@
-#include "SpriteRenderer.h"
 #include <iostream>
 
+#include "sprite_renderer.h"
 #include "resource_manager.h"
 
 // Fonte do shader para a renderização dos sprites
@@ -29,18 +29,16 @@ const char* FRAGMENT_SHADER_SOURCE =
 "   color = vec4(spriteColor, 1.0) * texture(spriteTexture, TexCoord);\n"
 "}\n";
 
-SpriteRenderer::SpriteRenderer(unsigned int spriteWidth, unsigned int spriteHeight)
-    : m_shaderProgram(0), VAO(0), VBO(0)
-{   
+SpriteRenderer::SpriteRenderer(unsigned int spriteWidth, unsigned int spriteHeight) : m_shaderProgram(0), VAO(0), VBO(0) {
     this->spriteShader = ResourceManager::LoadShader("resources/shaders/text_2d.vs", "resources/shaders/text_2d.fs", nullptr, "text");
-    this->spriteShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f), true);
+    this->spriteShader.SetMatrix4("projection", glm::ortho(0.0f, static_cast<float>(spriteWidth), static_cast<float>(spriteHeight), 0.0f), true);
     this->spriteShader.SetInteger("text", 0);
 
-    width = width;
-    height = height;
+    width = spriteHeight;
+    height = spriteHeight;
 }
-void SpriteRenderer::init()
-{
+
+void SpriteRenderer::init() {
     this->spriteShader.Use();
 
     // Cria o VAO
@@ -92,8 +90,7 @@ void SpriteRenderer::render(const glm::vec2& position, const glm::vec2& size, co
     glBindVertexArray(0);
 }
 
-unsigned int SpriteRenderer::compileShader(const char* shaderSource, unsigned int shaderType)
-{
+unsigned int SpriteRenderer::compileShader(const char* shaderSource, unsigned int shaderType) {
     // Cria o shader
     unsigned int shaderID = glCreateShader(shaderType);
 
@@ -114,8 +111,7 @@ unsigned int SpriteRenderer::compileShader(const char* shaderSource, unsigned in
     return shaderID;
 }
 
-void SpriteRenderer::linkShaderProgram(unsigned int vertexShaderID, unsigned int fragmentShaderID)
-{
+void SpriteRenderer::linkShaderProgram(unsigned int vertexShaderID, unsigned int fragmentShaderID) {
     // Cria o programa de shader
     m_shaderProgram = glCreateProgram();
 
