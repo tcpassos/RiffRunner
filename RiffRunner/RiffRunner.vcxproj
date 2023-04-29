@@ -138,7 +138,9 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
+    <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_menu.cpp" />
+    <ClCompile Include="src\scene_tests.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\stb.cpp" />
@@ -149,7 +151,7 @@
     <ClInclude Include="include\audio_player.h" />
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\resource_manager.h" />
-    <ClInclude Include="include\scenes.h" />
+    <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
     <ClInclude Include="include\sprite.h" />
     <ClInclude Include="include\texture.h" />

@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "scenes.h"
+#include "scene.h"
 #include "menu.h"
 #include "audio_player.h"
 #include "resource_manager.h"
@@ -61,9 +61,8 @@ SceneId acceptMenu(GLFWwindow* window) {
     menuMusic.play();
 
     // Background image
-    Sprite* menuImage = new Sprite();
-    ResourceManager::LoadTexture("resources/img/menu.jpg", "menu");
-    menuImage->setTexture(ResourceManager::GetTexture("menu"));
+    Sprite* menuImage = new Sprite(ResourceManager::LoadTexture("resources/img/menu.jpg", "menu"));
+    //menuImage->setPosition(glm::vec3(100, 100, 0));
 
     // Indicates that an item has been selected from the menu with enter
     bool enterKeyPressed = false;

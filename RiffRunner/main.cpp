@@ -3,7 +3,7 @@
 #include <stb/stb_image.h>
 #include "text_renderer.h"
 #include "resource_manager.h"
-#include "scenes.h"
+#include "scene.h"
 
 int main(void) {
     glfwInit();
@@ -32,13 +32,8 @@ int main(void) {
     glfwSetWindowIcon(window, 1, icons);
     stbi_image_free(icons[0].pixels);
 
-    // Start the game from the main menu
-    SceneId sceneId = SceneMenu;
-
-    // Run in loop until window is closed
-    while (!glfwWindowShouldClose(window) && sceneId != SceneExit) {
-        sceneId = acceptMenu(window);
-    }
+    // Run scenes
+    accept(window, SceneMenu);
 
     // Delete all resources as loaded using the resource manager
     ResourceManager::Clear();

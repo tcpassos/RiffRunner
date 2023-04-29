@@ -10,27 +10,27 @@
 class Sprite {
 public:
     // Constructor (inits shaders/shapes)
-    Sprite();
+    Sprite(Texture2D texture);
     // Destructor
     ~Sprite();
 
     void setTexture(Texture2D texture) { this->texture = texture; }
     void setColor(glm::vec3 color) { this->color = color; }
-    void setPosition(float x, float y) { this->position.x = x; this->position.y = y; }
-    void setScale(float x, float y) { this->scale.x = x; this->scale.y = y; }
-    void setOrigin(float x, float y) { this->origin.x = x; this->origin.y = y; }
-    void setRotation(float rotation) { this->rotation = rotation; }
+    void setPosition(glm::vec3 position) { this->position = position; }
+    void setSize(glm::vec3 size) { this->size = size; }
+    void setOrigin(glm::vec3 origin) { this->origin = origin; }
+    void setRotation(glm::vec3 rotation) { this->rotation = rotation; }
     void draw(GLFWwindow* window);
 
 private:
     Texture2D texture;
     Shader shader;
-    unsigned int VAO;
+    GLuint VAO;
     glm::vec3 color;
-    glm::vec2 position;
-    glm::vec2 scale;
-    glm::vec2 origin;
-    float rotation;
+    glm::vec3 position;
+    glm::vec3 size;
+    glm::vec3 origin;
+    glm::vec3 rotation;
 
     // Initializes and configures the quad's buffer and vertex attributes
     void initRenderData();
