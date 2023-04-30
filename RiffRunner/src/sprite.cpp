@@ -4,6 +4,8 @@
 Sprite::Sprite(Texture2D texture) {
     this->shader = ResourceManager::LoadShader("resources/shaders/shader.vs", "resources/shaders/shader_texture.fs", nullptr, "sprite");
     this->texture = texture;
+                              // left   top   // width             // height
+    this->textureRect = glm::vec4(0.0f, 0.0f, this->texture.Width, this->texture.Height);
     this->color = glm::vec4(1.0f);
     this->position = glm::vec3(0.0f);
     this->size = glm::vec3(this->texture.Width, this->texture.Height, 1.0f);
@@ -14,6 +16,41 @@ Sprite::Sprite(Texture2D texture) {
 
 Sprite::~Sprite() {
     glDeleteVertexArrays(1, &this->VAO);
+}
+
+void Sprite::setTextureRect(glm::vec4 textureRect) {
+    this->textureRect = textureRect;
+
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+    
+    // Offsets
+    GLintptr offsetS = 3 * sizeof(GLfloat);
+    GLintptr offsetT = 4 * sizeof(GLfloat);
+
+    GLfloat textureCoord[] = {
+        //s	   t
+          0.0, 1.0, // top left
+          0.0, 0.0, // bottom left
+          1.0, 1.0, // top right
+          0.0, 0.0, // bottom left
+          1.0, 1.0, // top right
+          1.0, 0.0  // bottom right
+    };
+
+    // Top left
+    int TOP_LEFT_INDEX = 0;
+    glBufferSubData(GL_ARRAY_BUFFER, TOP_LEFT_INDEX * 6 * sizeof(GLfloat) + offsetS, sizeof(GLfloat), &textureCoord[TOP_LEFT_INDEX, 0]);
+    glBufferSubData(GL_ARRAY_BUFFER, TOP_LEFT_INDEX * 6 * sizeof(GLfloat) + offsetT, sizeof(GLfloat), &textureCoord[TOP_LEFT_INDEX, 1]);
+    
+    // Bottom left
+    int BOTTOM_LEFT_INDEX = 1;
+    glBufferSubData(GL_ARRAY_BUFFER, BOTTOM_LEFT_INDEX * 6 * sizeof(GLfloat) + offsetS, sizeof(GLfloat), &textureCoord[BOTTOM_LEFT_INDEX, 0]);
+    glBufferSubData(GL_ARRAY_BUFFER, BOTTOM_LEFT_INDEX * 6 * sizeof(GLfloat) + offsetT, sizeof(GLfloat), &textureCoord[BOTTOM_LEFT_INDEX, 1]);
+    BOTTOM_LEFT_INDEX = 3;
+    glBufferSubData(GL_ARRAY_BUFFER, BOTTOM_LEFT_INDEX * 6 * sizeof(GLfloat) + offsetS, sizeof(GLfloat), &textureCoord[BOTTOM_LEFT_INDEX, 0]);
+    glBufferSubData(GL_ARRAY_BUFFER, BOTTOM_LEFT_INDEX * 6 * sizeof(GLfloat) + offsetT, sizeof(GLfloat), &textureCoord[BOTTOM_LEFT_INDEX, 1]);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Sprite::draw(GLFWwindow* window) {
@@ -52,20 +89,19 @@ void Sprite::draw(GLFWwindow* window) {
 }
 
 void Sprite::initRenderData() {
-    GLuint VBO;
     GLfloat vertices[] = {
-       //x     y    z    s	 t
-         0.0,  1.0, 0.0, 0.0, 1.0,
-         0.0,  0.0, 0.0, 0.0, 0.0,
-         1.0,  1.0, 0.0, 1.0, 1.0,
-         0.0,  0.0, 0.0, 0.0, 0.0,
-         1.0,  1.0, 0.0, 1.0, 1.0,
-         1.0,  0.0, 0.0, 1.0, 0.0
+       //x     y    z    s	  t
+         0.0,  1.0, 0.0, 0.0, 1.0, // top left
+         0.0,  0.0, 0.0, 0.0, 0.0, // bottom left
+         1.0,  1.0, 0.0, 1.0, 1.0, // top right
+         0.0,  0.0, 0.0, 0.0, 0.0, // bottom left
+         1.0,  1.0, 0.0, 1.0, 1.0, // top right
+         1.0,  0.0, 0.0, 1.0, 0.0  // bottom right
     };
 
     // VBO
-    glGenBuffers(1, &VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glGenBuffers(1, &this->VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // VAO
