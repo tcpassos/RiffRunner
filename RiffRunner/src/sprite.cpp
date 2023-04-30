@@ -20,20 +20,19 @@ void Sprite::draw(GLFWwindow* window) {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
+    // Bind VAO
+    glBindVertexArray(this->VAO);
+
     // Prepare transformations
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
     glm::mat4 model = glm::mat4(1);
-    model = glm::translate(model, this->position);                                 // position
-    model = glm::translate(model, glm::vec3(0.5f * width, 0.5f * height, 0.0f));   // move origin of rotation to center of quad
     model = glm::rotate(model, rotation.x, glm::vec3(0.1f, 0.0f, 0.0f));           // rotation x
     model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));           // rotation y
     model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));           // rotation z
-    model = glm::translate(model, glm::vec3(-0.5f * width, -0.5f * height, 0.0f)); // move origin back
+    model = glm::translate(model, glm::vec3(0.5f * width, 0.5f * height, 0.0f));   // move origin of rotation to center of quad
+    //model = glm::translate(model, glm::vec3(-0.5f * width, -0.5f * height, 0.0f)); // move origin back
+    model = glm::translate(model, this->position);                                 // position
     model = glm::scale(model, this->size);                                         // resize
-
-    // Prepare texture
-    glActiveTexture(GL_TEXTURE0);
-    texture.Bind();
 
     // Prepare shader
     this->shader.Use();
@@ -41,9 +40,13 @@ void Sprite::draw(GLFWwindow* window) {
     this->shader.SetMatrix4("model", model);
     this->shader.SetInteger("texBuff", 0);
 
-    // Draw sprite
-    glBindVertexArray(VAO);
+    // Prepare texture
+    glActiveTexture(GL_TEXTURE0);
+    this->texture.Bind();
+
+    // Render textured quad
     glDrawArrays(GL_TRIANGLES, 0, 6);
+
     glBindVertexArray(0);
 }
 
@@ -51,12 +54,12 @@ void Sprite::initRenderData() {
     GLuint VBO;
     GLfloat vertices[] = {
         //x   y     z    r    g    b     s	   t
-        -1.0,  1.0, 0.0, 1.0, 0.0, 0.0, -1.0,  1.0,
-         1.0,  1.0, 0.0, 0.0, 1.0, 0.0,  1.0,  1.0,
-         1.0, -1.0, 0.0, 0.0, 0.0, 1.0,  1.0, -1.0,
-        -1.0, -1.0, 0.0, 0.0, 1.0, 0.0, -1.0, -1.0,
-        -1.0,  1.0, 0.0, 1.0, 0.0, 0.0, -1.0,  1.0,
-         1.0, -1.0, 0.0, 0.0, 0.0, 1.0,  1.0, -1.0
+        -0.5,  0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, //v0
+        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
+         0.5,  0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
+        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
+         0.5,  0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
+         0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0  //v3
     };
 
     // VBO
@@ -80,7 +83,6 @@ void Sprite::initRenderData() {
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
 
-    // Unbind buffers
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
