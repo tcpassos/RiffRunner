@@ -26,12 +26,12 @@ void Sprite::draw(GLFWwindow* window) {
     // Prepare transformations
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
     glm::mat4 model = glm::mat4(1);
-    model = glm::rotate(model, rotation.x, glm::vec3(0.1f, 0.0f, 0.0f));           // rotation x
+    model = glm::translate(model, this->position);                                 // position
+    model = glm::translate(model, glm::vec3(0.5f * width, 0.5f * height, 0.0f));   // move origin of rotation to center of quad
+    model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));           // rotation x
     model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));           // rotation y
     model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));           // rotation z
-    model = glm::translate(model, glm::vec3(0.5f * width, 0.5f * height, 0.0f));   // move origin of rotation to center of quad
-    //model = glm::translate(model, glm::vec3(-0.5f * width, -0.5f * height, 0.0f)); // move origin back
-    model = glm::translate(model, this->position);                                 // position
+    model = glm::translate(model, glm::vec3(-0.5f * width, -0.5f * height, 0.0f)); // move origin back
     model = glm::scale(model, this->size);                                         // resize
 
     // Prepare shader
@@ -53,13 +53,13 @@ void Sprite::draw(GLFWwindow* window) {
 void Sprite::initRenderData() {
     GLuint VBO;
     GLfloat vertices[] = {
-        //x   y     z    r    g    b     s	   t
-        -0.5,  0.5, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, //v0
-        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
-         0.5,  0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
-        -0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
-         0.5,  0.5, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
-         0.5, -0.5, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0  //v3
+       //x    y    z    r    g    b    s	 t
+         0.0,  1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, //v0
+         0.0,  0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
+         1.0,  1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
+         0.0,  0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
+         1.0,  1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
+         1.0,  0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0  //v3
     };
 
     // VBO

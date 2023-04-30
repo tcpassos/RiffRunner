@@ -15,7 +15,7 @@ SceneId acceptTest(GLFWwindow* window) {
     Texture2D texture = ResourceManager::LoadTexture("resources/img/menu.jpg", "menu");
     Sprite sprite(texture);
 
-    sprite.setSize(glm::vec3(40, 30, 0));
+    //sprite.setSize(glm::vec3(80, 60, 0));
 
     int x = 0;
 
@@ -41,7 +41,7 @@ SceneId acceptTest(GLFWwindow* window) {
         }
 
         //sprite.draw(window);
-        sprite.setPosition(glm::vec3(x, 100, 0));
+        //sprite.setPosition(glm::vec3(x, 0, 0));
         sprite.draw(window);
 
         // ==========================================================
