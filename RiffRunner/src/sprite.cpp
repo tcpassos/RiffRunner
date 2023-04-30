@@ -4,7 +4,7 @@
 Sprite::Sprite(Texture2D texture) {
     this->shader = ResourceManager::LoadShader("resources/shaders/shader.vs", "resources/shaders/shader_texture.fs", nullptr, "sprite");
     this->texture = texture;
-    this->color = glm::vec3(1.0f);
+    this->color = glm::vec4(1.0f);
     this->position = glm::vec3(0.0f);
     this->size = glm::vec3(this->texture.Width, this->texture.Height, 1.0f);
     this->origin = glm::vec3(0.0f);
@@ -38,6 +38,7 @@ void Sprite::draw(GLFWwindow* window) {
     this->shader.Use();
     this->shader.SetMatrix4("projection", projection);
     this->shader.SetMatrix4("model", model);
+    this->shader.SetVector4f("texColor", this->color);
     this->shader.SetInteger("texBuff", 0);
 
     // Prepare texture
@@ -53,13 +54,13 @@ void Sprite::draw(GLFWwindow* window) {
 void Sprite::initRenderData() {
     GLuint VBO;
     GLfloat vertices[] = {
-       //x    y    z    r    g    b    s	 t
-         0.0,  1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, //v0
-         0.0,  0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
-         1.0,  1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
-         0.0,  0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, //v1
-         1.0,  1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, //v2
-         1.0,  0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0  //v3
+       //x     y    z    s	 t
+         0.0,  1.0, 0.0, 0.0, 1.0,
+         0.0,  0.0, 0.0, 0.0, 0.0,
+         1.0,  1.0, 0.0, 1.0, 1.0,
+         0.0,  0.0, 0.0, 0.0, 0.0,
+         1.0,  1.0, 0.0, 1.0, 1.0,
+         1.0,  0.0, 0.0, 1.0, 0.0
     };
 
     // VBO
@@ -72,16 +73,12 @@ void Sprite::initRenderData() {
     glBindVertexArray(this->VAO);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 8 * sizeof(GLfloat), (GLvoid*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_TRUE, 5 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
 
-    // Color attribute
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(1);
-
     // Texture coord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);

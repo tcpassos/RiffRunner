@@ -15,7 +15,7 @@ public:
     ~Sprite();
 
     void setTexture(Texture2D texture) { this->texture = texture; }
-    void setColor(glm::vec3 color) { this->color = color; }
+    void setColor(glm::vec4 color) { this->color = color; }
     void setPosition(glm::vec3 position) { this->position = position; }
     void setSize(glm::vec3 size) { this->size = size; }
     void setOrigin(glm::vec3 origin) { this->origin = origin; }
@@ -26,7 +26,7 @@ private:
     Texture2D texture;
     Shader shader;
     GLuint VAO;
-    glm::vec3 color;
+    glm::vec4 color;
     glm::vec3 position;
     glm::vec3 size;
     glm::vec3 origin;
