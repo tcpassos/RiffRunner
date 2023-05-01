@@ -109,7 +109,6 @@ SceneId acceptMenu(GLFWwindow* window) {
                 }
                 break;
             }
-
         } else if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE) {
             enterKeyPressed = false;
         }

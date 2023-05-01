@@ -4,8 +4,7 @@
 Sprite::Sprite(Texture2D texture) {
     this->shader = ResourceManager::LoadShader("resources/shaders/shader.vs", "resources/shaders/shader_texture.fs", nullptr, "sprite");
     this->texture = texture;
-                              // Top left               Top right              Bottom left            // Bottom right
-    this->textureRect = new Rect(glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f));
+    this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.Width, this->texture.Height));
     this->color = glm::vec4(1.0f);
     this->position = glm::vec3(0.0f);
     this->size = glm::vec2(this->texture.Width, this->texture.Height);
@@ -18,14 +17,14 @@ Sprite::~Sprite() {
     glDeleteVertexArrays(1, &this->VAO);
 }
 
-void Sprite::setTextureRect(Rect textureRect) {
+void Sprite::setTextureRect(Rect &textureRect) {
     this->textureRect = &textureRect;
     
     // Normalize vertices
-    glm::vec2 topLeft = textureRect.topLeft / this->size;
-    glm::vec2 topRight = textureRect.topRight / this->size;
-    glm::vec2 bottomLeft = textureRect.bottomLeft / this->size;
-    glm::vec2 bottomRight = textureRect.bottomRight / this->size;
+    glm::vec2 topLeft = glm::vec2(textureRect.left / this->size.x, textureRect.top / this->size.y);
+    glm::vec2 topRight = glm::vec2(textureRect.width / this->size.x, textureRect.top / this->size.y);
+    glm::vec2 bottomLeft = glm::vec2(textureRect.left / this->size.x, textureRect.height / this->size.y);
+    glm::vec2 bottomRight = glm::vec2(textureRect.width / this->size.x, textureRect.height / this->size.y);
 
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 

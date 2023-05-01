@@ -16,7 +16,8 @@ public:
     ~Sprite();
 
     void setTexture(Texture2D texture) { this->texture = texture; }
-    void setTextureRect(Rect textureRect);
+    void setTextureRect(Rect &textureRect);
+    Rect& getTextureRect() { return *this->textureRect; };
     void setColor(glm::vec4 color) { this->color = color; }
     void setPosition(glm::vec3 position) { this->position = position; }
     void setSize(glm::vec2 size) { this->size = size; }
