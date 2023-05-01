@@ -68,8 +68,6 @@ SceneId acceptMenu(GLFWwindow* window) {
 
     // Background image
     Sprite* menuImage = new Sprite(ResourceManager::LoadTexture("resources/img/menu.jpg", "menu"));
-    //Rect* textureRect = new Rect(glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f));
-    //menuImage->setTextureRect(*textureRect);
 
     // Indicates that an item has been selected from the menu with enter
     bool enterKeyPressed = false;

@@ -19,7 +19,7 @@ public:
     void setTextureRect(Rect textureRect);
     void setColor(glm::vec4 color) { this->color = color; }
     void setPosition(glm::vec3 position) { this->position = position; }
-    void setSize(glm::vec3 size) { this->size = size; }
+    void setSize(glm::vec2 size) { this->size = size; }
     void setRotation(glm::vec3 rotation) { this->rotation = rotation; }
     void setOrigin(glm::vec3 origin) { this->origin = origin; }
     void draw(GLFWwindow* window);
@@ -32,7 +32,7 @@ private:
     Rect* textureRect;
     glm::vec4 color;
     glm::vec3 position;
-    glm::vec3 size;
+    glm::vec2 size;
     glm::vec3 origin;
     glm::vec3 rotation;
 

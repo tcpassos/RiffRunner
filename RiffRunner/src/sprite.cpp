@@ -8,7 +8,7 @@ Sprite::Sprite(Texture2D texture) {
     this->textureRect = new Rect(glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 1.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f));
     this->color = glm::vec4(1.0f);
     this->position = glm::vec3(0.0f);
-    this->size = glm::vec3(this->texture.Width, this->texture.Height, 1.0f);
+    this->size = glm::vec2(this->texture.Width, this->texture.Height);
     this->origin = glm::vec3(0.0f);
     this->rotation = glm::vec3(0.0f);
     this->initRenderData();
@@ -20,18 +20,25 @@ Sprite::~Sprite() {
 
 void Sprite::setTextureRect(Rect textureRect) {
     this->textureRect = &textureRect;
+    
+    // Normalize vertices
+    glm::vec2 topLeft = textureRect.topLeft / this->size;
+    glm::vec2 topRight = textureRect.topRight / this->size;
+    glm::vec2 bottomLeft = textureRect.bottomLeft / this->size;
+    glm::vec2 bottomRight = textureRect.bottomRight / this->size;
+
     glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 
     // Top left
-    updateTextureCoord(0, textureRect.topLeft.x, textureRect.topLeft.y);
-    // Bottom left
-    updateTextureCoord(1, textureRect.bottomLeft.x, textureRect.bottomLeft.y);
-    updateTextureCoord(3, textureRect.bottomLeft.x, textureRect.bottomLeft.y);
+    updateTextureCoord(0, topLeft.x, topLeft.y);
+    updateTextureCoord(5, topLeft.x, topLeft.y);
     // Top right
-    updateTextureCoord(2, textureRect.topRight.x, textureRect.topRight.y);
-    updateTextureCoord(4, textureRect.topRight.x, textureRect.topRight.y);
+    updateTextureCoord(4, topRight.x, topRight.y);
+    // Bottom left
+    updateTextureCoord(1, bottomLeft.x, bottomLeft.y);
     // Bottom right
-    updateTextureCoord(5, textureRect.bottomRight.x, textureRect.bottomRight.y);
+    updateTextureCoord(2, bottomRight.x, bottomRight.y);
+    updateTextureCoord(3, bottomRight.x, bottomRight.y);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -59,7 +66,7 @@ void Sprite::draw(GLFWwindow* window) {
     model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));                         // rotation y
     model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));                         // rotation z
     //model = glm::translate(model, glm::vec3(-this->origin.x, -this->origin.y, -this->origin.z)); // reset origin
-    model = glm::scale(model, this->size);                                                       // resize
+    model = glm::scale(model, glm::vec3(this->size, 1.0f));                                      // resize
 
     // Prepare shader
     this->shader.Use();
@@ -81,12 +88,13 @@ void Sprite::draw(GLFWwindow* window) {
 void Sprite::initRenderData() {
     GLfloat vertices[] = {
        //x     y    z    s	  t
-         0.0,  1.0, 0.0, 0.0, 1.0, // top left
-         0.0,  0.0, 0.0, 0.0, 0.0, // bottom left
-         1.0,  1.0, 0.0, 1.0, 1.0, // top right
-         0.0,  0.0, 0.0, 0.0, 0.0, // bottom left
-         1.0,  1.0, 0.0, 1.0, 1.0, // top right
-         1.0,  0.0, 0.0, 1.0, 0.0  // bottom right
+         0.0,  0.0, 0.0, 0.0, 0.0, // top left
+         0.0,  1.0, 0.0, 0.0, 1.0, // bottom left
+         1.0,  1.0, 0.0, 1.0, 1.0, // bottom right
+         
+         1.0,  1.0, 0.0, 1.0, 1.0, // bottom right
+         1.0,  0.0, 0.0, 1.0, 0.0, // top right
+         0.0,  0.0, 0.0, 0.0, 0.0, // top left
     };
 
     // VBO
