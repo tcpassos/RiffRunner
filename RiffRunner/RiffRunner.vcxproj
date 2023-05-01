@@ -135,13 +135,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="scene_musicSelector.cpp" />
     <ClCompile Include="src\audio_player.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_menu.cpp" />
+    <ClCompile Include="src\scene_music_selector.cpp" />
     <ClCompile Include="src\scene_tests.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\sprite.cpp" />

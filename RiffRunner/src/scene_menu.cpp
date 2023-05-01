@@ -19,10 +19,10 @@ void key_callback_menu(GLFWwindow* window, int key, int scancode, int action, in
 
     // Navigation
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-        menu->moveUp();
+        menu->previous();
     }
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-        menu->moveDown();
+        menu->next();
     }
 }
 
@@ -30,14 +30,19 @@ void key_callback_menu(GLFWwindow* window, int key, int scancode, int action, in
 // Menu scene
 // ======================================================================================
 SceneId acceptMenu(GLFWwindow* window) {
+    
+    // Screen size
+    int width, height;
+    glfwGetWindowSize(window, &width, &height);
+
     // Main menu
-    Menu mainMenu(800, 600, 0, 0);
-                                   mainMenu.addItem("<Iniciar>");
+    Menu mainMenu(width, height, 0, 0);
+    const int MENU_MAIN_START    = mainMenu.addItem("<Iniciar>");
     const int MENU_MAIN_SETTINGS = mainMenu.addItem("<Opcoes>");
     const int MENU_MAIN_EXIT     = mainMenu.addItem("<Sair>");
 
     // Settings menu
-    Menu settingsMenu(800, 600, 0, 0);
+    Menu settingsMenu(width, height, 0, 0);
                                    settingsMenu.addItem("<Opcoes graficas>");
                                    settingsMenu.addItem("<Audio>");
     const int MENU_SETTINGS_BACK = settingsMenu.addItem("<Voltar>");
@@ -63,8 +68,8 @@ SceneId acceptMenu(GLFWwindow* window) {
 
     // Background image
     Sprite* menuImage = new Sprite(ResourceManager::LoadTexture("resources/img/menu.jpg", "menu"));
-    Rect* textureRect = new Rect(glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f));
-    menuImage->setTextureRect(*textureRect);
+    //Rect* textureRect = new Rect(glm::vec2(0.0f, 1.0f), glm::vec2(1.0f, 0.0f), glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 0.0f));
+    //menuImage->setTextureRect(*textureRect);
 
     // Indicates that an item has been selected from the menu with enter
     bool enterKeyPressed = false;
@@ -80,18 +85,21 @@ SceneId acceptMenu(GLFWwindow* window) {
             enterKeyPressed = true;
 
             // Get selected menu option index
-            int selected = menu->getItem();
+            int selected = menu->getItemIndex();
 
             switch (menuType) {
             /* MAIN MENU  --------------------------------- */
             case MenuTypeMain:
+                if (selected == MENU_MAIN_START) {
+                    return SceneMusicSelector;
+                    glfwSetWindowShouldClose(window, true);
                 // Enter settings menu
-                if (selected == MENU_MAIN_SETTINGS) {
+                } else if (selected == MENU_MAIN_SETTINGS) {
                     menuType = MenuTypeSettings;
                     menu = &settingsMenu;
                 // Exit program
                 } else if (selected == MENU_MAIN_EXIT) {
-                    glfwSetWindowShouldClose(window, true);
+                    return SceneExit;
                 }
                 break;
             /* SETTINGS MENU ------------------------------ */

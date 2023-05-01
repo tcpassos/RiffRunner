@@ -1,7 +1,7 @@
 #include "scene.h"
 
 void accept(GLFWwindow* window, SceneId id) {
-    while (!glfwWindowShouldClose(window) && id != SceneExit) {
+    while (!glfwWindowShouldClose(window)) {
         switch (id) {
         case SceneTest:
             id = acceptTest(window);
@@ -11,6 +11,9 @@ void accept(GLFWwindow* window, SceneId id) {
             break;
         case SceneMusicSelector:
             id = acceptMusicSelector(window);
+            break;
+        case SceneExit:
+            glfwSetWindowShouldClose(window, true);
             break;
         }
     }

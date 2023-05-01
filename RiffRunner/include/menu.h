@@ -11,13 +11,15 @@ using namespace std;
 class Menu
 {
 public:
-    Menu(int screenWidth, int screenHeight, int initialPosX = 0, int initialPosY = 0);
+    Menu(int screenWidth, int screenHeight, int initialPosX = 0, int initialPosY = 0, string font = "resources/fonts/TribalBox.ttf");
 
     int addItem(string label);
+    void previous();
+    void next();
+    void setAlignmentVertical() { this->isVertical = true; };
+    void setAlignmentHorizontal() { this->isVertical = false; };
+    int getItemIndex() { return selectedItem; }
     void draw();
-    void moveUp();
-    void moveDown();
-    int getItem() { return selectedItem; }
 
 private:
     TextRenderer* textRenderer;
@@ -28,6 +30,7 @@ private:
 
     int width;
     int heigth;
+    bool isVertical;
 
     int posX = 0;
     int posY = 0;

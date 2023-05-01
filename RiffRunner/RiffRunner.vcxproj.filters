@@ -57,7 +57,7 @@
     <ClCompile Include="src\scene.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="scene_musicSelector.cpp">
+    <ClCompile Include="src\scene_music_selector.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>

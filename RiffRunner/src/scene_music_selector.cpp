@@ -12,30 +12,44 @@
 #include <string.h>
 #include "audio_player.h"
 #include "text_renderer.h"
+#include "menu.h"
 
 namespace fs = std::filesystem;
 
+// ======================================================================================
+// Keyboard navigation keys callback
+// ======================================================================================
+void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
+
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+        menu->previous();
+    }
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+        menu->next();
+    }
+}
 
 // ======================================================================================
-// Test scene
+// Music selector scene
 // ======================================================================================
 SceneId acceptMusicSelector(GLFWwindow* window) {
 
+    // Screen size
     int width, height;
+    glfwGetWindowSize(window, &width, &height);
 
-    glfwGetFramebufferSize(window, &width, &height);
+    // Music selector menu
+    Menu musicSelectorMenu(width, height, width/2 - 30, 450, "resources/fonts/Queen of Clubs.otf");
+    musicSelectorMenu.setAlignmentHorizontal();
 
-    AudioPlayer click;
-    click.loadAudio("resources/sound/click.wav");
+    // Menu key callback
+    glfwSetKeyCallback(window, key_callback_music_selector);
+    glfwSetWindowUserPointer(window, &musicSelectorMenu);
 
-    TextRenderer textRenderer(width, height);
-    textRenderer.Load("resources/fonts/Queen of Clubs.otf", 45);
-
-    int cont_dir = 0;
-    int indice = 0;
+    // Load album covers
     std::vector<std::string> musicDir;
-    std::vector<Sprite> albumCoverSprite;
-
+    std::vector<Sprite> albumCovers;
     for (fs::recursive_directory_iterator it("resources\\music\\"), end; it != end; ++it) {
         std::string path = it->path().string();
         if (path.find("!") == std::string::npos) {
@@ -47,17 +61,19 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
                     cover.setOrigin(glm::vec3(-((texture.Width * 0.6) / 2), -(texture.Height * 0.6), 0.0));
                     cover.setPosition(glm::vec3(width/2, height/3*2, 0.0));
                     cover.setSize(glm::vec3(texture.Width*0.6, texture.Height * 0.6, 1));
-                    albumCoverSprite.push_back(cover);
+                    albumCovers.push_back(cover);
 
-                    musicDir.push_back(it->path().parent_path().filename().string());
+                    string musicName = it->path().parent_path().filename().string();
+                    musicDir.push_back(musicName);
+                    musicSelectorMenu.addItem(musicName);
                 }
             }
         }
     }
 
-    //background
-    Texture2D texture = ResourceManager::LoadTexture("resources/img/fundo.jpg", "fundo");
-    Sprite sprite(texture);
+    // Background
+    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/music_selector_background.jpg", "musicSelectorBackground");
+    Sprite backgroundImage(backgroundTexture);
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, width, height);
@@ -65,30 +81,16 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
 
         // Exit on ESC
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
-
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        {
-            indice--;
-            if (indice < 0) indice = musicDir.size() - 1;
-            click.play();
-        }
-
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        {
-            indice++;
-            if (indice > musicDir.size() - 1) indice = 0;
-            click.play();
-        }
+            return SceneMenu;
 
         // Clear color buffer
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //cor de fundo
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        sprite.draw(window);
-        albumCoverSprite[indice].draw(window);
+        backgroundImage.draw(window);
+        albumCovers[musicSelectorMenu.getItemIndex()].draw(window);
+        musicSelectorMenu.draw();
 
-        textRenderer.RenderText(musicDir[indice], width/2, height/5*4, 1.0f, glm::vec3{ 1.0f, 1.0f, 1.0f });
         // ==========================================================
         // Switch buffers
         glfwSwapBuffers(window);
