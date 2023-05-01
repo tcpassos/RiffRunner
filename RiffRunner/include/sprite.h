@@ -6,6 +6,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "texture.h"
 #include "shader.h"
+#include "rect.h"
 
 class Sprite {
 public:
@@ -15,7 +16,7 @@ public:
     ~Sprite();
 
     void setTexture(Texture2D texture) { this->texture = texture; }
-    void setTextureRect(glm::vec4 textureRect);
+    void setTextureRect(Rect textureRect);
     void setColor(glm::vec4 color) { this->color = color; }
     void setPosition(glm::vec3 position) { this->position = position; }
     void setSize(glm::vec3 size) { this->size = size; }
@@ -28,7 +29,7 @@ private:
     GLuint VBO;
     GLuint VAO;
     Texture2D texture;
-    glm::vec4 textureRect;
+    Rect* textureRect;
     glm::vec4 color;
     glm::vec3 position;
     glm::vec3 size;
@@ -37,4 +38,5 @@ private:
 
     // Initializes and configures the quad's buffer and vertex attributes
     void initRenderData();
+    void updateTextureCoord(int index, float x, float y);
 };

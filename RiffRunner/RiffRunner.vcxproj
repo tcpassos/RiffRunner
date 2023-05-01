@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="include\audio_player.h" />
     <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\rect.h" />
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
