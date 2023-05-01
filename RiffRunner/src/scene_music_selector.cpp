@@ -48,7 +48,6 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &musicSelectorMenu);
 
     // Load album covers
-    std::vector<std::string> musicDir;
     std::vector<Sprite> albumCovers;
     for (fs::recursive_directory_iterator it("resources\\music\\"), end; it != end; ++it) {
         std::string path = it->path().string();
@@ -56,15 +55,16 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
 
             if (path.find("album.") != std::string::npos) {
                 if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") ) {
-                    Texture2D texture = ResourceManager::LoadTexture(("resources/music/" + it->path().parent_path().filename().string() + "/album.png").c_str(), it->path().parent_path().filename().string().c_str());
-                    Sprite cover(texture);
-                    cover.setOrigin(glm::vec3(-((texture.Width * 0.6) / 2), -(texture.Height * 0.6), 0.0));
-                    cover.setPosition(glm::vec3(width/2, height/3*2, 0.0));
-                    cover.setSize(glm::vec3(texture.Width*0.6, texture.Height * 0.6, 1));
+                    string musicName = it->path().parent_path().filename().string();
+                    Texture2D coverTexture = ResourceManager::LoadTexture(("resources/music/" + musicName + "/album.png").c_str(), musicName);
+                    
+                    Sprite cover(coverTexture);
+                    float coverWidth = width * 0.4;
+                    float coverHeight = height * 0.5;
+                    cover.setPosition(glm::vec3((width / 2) - (coverWidth / 2), height/6, 0.0));
+                    cover.setSize(glm::vec3(coverWidth, coverHeight, 1));
                     albumCovers.push_back(cover);
 
-                    string musicName = it->path().parent_path().filename().string();
-                    musicDir.push_back(musicName);
                     musicSelectorMenu.addItem(musicName);
                 }
             }

@@ -23,6 +23,12 @@ public:
     void setSize(glm::vec2 size) { this->size = size; }
     void setRotation(glm::vec3 rotation) { this->rotation = rotation; }
     void setOrigin(glm::vec3 origin) { this->origin = origin; }
+    void rotateX(float rotation) { this->rotation = glm::vec3(this->rotation.x + rotation, this->rotation.y, this->rotation.z); };
+    void rotateY(float rotation) { this->rotation = glm::vec3(this->rotation.x, this->rotation.y + rotation, this->rotation.z); };
+    void rotateZ(float rotation) { this->rotation = glm::vec3(this->rotation.x, this->rotation.y, this->rotation.z + rotation); };
+    void moveX(float movement) { this->position = glm::vec3(this->position.x + movement, this->position.y, this->position.z); }
+    void moveY(float movement) { this->position = glm::vec3(this->position.x, this->position.y + movement, this->position.z); }
+    void moveZ(float movement) { this->position = glm::vec3(this->position.x, this->position.y, this->position.z + movement); }
     void draw(GLFWwindow* window);
 
 private:
