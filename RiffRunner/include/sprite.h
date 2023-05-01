@@ -20,8 +20,8 @@ public:
     void setColor(glm::vec4 color) { this->color = color; }
     void setPosition(glm::vec3 position) { this->position = position; }
     void setSize(glm::vec3 size) { this->size = size; }
-    void setOrigin(glm::vec3 origin) { this->origin = origin; }
     void setRotation(glm::vec3 rotation) { this->rotation = rotation; }
+    void setOrigin(glm::vec3 origin) { this->origin = origin; }
     void draw(GLFWwindow* window);
 
 private:

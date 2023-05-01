@@ -58,7 +58,7 @@ void Sprite::draw(GLFWwindow* window) {
     model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));                         // rotation x
     model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));                         // rotation y
     model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));                         // rotation z
-    model = glm::translate(model, glm::vec3(-this->origin.x, -this->origin.y, -this->origin.z)); // reset origin
+    //model = glm::translate(model, glm::vec3(-this->origin.x, -this->origin.y, -this->origin.z)); // reset origin
     model = glm::scale(model, this->size);                                                       // resize
 
     // Prepare shader

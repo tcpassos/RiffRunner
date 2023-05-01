@@ -6,9 +6,11 @@
 typedef enum SceneId {
     SceneMenu,
     SceneTest,
+    SceneMusicSelector,
     SceneExit
 } SceneId;
 
 SceneId acceptMenu(GLFWwindow* window);
 SceneId acceptTest(GLFWwindow* window);
+SceneId acceptMusicSelector(GLFWwindow* window);
 void accept(GLFWwindow* window, SceneId id);

@@ -9,6 +9,9 @@ void accept(GLFWwindow* window, SceneId id) {
         case SceneMenu:
             id = acceptMenu(window);
             break;
+        case SceneMusicSelector:
+            id = acceptMusicSelector(window);
+            break;
         }
     }
 }
