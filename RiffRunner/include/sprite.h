@@ -19,16 +19,20 @@ public:
     void setTextureRect(Rect &textureRect);
     Rect& getTextureRect() { return *this->textureRect; };
     void setColor(glm::vec4 color) { this->color = color; }
-    void setPosition(glm::vec3 position) { this->position = position; }
+    glm::vec4 getColor() { return this->color; }
+    void setPosition(glm::vec2 position) { this->position = position; }
+    void setPosition(float x, float y) { this->position.x = x; this->position.y = y; }
+    glm::vec2 getPosition() { return this->position; }
+    void moveX(float movement) { this->position = glm::vec2(this->position.x + movement, this->position.y); }
+    void moveY(float movement) { this->position = glm::vec2(this->position.x, this->position.y + movement); }
     void setSize(glm::vec2 size) { this->size = size; }
-    void setRotation(glm::vec3 rotation) { this->rotation = rotation; }
-    void setOrigin(glm::vec3 origin) { this->origin = origin; }
-    void rotateX(float rotation) { this->rotation = glm::vec3(this->rotation.x + rotation, this->rotation.y, this->rotation.z); };
-    void rotateY(float rotation) { this->rotation = glm::vec3(this->rotation.x, this->rotation.y + rotation, this->rotation.z); };
-    void rotateZ(float rotation) { this->rotation = glm::vec3(this->rotation.x, this->rotation.y, this->rotation.z + rotation); };
-    void moveX(float movement) { this->position = glm::vec3(this->position.x + movement, this->position.y, this->position.z); }
-    void moveY(float movement) { this->position = glm::vec3(this->position.x, this->position.y + movement, this->position.z); }
-    void moveZ(float movement) { this->position = glm::vec3(this->position.x, this->position.y, this->position.z + movement); }
+    void setSize(float width, float height) { this->size.x = width; this->size.y = height; }
+    glm::vec2 getSize() { return this->size; }
+    void setRotation(float rotation) { this->rotation = rotation; }
+    float getRotation() { return this->rotation; }
+    void rotate(float rotation) { this->rotation = this->rotation + rotation; };
+    void setOrigin(glm::vec2 origin) { this->origin = origin; }
+    glm::vec2 getOrigin() { return this->origin; }
     void draw(GLFWwindow* window);
 
 private:
@@ -38,10 +42,10 @@ private:
     Texture2D texture;
     Rect* textureRect;
     glm::vec4 color;
-    glm::vec3 position;
+    glm::vec2 position;
     glm::vec2 size;
-    glm::vec3 origin;
-    glm::vec3 rotation;
+    glm::vec2 origin;
+    float rotation;
 
     // Initializes and configures the quad's buffer and vertex attributes
     void initRenderData();

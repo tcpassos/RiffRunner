@@ -6,10 +6,10 @@ Sprite::Sprite(Texture2D texture) {
     this->texture = texture;
     this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.Width, this->texture.Height));
     this->color = glm::vec4(1.0f);
-    this->position = glm::vec3(0.0f);
+    this->position = glm::vec2(0.0f);
     this->size = glm::vec2(this->texture.Width, this->texture.Height);
-    this->origin = glm::vec3(0.0f);
-    this->rotation = glm::vec3(0.0f);
+    this->origin = glm::vec2(0.0f);
+    this->rotation = 0.0f;
     this->initRenderData();
 }
 
@@ -59,12 +59,10 @@ void Sprite::draw(GLFWwindow* window) {
     // Prepare transformations
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
     glm::mat4 model = glm::mat4(1);
-    model = glm::translate(model, this->position);                                               // position
-    model = glm::translate(model, this->origin);                                                 // set origin
-    model = glm::rotate(model, rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));                         // rotation x
-    model = glm::rotate(model, rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));                         // rotation y
-    model = glm::rotate(model, rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));                         // rotation z
-    model = glm::translate(model, glm::vec3(-this->origin.x, -this->origin.y, -this->origin.z)); // reset origin
+    model = glm::translate(model, glm::vec3(this->position, 1.0));                               // position
+    model = glm::translate(model, glm::vec3(this->origin, 0.0));                                 // set origin
+    model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));                           // rotation z
+    model = glm::translate(model, glm::vec3(-this->origin.x, -this->origin.y, 0.0));             // reset origin
     model = glm::scale(model, glm::vec3(this->size, 1.0f));                                      // resize
 
     // Prepare shader

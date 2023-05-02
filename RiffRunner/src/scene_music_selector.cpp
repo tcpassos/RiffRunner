@@ -61,8 +61,8 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
                     Sprite cover(coverTexture);
                     float coverWidth = width * 0.4;
                     float coverHeight = height * 0.5;
-                    cover.setPosition(glm::vec3((width / 2) - (coverWidth / 2), height/6, 0.0));
-                    cover.setSize(glm::vec3(coverWidth, coverHeight, 1));
+                    cover.setPosition((width / 2) - (coverWidth / 2), height/6);
+                    cover.setSize(coverWidth, coverHeight);
                     albumCovers.push_back(cover);
 
                     musicSelectorMenu.addItem(musicName);

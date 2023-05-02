@@ -140,6 +140,7 @@
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\scene_game.cpp" />
     <ClCompile Include="src\scene_menu.cpp" />
     <ClCompile Include="src\scene_music_selector.cpp" />
     <ClCompile Include="src\scene_tests.cpp" />
