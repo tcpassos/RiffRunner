@@ -12,6 +12,9 @@ void accept(GLFWwindow* window, SceneId id) {
         case SceneMusicSelector:
             id = acceptMusicSelector(window);
             break;
+        case SceneDifficultySelector:
+            id = acceptDifficultySelector(window);;
+            break;
         case SceneGame:
             id = acceptGame(window);
             break;

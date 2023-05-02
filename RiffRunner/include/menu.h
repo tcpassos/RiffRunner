@@ -16,6 +16,8 @@ public:
     int addItem(string label);
     void previous();
     void next();
+    void previousDifficulty();
+    void nextDifficulty();
     void setAlignmentVertical() { this->isVertical = true; };
     void setAlignmentHorizontal() { this->isVertical = false; };
     int getItemIndex() { return selectedItem; }
@@ -35,4 +37,6 @@ private:
     int posX = 0;
     int posY = 0;
     int size = 52;
+
+    std::string getDifficultySound();
 };

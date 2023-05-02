@@ -83,6 +83,9 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             return SceneMenu;
 
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+            return SceneDifficultySelector;
+
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

@@ -57,3 +57,38 @@ void Menu::next() {
         clickSound.play();
     }
 }
+
+void Menu::previousDifficulty() {
+    if (selectedItem - 1 >= 0) {
+        selectedItem--;
+        clickSound.loadAudio(getDifficultySound().c_str());
+        clickSound.play();
+    }
+}
+
+void Menu::nextDifficulty() {
+    if (selectedItem + 1 < menuItens.size()) {
+        selectedItem++;
+        clickSound.loadAudio(getDifficultySound().c_str());
+        clickSound.play();
+    }
+}
+
+std::string Menu::getDifficultySound() {
+    switch (getItemIndex()) {
+        case 0:
+            return "resources/sound/izzi.wav";
+            break;
+        case 1:
+            return "resources/sound/family.wav";
+            break;
+        case 2:
+            return "resources/sound/serjao.wav";
+            break;
+        case 3:
+            return "resources/sound/chuck.wav";
+            break;
+    }
+
+}
+
