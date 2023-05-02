@@ -24,6 +24,15 @@ SceneId acceptGame(GLFWwindow* window) {
     // Performance indicator | Score | Special multiplier
     HUD hud;
 
+    // Track
+    Texture2D trackTexture = ResourceManager::LoadTexture("resources/img/track.jpg", "track");
+    Sprite track(trackTexture);
+    track.setOrigin(track.getSize() / 2.0f);
+    track.setPosition(windowWidth / 2, windowHeight / 2);
+    track.getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
+    track.getProjection()->moveY(-100.0f);
+    track.getProjection()->moveZ(-55.0f);
+
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
     Sprite flames(flamesTexture);
@@ -65,9 +74,20 @@ SceneId acceptGame(GLFWwindow* window) {
         glClear(GL_COLOR_BUFFER_BIT);
         // ==========================================================
 
+        // Background
         backgroundImage.draw(window);
+        
+        // HUD
         hud.draw(window);
 
+        // Track
+        Rect trackTextureRect = track.getTextureRect();
+        trackTextureRect.top--;
+        trackTextureRect.height--;
+        track.setTextureRect(trackTextureRect);        
+        track.draw(window);
+
+        // Flames
         if (flamesAnimation.isRunning()) {
             flames.draw(window);
         }

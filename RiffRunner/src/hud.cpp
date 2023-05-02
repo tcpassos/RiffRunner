@@ -16,7 +16,7 @@ HUD::HUD() {
 							  ResourceManager::LoadTexture("resources/img/hud/red.png", "performanceRed");
 	this->indicator = new Sprite(yellowTexture);
 	this->indicator->setSize(yellowTexture.Width * 0.55, yellowTexture.Height * 0.55);
-	this->indicator->setPosition(0, 300);
+	this->indicator->setPosition(0, 200);
 
 	// Pointer
 	Texture2D pointerTexture = ResourceManager::LoadTexture("resources/img/hud/pointer.png", "performancePointer");

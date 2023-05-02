@@ -2,7 +2,7 @@
 #include "resource_manager.h"
 
 Sprite::Sprite(Texture2D texture) {
-    this->shader = ResourceManager::LoadShader("resources/shaders/shader.vs", "resources/shaders/shader_texture.fs", nullptr, "sprite");
+    this->shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "sprite");
     this->texture = texture;
     this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.Width, this->texture.Height));
     this->color = glm::vec4(1.0f);
@@ -10,6 +10,7 @@ Sprite::Sprite(Texture2D texture) {
     this->size = glm::vec2(this->texture.Width, this->texture.Height);
     this->origin = glm::vec2(0.0f);
     this->rotation = 0.0f;
+    this->projection = new Projection(glm::vec3(0.0f, 0.0f, -172.0f), glm::vec3(0.0f));
     this->initRenderData();
 }
 
@@ -66,7 +67,20 @@ void Sprite::draw(GLFWwindow* window) {
     glBindVertexArray(this->VAO);
 
     // Prepare transformations
-    glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
+    glm::mat4 projection = glm::perspective(this->projection->getFieldOfView(), static_cast<float>(width) / static_cast<float>(height), this->projection->getNearPlane(), this->projection->getFarPlane());
+    glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, this->projection->getPosition().z), // cam position
+        glm::vec3(0.0f, 0.0f, 0.0f),                                                       // looking at
+        glm::vec3(0.0f, -1.0f, 0.0f));                                                     // up vector
+    // Cam rotation
+    view = glm::rotate(view, this->projection->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f)); // x
+    view = glm::rotate(view, this->projection->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f)); // y
+    view = glm::rotate(view, this->projection->getRotation().z, glm::vec3(1.0f, 0.0f, 1.0f)); // z
+    // Cam position
+    view = glm::translate(view, glm::vec3(this->projection->getPosition().x, this->projection->getPosition().y, 0.0f));
+    projection *= view;
+    // Centers the projection
+    projection = glm::translate(projection, glm::vec3(-width/2, -height/2, 0));
+
     glm::mat4 model = glm::mat4(1);
     model = glm::translate(model, glm::vec3(this->position - this->origin, 1.0));                // position
     model = glm::translate(model, glm::vec3(this->origin, 0.0));                                 // set origin

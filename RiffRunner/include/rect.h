@@ -14,4 +14,8 @@ public:
 
     Rect(glm::vec2 position, glm::vec2 size) :
         left(position.x), top(position.y), width(size.x), height(size.y) {}
+
+    bool intersects(Rect rect) const;
+    bool intersectsX(Rect rect) const;
+    bool intersectsY(Rect rect) const;
 };

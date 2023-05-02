@@ -64,6 +64,7 @@ SceneId acceptMenu(GLFWwindow* window) {
     // Menu music
     AudioPlayer menuMusic;
     menuMusic.loadAudio("resources/sound/menu.wav");
+    menuMusic.setVolume(50.0);
     menuMusic.play();
 
     // Background image

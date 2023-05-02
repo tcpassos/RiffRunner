@@ -140,6 +140,7 @@
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\hud.cpp" />
     <ClCompile Include="src\menu.cpp" />
+    <ClCompile Include="src\rect.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_difficulty_selector.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\hud.h" />
     <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\projection.h" />
     <ClInclude Include="include\rect.h" />
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scene.h" />
