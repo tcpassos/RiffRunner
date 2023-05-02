@@ -38,7 +38,7 @@ SceneId acceptFailure(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     // Failure menu
-    Menu failureMenu(width, height, width / 8 * 2, height / 5 * 3);
+    Menu failureMenu(width, height, width / 12 * 3, height / 8 * 6);
 
     const int FAILURE_RESTART = failureMenu.addItem("<Reiniciar>");
     const int FAILURE_GIVEUP = failureMenu.addItem("<Desistir>");
