@@ -32,7 +32,9 @@ public:
     float getRotation() { return this->rotation; }
     void rotate(float rotation) { this->rotation = this->rotation + rotation; };
     void setOrigin(glm::vec2 origin) { this->origin = origin; }
+    void setOrigin(float x, float y) { this->origin.x = x; this->origin.y = y; }
     glm::vec2 getOrigin() { return this->origin; }
+    Rect getBounds();
     void draw(GLFWwindow* window);
 
 private:

@@ -6,6 +6,7 @@
 #include <stb/stb_image.h>
 #include "resource_manager.h"
 #include "sprite.h"
+#include "hud.h"
 
 // ======================================================================================
 // Game scene
@@ -19,13 +20,8 @@ SceneId acceptGame(GLFWwindow* window) {
     Sprite backgroundImage(backgroundTexture);
     backgroundImage.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
 
-    // Track
-    Texture2D trackTexture = ResourceManager::LoadTexture("resources/img/track.jpg", "track");
-    Sprite track(trackTexture);
-    track.setSize(glm::vec3(200, 600, 1.0f));
-    track.setOrigin(glm::vec3(trackTexture.Width/2, trackTexture.Height/2, 0.0f));
-    track.setPosition(glm::vec3(windowWidth / 2 - track.getSize().x / 2, 0.0, 0.0));
-    
+    // Performance indicator
+    HUD hud;
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
@@ -35,19 +31,20 @@ SceneId acceptGame(GLFWwindow* window) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+            hud.decrementPerformance();
+        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+            hud.incrementPerformance();
+            hud.addPoints(1);
+        }
+
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //cor de fundo
         glClear(GL_COLOR_BUFFER_BIT);
         // ==========================================================
 
         backgroundImage.draw(window);
-
-        Rect trackRect = track.getTextureRect();
-        trackRect.top += 1;
-        trackRect.height += 1;
-        track.setTextureRect(trackRect);
-
-        track.draw(window);
+        hud.draw(window);
 
         // ==========================================================
         // Switch buffers

@@ -49,6 +49,15 @@ void Sprite::updateTextureCoord(int index, float x, float y) {
     glBufferSubData(GL_ARRAY_BUFFER, index * 5 * sizeof(GLfloat) + offsetT, sizeof(GLfloat), &y);
 }
 
+Rect Sprite::getBounds() {
+    float left = this->position.x - this->origin.x;
+    float top = this->position.y - this->origin.y;
+    float width = left + this->size.x;
+    float height = top + this->size.y;
+    Rect bounds (left, top, width, height);
+    return bounds;
+}
+
 void Sprite::draw(GLFWwindow* window) {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
@@ -59,7 +68,7 @@ void Sprite::draw(GLFWwindow* window) {
     // Prepare transformations
     glm::mat4 projection = glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f, -1.0f, 1.0f);
     glm::mat4 model = glm::mat4(1);
-    model = glm::translate(model, glm::vec3(this->position, 1.0));                               // position
+    model = glm::translate(model, glm::vec3(this->position - this->origin, 1.0));                // position
     model = glm::translate(model, glm::vec3(this->origin, 0.0));                                 // set origin
     model = glm::rotate(model, rotation, glm::vec3(0.0f, 0.0f, 1.0f));                           // rotation z
     model = glm::translate(model, glm::vec3(-this->origin.x, -this->origin.y, 0.0));             // reset origin
@@ -75,6 +84,10 @@ void Sprite::draw(GLFWwindow* window) {
     // Prepare texture
     glActiveTexture(GL_TEXTURE0);
     this->texture.Bind();
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_ALWAYS);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Render textured quad
     glDrawArrays(GL_TRIANGLES, 0, 6);
