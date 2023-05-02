@@ -18,19 +18,34 @@
 // ======================================================================================
 void key_callback_difficulty_selector(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
+    int oldOption = menu->getItemIndex();
 
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-        menu->previousDifficulty();
-        
+        menu->previous();
     }
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-        menu->nextDifficulty();
+        menu->next();
     }
+    if (oldOption != menu->getItemIndex())
+        switch (menu->getItemIndex()) {
+            case 0:
+                menu->playSound("resources/sound/izzi.wav");
+                break;
+            case 1:
+                menu->playSound("resources/sound/family.wav");
+                break;
+            case 2:
+                menu->playSound("resources/sound/serjao.wav");
+                break;
+            case 3:
+                menu->playSound("resources/sound/chuck.wav");
+                break;
+        }
 
 }
 
 // ======================================================================================
-// Music selector scene
+// Difficulty selector scene
 // ======================================================================================
 SceneId acceptDifficultySelector(GLFWwindow* window) {
 
@@ -38,7 +53,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
-    // Music selector menu
+    // Difficulty selector menu
     Menu difficultySelectorMenu(width, height, 0, 0, "resources/fonts/Queen of Clubs.otf");
     difficultySelectorMenu.setAlignmentHorizontal();
 

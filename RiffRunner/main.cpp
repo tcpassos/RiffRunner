@@ -33,7 +33,7 @@ int main(void) {
     stbi_image_free(icons[0].pixels);
 
     // Run scenes
-    accept(window, SceneMenu);
+    accept(window, SceneFailure);
 
     // Delete all resources as loaded using the resource manager
     ResourceManager::Clear();

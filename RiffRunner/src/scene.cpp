@@ -18,6 +18,9 @@ void accept(GLFWwindow* window, SceneId id) {
         case SceneGame:
             id = acceptGame(window);
             break;
+        case SceneFailure:
+            id = acceptFailure(window);
+            break;
         case SceneExit:
             glfwSetWindowShouldClose(window, true);
             break;

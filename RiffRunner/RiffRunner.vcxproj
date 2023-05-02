@@ -142,6 +142,7 @@
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_difficulty_selector.cpp" />
+    <ClCompile Include="src\scene_failure.cpp" />
     <ClCompile Include="src\scene_game.cpp" />
     <ClCompile Include="src\scene_menu.cpp" />
     <ClCompile Include="src\scene_music_selector.cpp" />

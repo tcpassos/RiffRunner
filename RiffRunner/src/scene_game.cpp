@@ -38,6 +38,9 @@ SceneId acceptGame(GLFWwindow* window) {
             hud.addPoints(1);
         }
 
+        if (hud.getPerformance() == 0)
+            return SceneFailure;
+
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //cor de fundo
         glClear(GL_COLOR_BUFFER_BIT);
