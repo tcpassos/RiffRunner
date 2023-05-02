@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\audio_player.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\hud.cpp" />
@@ -154,7 +155,9 @@
     <ClCompile Include="src\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\animation.h" />
     <ClInclude Include="include\audio_player.h" />
+    <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\hud.h" />
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\rect.h" />

@@ -6,6 +6,7 @@
 #include <stb/stb_image.h>
 #include "resource_manager.h"
 #include "sprite.h"
+#include "animation.h"
 #include "hud.h"
 
 // ======================================================================================
@@ -23,6 +24,15 @@ SceneId acceptGame(GLFWwindow* window) {
     // Performance indicator | Score | Special multiplier
     HUD hud;
 
+    // Flames
+    Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
+    Sprite flames(flamesTexture);
+    flames.setSize(40.0f, 50.0f);
+    Animation flamesAnimation(flames);
+    for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
+        flamesAnimation.addFrame(*(new Frame(35.0f, flames.getSize().x / 8, flames.getSize().y, flameOffset)));
+    }
+
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
         glfwPollEvents();
@@ -31,6 +41,7 @@ SceneId acceptGame(GLFWwindow* window) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
+        // Score
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             hud.decrementPerformance();
             hud.clearStreak();
@@ -40,6 +51,11 @@ SceneId acceptGame(GLFWwindow* window) {
             hud.incrementStreak();
             hud.addPoints(1);
         }
+
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            flamesAnimation.reset();
+        }
+        flamesAnimation.update();
 
         if (hud.getPerformance() == 0)
             return SceneFailure;
@@ -51,6 +67,10 @@ SceneId acceptGame(GLFWwindow* window) {
 
         backgroundImage.draw(window);
         hud.draw(window);
+
+        if (flamesAnimation.isRunning()) {
+            flames.draw(window);
+        }
 
         // ==========================================================
         // Switch buffers

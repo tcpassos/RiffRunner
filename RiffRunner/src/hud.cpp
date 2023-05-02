@@ -52,6 +52,7 @@ HUD::HUD() {
 	this->specialBar = new Sprite(specialBarTexture);
 	this->specialBar->setOrigin(0.0f, this->specialBar->getSize().y);
 	this->specialBar->setPosition(this->multiplier->getPosition().x + 143, this->multiplier->getBounds().height - 55);
+	this->specialBar->setSize(this->specialBar->getSize().x, 0.0f);
 	this->specialBar->setColor(glm::vec4(0.3f, 0.8f, 0.9f, 1.0f));
 }
 
@@ -96,10 +97,12 @@ void HUD::clearStreak() {
 }
 
 void HUD::updateMultiplier() {
-	float multiplierUnit = this->specialBarHeight / MULTIPLIER_TRESHOLD;
-	int multiplierPosition = this->streak % MULTIPLIER_TRESHOLD + 1;
-	this->specialBar->setSize(this->specialBar->getSize().x, multiplierUnit * multiplierPosition);
-	this->specialBar->setOrigin(0.0f, this->specialBar->getSize().y);
+	if (this->streak < MULTIPLIER_TRESHOLD * 4) {
+		float multiplierUnit = this->specialBarHeight / MULTIPLIER_TRESHOLD;
+		int multiplierPosition = this->streak % MULTIPLIER_TRESHOLD + 1;
+		this->specialBar->setSize(this->specialBar->getSize().x, multiplierUnit * multiplierPosition);
+		this->specialBar->setOrigin(0.0f, this->specialBar->getSize().y);
+	}
 
 	if (this->streak < MULTIPLIER_TRESHOLD) {
 		this->multiplier->setTexture(ResourceManager::GetTexture("x1"));
