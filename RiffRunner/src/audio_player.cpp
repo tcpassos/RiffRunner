@@ -86,5 +86,5 @@ void AudioPlayer::stop() {
 }
 
 void AudioPlayer::setVolume(float volume) {
-    alSourcef(source, AL_GAIN, 0);
+    alSourcef(source, AL_GAIN, volume/100 );
 }
