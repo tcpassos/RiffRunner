@@ -20,7 +20,7 @@ SceneId acceptGame(GLFWwindow* window) {
     Sprite backgroundImage(backgroundTexture);
     backgroundImage.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
 
-    // Performance indicator
+    // Performance indicator | Score | Special multiplier
     HUD hud;
 
     while (!glfwWindowShouldClose(window)) {
@@ -31,10 +31,13 @@ SceneId acceptGame(GLFWwindow* window) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
 
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
             hud.decrementPerformance();
+            hud.clearStreak();
+        }
         if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
             hud.incrementPerformance();
+            hud.incrementStreak();
             hud.addPoints(1);
         }
 
@@ -42,7 +45,7 @@ SceneId acceptGame(GLFWwindow* window) {
             return SceneFailure;
 
         // Clear color buffer
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); //cor de fundo
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         // ==========================================================
 

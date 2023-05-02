@@ -16,6 +16,8 @@ public:
     void incrementPerformance();
     void decrementPerformance();
     void addPoints(unsigned int points) { this->score += points; }
+    void incrementStreak();
+    void clearStreak();
     unsigned int getPerformance() { return this->performance; }
     unsigned int getScore() { return this->score; }
     void draw(GLFWwindow* window);
@@ -24,11 +26,16 @@ private:
     unsigned int performance;
     unsigned int limit;
     unsigned int score;
+    unsigned int streak;
+    float specialBarHeight;
 
     Sprite* indicator;
     Sprite* pointer;
     Sprite* display;
     TextRenderer* scoreText;
+    Sprite* multiplier;
+    Sprite* specialBar;
 
     void updatePerformanceIndicator();
+    void updateMultiplier();
 };
