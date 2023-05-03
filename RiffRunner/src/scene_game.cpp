@@ -99,10 +99,10 @@ SceneId acceptGame(GLFWwindow* window) {
     file.close();
 
     // Load song
-    //AudioPlayer background, song;
-    //background.loadAudio("resources/music/Aerosmith - Dream On/background.ogg");
+    AudioPlayer background;
+    background.loadAudio("resources/music/Aerosmith - Dream On/background.ogg");
     //song.loadAudio("resources/music/Aerosmith - Dream On/song.ogg");
-    //background.play();
+    background.play();
     //song.play();
 
     // Start song timer

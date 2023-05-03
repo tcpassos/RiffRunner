@@ -26,7 +26,7 @@ SongNote::SongNote(Sprite& track, unsigned int value, double duration) {
         this->tail = new RectangleShape(10, duration * 10);
         this->tail->setOrigin(this->tail->getSize().x / 2, this->tail->getSize().y);
         this->tail->setPosition(this->note->getPosition().x, 0.0f);
-        this->note->setProjection(*track.getProjection());
+        this->tail->setProjection(*track.getProjection());
         switch (value) {
         case 1: this->tail->setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.7f)); break;
         case 2: this->tail->setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.7f)); break;
