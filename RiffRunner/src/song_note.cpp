@@ -19,19 +19,14 @@ SongNote::SongNote(Sprite& track, unsigned int value, double duration) {
     this->note->setOrigin(this->note->getSize().x / 2, 0.0f);
     this->note->setPosition(notePosition, 0.0f);
     this->note->setTextureRect(noteTextureRect);
-    //this->note->setProjection(*track.getProjection());
-    this->note->getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
-    this->note->getProjection()->moveY(-100.0f);
-    this->note->getProjection()->moveZ(-55.0f);
+    this->note->setProjection(*track.getProjection());
 
     // Tail
     if (duration > 0) {
         this->tail = new RectangleShape(10, duration * 10);
         this->tail->setOrigin(this->tail->getSize().x / 2, this->tail->getSize().y);
         this->tail->setPosition(this->note->getPosition().x, 0.0f);
-        this->tail->getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
-        this->tail->getProjection()->moveY(-100.0f);
-        this->tail->getProjection()->moveZ(-55.0f);
+        this->note->setProjection(*track.getProjection());
         switch (value) {
         case 1: this->tail->setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.7f)); break;
         case 2: this->tail->setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.7f)); break;

@@ -87,7 +87,7 @@ SceneId acceptGame(GLFWwindow* window) {
     std::vector<SongNote> notes;
     TimedDispatcher<SongNote> noteDispatcher;
 
-    std::ifstream file("resources/music/Aerosmith - Dream On/seq1.txt");
+    std::ifstream file("resources/music/Aerosmith - Dream On/seq0.txt");
     std::string line;
     while (getline(file, line)) {
         std::istringstream iss(line);

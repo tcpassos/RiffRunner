@@ -34,7 +34,7 @@ public:
     void setOrigin(float x, float y) { this->origin.x = x; this->origin.y = y; }
     glm::vec2 getOrigin() { return this->origin; }
 
-    void setProjection(Projection projection) { this->projection = &projection; }
+    void setProjection(Projection &projection) { this->projection = &projection; }
     Projection* getProjection() { return this->projection; }
 
     Rect getBounds();
