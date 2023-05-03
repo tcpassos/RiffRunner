@@ -152,6 +152,7 @@
     <ClCompile Include="src\scene_tests.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
+    <ClCompile Include="src\song_note.cpp" />
     <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\stb.cpp" />
     <ClCompile Include="src\texture.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\sprite.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\text_renderer.h" />
+    <ClInclude Include="include\timed_dispatcher.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

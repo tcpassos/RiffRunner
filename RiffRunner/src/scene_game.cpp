@@ -1,6 +1,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb/stb_image.h>
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 
 #include "animation.h"
 #include "hud.h"
@@ -9,6 +13,7 @@
 #include "scene.h"
 #include "song_note.h"
 #include "sprite.h"
+#include "timed_dispatcher.h"
 
 // ======================================================================================
 // Game scene
@@ -64,12 +69,7 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f));
     detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
-
-    // Notes
-    SongNote note1(track, 1, 5);
-    SongNote note2(track, 2, 5, 10);
-    SongNote note3(track, 4, 5, 50);
-    SongNote note4(track, 8, 5, 100);
+    Rect inputBounds(detectors[0].getBounds().left, detectors[0].getBounds().top, detectors[0].getBounds().width * 5, detectors[0].getBounds().height);
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -81,6 +81,22 @@ SceneId acceptGame(GLFWwindow* window) {
     for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
         flamesAnimation.addFrame(*(new Frame(10.0f + flameOffset*10.0f, flames.getSize().x / 8, flames.getSize().y, flameOffset)));
     }
+
+    // Load notes
+    std::vector<SongNote> notes;
+    TimedDispatcher<SongNote> noteDispatcher;
+
+    std::ifstream file("resources/music/Aerosmith - Dream On/seq1.txt");
+    std::string line;
+    while (getline(file, line)) {
+        std::istringstream iss(line);
+        double noteStart, noteDuration;
+        int noteValue;
+        iss >> noteStart >> noteDuration >> noteValue;
+        noteDispatcher.add(noteStart, SongNote(track, noteValue, noteDuration));
+    }
+    file.close();
+    const double timerStart = glfwGetTime();
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
@@ -145,15 +161,44 @@ SceneId acceptGame(GLFWwindow* window) {
             detector.draw(window);
         }
 
-        // Notes
-        note1.move(1);
-        note2.move(1);
-        note3.move(1);
-        note4.move(1);
-        note1.draw(window);
-        note2.draw(window);
-        note3.draw(window);
-        note4.draw(window);
+        // Put new notes on screen
+        double elapsedTime = glfwGetTime() - timerStart;
+        std::vector<SongNote> newNotes = noteDispatcher.get(elapsedTime);
+        notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
+        
+        // Process input
+        for (auto note : notes) {
+            if (note.isBefore(inputBounds)) {
+                // move??
+            }
+            else if (note.intersects(inputBounds)) {
+                if (note.checkInput(input)) {
+                    if (note.hasTail()) {
+                        // TODO: Atualizar tamanho da nota
+                        // TODO: Incrementar o streak/performance somente uma vez
+                        hud.addPoints(1);
+                    }
+                    else {
+                        // TODO: Remover a nota
+                        hud.incrementPerformance();
+                        hud.incrementStreak();
+                        hud.addPoints(2);
+                    }
+                }
+            }
+            else {
+                note.disable();
+                if (note.getBounds().top > inputBounds.height + 100) {
+                    // TODO: Remover nota
+                }
+            }
+        }
+
+        // Draw notes
+        for (auto note : notes) {
+            note.move(1);
+            note.draw(window);
+        }
 
         // Flames
         if (flamesAnimation.isRunning()) {
