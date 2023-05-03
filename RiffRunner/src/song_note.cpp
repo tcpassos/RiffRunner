@@ -71,6 +71,16 @@ bool SongNote::hasTail() {
 
 void SongNote::disable() {
     this->disabled = true;
+
+    glm::vec4 noteColor = this->note->getColor();
+    noteColor.a = 0.3f;
+    this->note->setColor(noteColor);
+
+    if (hasTail()) {
+        glm::vec4 tailColor = this->tail->getColor();
+        tailColor.a = 0.3f;
+        this->tail->setColor(tailColor);
+    }
 }
 
 Rect SongNote::getBounds() {

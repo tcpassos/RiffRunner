@@ -7,6 +7,7 @@
 #include <string>
 
 #include "animation.h"
+#include "audio_player.h"
 #include "hud.h"
 #include "rectangle_shape.h"
 #include "resource_manager.h"
@@ -96,6 +97,15 @@ SceneId acceptGame(GLFWwindow* window) {
         noteDispatcher.add(noteStart, SongNote(track, noteValue, noteDuration));
     }
     file.close();
+
+    // Load song
+    //AudioPlayer background, song;
+    //background.loadAudio("resources/music/Aerosmith - Dream On/background.ogg");
+    //song.loadAudio("resources/music/Aerosmith - Dream On/song.ogg");
+    //background.play();
+    //song.play();
+
+    // Start song timer
     const double timerStart = glfwGetTime();
 
     while (!glfwWindowShouldClose(window)) {
@@ -167,30 +177,33 @@ SceneId acceptGame(GLFWwindow* window) {
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
         
         // Process input
-        for (auto note : notes) {
-            if (note.isBefore(inputBounds)) {
-                // move??
-            }
-            else if (note.intersects(inputBounds)) {
-                if (note.checkInput(input)) {
-                    if (note.hasTail()) {
+        for (auto note = notes.begin(); note != notes.end(); ) {
+            if (note->intersects(inputBounds)) {
+                if (note->checkInput(input)) {
+                    if (note->hasTail()) {
                         // TODO: Atualizar tamanho da nota
                         // TODO: Incrementar o streak/performance somente uma vez
                         hud.addPoints(1);
-                    }
-                    else {
-                        // TODO: Remover a nota
+                        ++note;
+                    } else {
+                        note = notes.erase(note);
                         hud.incrementPerformance();
                         hud.incrementStreak();
                         hud.addPoints(2);
                     }
+                } else {
+                    ++note;
+                }
+            } else if (note->isAfter(inputBounds)) {
+                note->disable();
+                if (note->getBounds().top > inputBounds.height + 100) {
+                    note = notes.erase(note);
+                } else {
+                    ++note;
                 }
             }
             else {
-                note.disable();
-                if (note.getBounds().top > inputBounds.height + 100) {
-                    // TODO: Remover nota
-                }
+                ++note;
             }
         }
 
