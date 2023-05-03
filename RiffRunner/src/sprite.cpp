@@ -2,7 +2,7 @@
 #include "resource_manager.h"
 
 Sprite::Sprite(Texture2D texture) : Shape(texture.Width, texture.Height) {
-    this->shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "sprite");
+    this->shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "shaderSprite");
     this->texture = texture;
     this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.Width, this->texture.Height));
 }

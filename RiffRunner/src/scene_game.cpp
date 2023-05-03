@@ -1,13 +1,15 @@
 #include <iostream>
 
-#include "scene.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb/stb_image.h>
-#include "resource_manager.h"
-#include "sprite.h"
+
 #include "animation.h"
 #include "hud.h"
+#include "rectangle_shape.h"
+#include "resource_manager.h"
+#include "scene.h"
+#include "sprite.h"
 
 // ======================================================================================
 // Game scene
@@ -32,6 +34,37 @@ SceneId acceptGame(GLFWwindow* window) {
     track.getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
     track.getProjection()->moveY(-100.0f);
     track.getProjection()->moveZ(-55.0f);
+
+    // Track lines
+    std::vector<RectangleShape> trackLines;
+    for (int i = 0; i < 6; i++) {
+        float trackLinePosition = track.getBounds().left + (track.getSize().x / 5) * i;
+        RectangleShape trackLine(track.getSize().x, track.getSize().y);
+        trackLine.setSize(1.0f, trackLine.getSize().y);
+        trackLine.setOrigin(trackLine.getSize() / 2.0f);
+        trackLine.setPosition(trackLinePosition, track.getPosition().y);
+        trackLine.setProjection(*track.getProjection());
+
+        trackLines.push_back(trackLine);
+    }
+
+    // Detectors
+    std::vector<RectangleShape> detectors;
+    for (int i = 0; i < 5; i++) {
+        float detectorWidth = track.getSize().x / 5;
+        float detectorPosition = track.getBounds().left + detectorWidth * i + detectorWidth / 2;
+        RectangleShape detector(track.getSize().x, track.getSize().y);
+        detector.setSize(detectorWidth, 15.0f);
+        detector.setOrigin(detector.getSize() / 2.0f);
+        detector.setPosition(detectorPosition, track.getBounds().height - 20);
+        detector.setProjection(*track.getProjection());
+        detectors.push_back(detector);
+    }
+    detectors[0].setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
+    detectors[1].setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
+    detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f));
+    detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
+    detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -90,6 +123,14 @@ SceneId acceptGame(GLFWwindow* window) {
         // Flames
         if (flamesAnimation.isRunning()) {
             flames.draw(window);
+        }
+
+        for (auto& trackLine : trackLines) {
+            trackLine.draw(window);
+        }
+
+        for (auto& detector : detectors) {
+            detector.draw(window);
         }
 
         // ==========================================================

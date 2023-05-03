@@ -141,6 +141,7 @@
     <ClCompile Include="src\hud.cpp" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\rect.cpp" />
+    <ClCompile Include="src\rectangle_shape.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\scene_difficulty_selector.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\projection.h" />
     <ClInclude Include="include\rect.h" />
+    <ClInclude Include="include\rectangle_shape.h" />
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
