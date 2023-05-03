@@ -150,6 +150,7 @@
     <ClCompile Include="src\scene_music_selector.cpp" />
     <ClCompile Include="src\scene_tests.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\stb.cpp" />
     <ClCompile Include="src\texture.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
+    <ClInclude Include="include\shape.h" />
     <ClInclude Include="include\sprite.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\text_renderer.h" />
