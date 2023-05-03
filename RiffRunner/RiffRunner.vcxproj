@@ -170,6 +170,7 @@
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
     <ClInclude Include="include\shape.h" />
+    <ClInclude Include="include\song_note.h" />
     <ClInclude Include="include\sprite.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\text_renderer.h" />

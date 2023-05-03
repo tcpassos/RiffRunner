@@ -5,17 +5,11 @@ bool Rect::intersects(Rect rect) const {
 }
 
 bool Rect::intersectsX(Rect rect) const {
-    float aLeft = this->left;
-    float aRight = this->left + this->width;
-    float bLeft = rect.left;
-    float bRight = rect.left + rect.width;
-    return (aLeft >= bLeft && aLeft < bRight) || (bLeft >= aLeft && bLeft < aRight);
+    return (this->left >= rect.left && this->left < rect.width) ||
+           (rect.left >= this->left && rect.left < this->width);
 }
 
 bool Rect::intersectsY(Rect rect) const {
-    float aTop = this->top;
-    float aBottom = this->top + this->height;
-    float bTop = rect.top;
-    float bBottom = rect.top + rect.height;
-    return (aTop >= bTop && aTop < bBottom) || (bTop >= aTop && bTop < aBottom);
+    return (this->top >= rect.top && this->top < rect.height) ||
+           (rect.top >= this->top && rect.top < this->height);
 }

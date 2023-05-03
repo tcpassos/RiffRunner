@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb/stb_image.h>
@@ -9,6 +7,7 @@
 #include "rectangle_shape.h"
 #include "resource_manager.h"
 #include "scene.h"
+#include "song_note.h"
 #include "sprite.h"
 
 // ======================================================================================
@@ -48,7 +47,7 @@ SceneId acceptGame(GLFWwindow* window) {
         trackLines.push_back(trackLine);
     }
 
-    // Detectors
+    // Input zone
     std::vector<RectangleShape> detectors;
     for (int i = 0; i < 5; i++) {
         float detectorWidth = track.getSize().x / 5;
@@ -66,13 +65,21 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
 
+    // Notes
+    SongNote note1(track, 1, 5);
+    SongNote note2(track, 2, 5, 10);
+    SongNote note3(track, 4, 5, 50);
+    SongNote note4(track, 8, 5, 100);
+
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
     Sprite flames(flamesTexture);
-    flames.setSize(40.0f, 50.0f);
+    flames.setSize(80.0f, 80.0f);
+    flames.setPosition(210.0f, 450.0f);
+    flames.setColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.8f));
     Animation flamesAnimation(flames);
     for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
-        flamesAnimation.addFrame(*(new Frame(35.0f, flames.getSize().x / 8, flames.getSize().y, flameOffset)));
+        flamesAnimation.addFrame(*(new Frame(10.0f + flameOffset*10.0f, flames.getSize().x / 8, flames.getSize().y, flameOffset)));
     }
 
     while (!glfwWindowShouldClose(window)) {
@@ -102,6 +109,14 @@ SceneId acceptGame(GLFWwindow* window) {
         if (hud.getPerformance() == 0)
             return SceneFailure;
 
+        // Update input
+        unsigned int input = 0;
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) input |= 1;
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) input |= 2;
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) input |= 4;
+        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) input |= 8;
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) input |= 16;
+
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -120,17 +135,29 @@ SceneId acceptGame(GLFWwindow* window) {
         track.setTextureRect(trackTextureRect);        
         track.draw(window);
 
-        // Flames
-        if (flamesAnimation.isRunning()) {
-            flames.draw(window);
-        }
-
+        // Track lines
         for (auto& trackLine : trackLines) {
             trackLine.draw(window);
         }
 
+        // Detectors
         for (auto& detector : detectors) {
             detector.draw(window);
+        }
+
+        // Notes
+        note1.move(1);
+        note2.move(1);
+        note3.move(1);
+        note4.move(1);
+        note1.draw(window);
+        note2.draw(window);
+        note3.draw(window);
+        note4.draw(window);
+
+        // Flames
+        if (flamesAnimation.isRunning()) {
+            flames.draw(window);
         }
 
         // ==========================================================
