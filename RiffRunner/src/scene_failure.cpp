@@ -60,9 +60,14 @@ SceneId acceptFailure(GLFWwindow* window) {
         if (failureMenu.getItemIndex() != oldOption && failureMenu.getItemIndex() == 1)
             naoConsegue.play();
 
-        // Volta ao menu
-        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && failureMenu.getItemIndex() == FAILURE_GIVEUP)
-            return SceneMenu;
+        
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+            Sound::stopAll();
+            if (failureMenu.getItemIndex() == FAILURE_RESTART)
+                return SceneGame;
+            if (failureMenu.getItemIndex() == FAILURE_GIVEUP)
+                return SceneMenu;
+        }
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

@@ -20,11 +20,35 @@
 #include "game_config.h"
 
 // ======================================================================================
+// Keyboard input
+// ======================================================================================
+void key_callback_game(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    unsigned int* input = (unsigned int*)glfwGetWindowUserPointer(window);
+
+    if (key == GLFW_KEY_A && action == GLFW_PRESS) *input |= 1;
+    if (key == GLFW_KEY_S && action == GLFW_PRESS) *input |= 2;
+    if (key == GLFW_KEY_J && action == GLFW_PRESS) *input |= 4;
+    if (key == GLFW_KEY_K && action == GLFW_PRESS) *input |= 8;
+    if (key == GLFW_KEY_L && action == GLFW_PRESS) *input |= 16;
+
+    if (key == GLFW_KEY_A && action == GLFW_RELEASE) *input &= ~1;
+    if (key == GLFW_KEY_S && action == GLFW_RELEASE) *input &= ~2;
+    if (key == GLFW_KEY_J && action == GLFW_RELEASE) *input &= ~4;
+    if (key == GLFW_KEY_K && action == GLFW_RELEASE) *input &= ~8;
+    if (key == GLFW_KEY_L && action == GLFW_RELEASE) *input &= ~16;
+}
+
+// ======================================================================================
 // Game scene
 // ======================================================================================
 SceneId acceptGame(GLFWwindow* window) {
     int windowWidth, windowHeight;
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+    // Game input callback
+    unsigned int input = 0;
+    glfwSetKeyCallback(window, key_callback_game);
+    glfwSetWindowUserPointer(window, &input);
 
     // Game background
     Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/game_background.jpg", "gameBackground");
@@ -74,7 +98,7 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
 
-    Rect inputBounds(track.getBounds().left, track.getBounds().height - 15, track.getBounds().width, track.getBounds().height);
+    Rect inputBounds(track.getBounds().left, track.getBounds().height - 15, track.getBounds().width, track.getBounds().height + 15);
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -85,7 +109,6 @@ SceneId acceptGame(GLFWwindow* window) {
         flame->setSize(40, 40);
         flame->setOrigin(flame->getSize() / 2.0f);
         flame->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 30);
-        flame->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.8f));
         flame->setProjection(*track.getProjection(), true);
         for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
             flame->addFrame(Frame(0.01f + flameOffset * 0.005f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));
@@ -125,7 +148,6 @@ SceneId acceptGame(GLFWwindow* window) {
     noteDispatcher.setDispatchDelay(-timeToReachDetector);
 
     std::ifstream file(notesFilename);
-    //std::ifstream file("resources/music/seq.txt");
     std::string line;
     while (getline(file, line)) {
         std::istringstream iss(line);
@@ -145,6 +167,7 @@ SceneId acceptGame(GLFWwindow* window) {
     // Load song
     Sound background((selectedSongFolder + "background.ogg").c_str());
     Sound song((selectedSongFolder + "song.ogg").c_str());
+    Sound pluck("resources/sound/click02.wav");
     background.play();
     song.play();
 
@@ -170,27 +193,11 @@ SceneId acceptGame(GLFWwindow* window) {
             return SceneMusicSelector;
         }
 
-        // Score
-        if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-            hud.decrementPerformance();
-            hud.clearStreak();
-        }
-        if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-            hud.incrementPerformance();
-            hud.incrementStreak();
-            hud.addPoints(1);
-        }
-
-        if (hud.getPerformance() == 0)
+        // Fail
+        if (hud.getPerformance() == 0) {
+            Sound::stopAll();
             return SceneFailure;
-
-        // Update input
-        unsigned int input = 0;
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) input |= 1;
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) input |= 2;
-        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) input |= 4;
-        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) input |= 8;
-        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) input |= 16;
+        }
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -230,28 +237,62 @@ SceneId acceptGame(GLFWwindow* window) {
         std::vector<SongNote> newNotes = noteDispatcher.get(timerCurrent);
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
         
+        // Process missclick notes
+        unsigned int validInputMask = 0;
+        for (auto note = notes.rbegin(); note != notes.rend(); ++note) {
+            if (note->isBefore(inputBounds)) break;
+            validInputMask |= note->getValue();
+        }
+        if ((input & ~validInputMask) != 0) { // missclick
+            input = 0; // release all notes
+            hud.decrementPerformance();
+            hud.clearStreak();
+            pluck.playOnce();
+        }
+
         // Process input
         for (auto note = notes.begin(); note != notes.end(); ) {
             // Before detector
             if (note->isBefore(inputBounds)) {
                 ++note;
             // On detector
-            } else if (note->intersects(inputBounds) && note->checkInput(input)) {
-                // Long note
-                if (note->hasTail()) {
-                    note->update(inputBounds.top - 5);
-                    ++note;
-                // Short note
+            } else if (note->intersects(inputBounds)) {
+                if (note->checkInput(input)) {
+                    // Long note
+                    if (note->hasTail()) {
+                        hud.addPoints(note->hold(inputBounds.top - 7));
+                        if (!flames[note->getIndex()]->isRunning()) {
+                            flames[note->getIndex()]->resetAnimation();
+                        }
+                        ++note;
+                    // Short note
+                    } else {
+                        input &= ~note->getValue(); // Release input
+                        hud.incrementPerformance();
+                        hud.incrementStreak();
+                        hud.addPoints(2);
+                        flames[note->getIndex()]->resetAnimation();
+                        note = notes.erase(note);
+                    }
+                    song.setVolume(100);
                 } else {
-                    hud.incrementPerformance();
-                    hud.incrementStreak();
-                    hud.addPoints(2);
-                    flames[note->getIndex()]->resetAnimation();
-                    note = notes.erase(note);
+                    ++note;
                 }
             // Afer detector
             } else {
-                note->disable();
+                if (note->getBounds().height > track.getSize().y) {
+                    if (!note->isDisabled()) {
+                        input &= ~note->getValue(); // Release input
+                        note->disable();
+                        if (!note->isConsumed()) {
+                            hud.decrementPerformance();
+                            hud.decrementPerformance();
+                            hud.clearStreak();
+                            song.setVolume(0);
+                        }
+                    }
+                }
+
                 if (note->getBounds().top > track.getSize().y + 100) {
                     note = notes.erase(note);
                 } else {

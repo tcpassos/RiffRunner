@@ -17,12 +17,13 @@ public:
     bool isBefore(Rect rect);
     bool isAfter(Rect rect);
     bool isDisabled();
+    bool isConsumed();
     bool hasTail();
     unsigned int getIndex();
     unsigned int getValue();
     Rect getBounds();
     void disable();
-    void update(unsigned int positionY);
+    unsigned int hold(unsigned int positionY);
     void move(int value);
     void draw(GLFWwindow* window);
 
@@ -30,7 +31,9 @@ private:
     unsigned int value;
     unsigned int index;
     bool disabled;
+    bool consumed;
     Sprite* note;
     RectangleShape* tail;
     unsigned int tailLength;
+    double lastHoldingPointTime;
 };

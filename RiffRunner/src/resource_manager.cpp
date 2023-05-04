@@ -109,6 +109,8 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file) {
         format = GL_RGBA;
     } else if (nrChannels == 1) {
         format = GL_RED;
+    } else if (nrChannels == 2) {
+        format = GL_RG;
     } else {
         format = GL_RGB;
     }

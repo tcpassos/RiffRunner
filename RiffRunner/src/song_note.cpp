@@ -5,6 +5,8 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     this->index = log2(value); // 1=0 2=1 4=2 8=3 16=4
     this->tailLength = tailLength;
     this->disabled = false;
+    this->consumed = false;
+    this->lastHoldingPointTime = 0;
 
     // Note
     Texture2D noteTexture = ResourceManager::LoadTexture("resources/img/notes.png", "notes");
@@ -60,6 +62,10 @@ bool SongNote::isDisabled() {
     return this->disabled;
 }
 
+bool SongNote::isConsumed() {
+    return this->consumed;
+}
+
 bool SongNote::hasTail() {
     return this->tailLength > 0;
 }
@@ -90,12 +96,24 @@ void SongNote::disable() {
     }
 }
 
-void SongNote::update(unsigned int positionY) {
+unsigned int SongNote::hold(unsigned int positionY) {
     if (note->getPosition().y < positionY) {
-        return;
+        return 0;
     }
+    // increments the score every 0.2 seconds
+    unsigned int points = 0;
+    double currentTime = glfwGetTime();
+    if (currentTime - lastHoldingPointTime > 0.2) {
+        lastHoldingPointTime = currentTime;
+        points++;
+    }
+    this->consumed = true;
     // Hide note
     note->setColor(glm::vec4(0.0f));
+    // Increases tail opacity
+    glm::vec4 tailColor = tail->getColor();
+    tailColor.a = 1.0f;
+    tail->setColor(tailColor);
     // Update tail length
     if (hasTail()) {
         float newLength = tail->getSize().y - (tail->getBounds().height - positionY);
@@ -104,6 +122,7 @@ void SongNote::update(unsigned int positionY) {
             note->setPosition(note->getPosition().x, positionY);
         }
     }
+    return points;
 }
 
 void SongNote::move(int value) {
