@@ -54,6 +54,9 @@ SceneId acceptGame(GLFWwindow* window) {
     Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/game_background.jpg", "gameBackground");
     Sprite backgroundImage(backgroundTexture);
     backgroundImage.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
+    Texture2D backgroundFrontTexture = ResourceManager::LoadTexture("resources/img/game_background_front.png", "gameBackgroundFront");
+    Sprite backgroundImageFront(backgroundFrontTexture);
+    backgroundImageFront.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
 
     // Performance indicator | Score | Special multiplier
     HUD hud;
@@ -123,15 +126,15 @@ SceneId acceptGame(GLFWwindow* window) {
 
     switch(selectedDifficulty) {
         case 0:
-            pixelsPerSecond = 400;
+            pixelsPerSecond = 450;
             notesFilename = selectedSongFolder + "seq1.txt";
             break;
         case 1:
-            pixelsPerSecond = 500;
+            pixelsPerSecond = 550;
             notesFilename = selectedSongFolder + "seq2.txt";
             break;
         case 2:
-            pixelsPerSecond = 600;
+            pixelsPerSecond = 700;
             notesFilename = selectedSongFolder + "seq3.txt";
             break;
         case 3:
@@ -206,11 +209,6 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Background
         backgroundImage.draw(window);
-
-        // Timer
-        std::stringstream timerString;
-        timerString << std::fixed << std::setprecision(2) << timerCurrent;
-        timerText.RenderText(timerString.str(), 70.0f, 20.0f, 1.0f);
         
         // HUD
         hud.draw(window);
@@ -314,6 +312,14 @@ SceneId acceptGame(GLFWwindow* window) {
                 flame->draw(window);
             }
         }
+
+        // Background front
+        backgroundImageFront.draw(window);
+
+        // Timer
+        std::stringstream timerString;
+        timerString << std::fixed << std::setprecision(2) << timerCurrent;
+        timerText.RenderText(timerString.str(), 70.0f, 20.0f, 1.0f);
 
         // ==========================================================
         // Switch buffers

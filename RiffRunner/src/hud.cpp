@@ -3,6 +3,7 @@
 #include "hud.h"
 
 #define MULTIPLIER_TRESHOLD 30
+#define SPECIAL_BAR_MAX 1000
 
 HUD::HUD() {
 	this->limit = 100;
@@ -47,6 +48,7 @@ HUD::HUD() {
 	this->multiplier = new Sprite(x1Texture);
 	this->multiplier->setPosition(800.0f - this->multiplier->getSize().x, this->indicator->getPosition().y);
 
+	this->specialCounter = 0;
 	Texture2D specialBarTexture = ResourceManager::LoadTexture("resources/img/hud/special_bar.png", "specialBar");
 	this->specialBarHeight = specialBarTexture.Height;
 	this->specialBar = new Sprite(specialBarTexture);
@@ -86,6 +88,17 @@ void HUD::updatePerformanceIndicator() {
 	}
 }
 
+void HUD::addPoints(unsigned int points) {
+	unsigned int newPoints = points * getMultiplier();
+	this->score += newPoints;
+	// Update special bar
+	specialCounter += newPoints;
+	if (specialCounter > SPECIAL_BAR_MAX) specialCounter = SPECIAL_BAR_MAX;
+	float specialBarUnit = specialBarHeight / SPECIAL_BAR_MAX;
+	specialBar->setSize(specialBar->getSize().x, specialBarUnit * specialCounter);
+	specialBar->setOrigin(0.0f, specialBar->getSize().y);
+}
+
 void HUD::incrementStreak() {
 	this->streak++;
 	updateMultiplier();
@@ -96,24 +109,26 @@ void HUD::clearStreak() {
 	updateMultiplier();
 }
 
-void HUD::updateMultiplier() {
-	if (this->streak < MULTIPLIER_TRESHOLD * 4) {
-		float multiplierUnit = this->specialBarHeight / MULTIPLIER_TRESHOLD;
-		int multiplierPosition = this->streak % MULTIPLIER_TRESHOLD + 1;
-		this->specialBar->setSize(this->specialBar->getSize().x, multiplierUnit * multiplierPosition);
-		this->specialBar->setOrigin(0.0f, this->specialBar->getSize().y);
-	}
-
+unsigned int HUD::getMultiplier() {
 	if (this->streak < MULTIPLIER_TRESHOLD) {
+		return 1;
+	} else if (this->streak < MULTIPLIER_TRESHOLD * 2) {
+		return 2;
+	} else if (this->streak < MULTIPLIER_TRESHOLD * 3) {
+		return 3;
+	} else {
+		return 4;
+	}
+}
+void HUD::updateMultiplier() {
+	unsigned int multiplier = getMultiplier();
+	if (multiplier == 1) {
 		this->multiplier->setTexture(ResourceManager::GetTexture("x1"));
-	}
-	else if (this->streak < MULTIPLIER_TRESHOLD * 2) {
+	} else if (multiplier == 2) {
 		this->multiplier->setTexture(ResourceManager::GetTexture("x2"));
-	}
-	else if (this->streak < MULTIPLIER_TRESHOLD * 3) {
+	} else if (multiplier == 3) {
 		this->multiplier->setTexture(ResourceManager::GetTexture("x3"));
-	}
-	else {
+	} else if (multiplier == 4) {
 		this->multiplier->setTexture(ResourceManager::GetTexture("x4"));
 	}
 }

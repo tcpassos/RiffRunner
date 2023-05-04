@@ -48,9 +48,6 @@
     <ClCompile Include="src\sprite.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_tests.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="src\scene.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>

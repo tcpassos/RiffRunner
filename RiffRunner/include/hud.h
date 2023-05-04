@@ -14,11 +14,12 @@ public:
     HUD();
     void incrementPerformance();
     void decrementPerformance();
-    void addPoints(unsigned int points) { this->score += points; }
+    void addPoints(unsigned int points);
     void incrementStreak();
     void clearStreak();
     unsigned int getPerformance() { return this->performance; }
     unsigned int getScore() { return this->score; }
+    unsigned int getMultiplier();
     void draw(GLFWwindow* window);
 
 private:
@@ -26,6 +27,7 @@ private:
     unsigned int limit;
     unsigned int score;
     unsigned int streak;
+    unsigned int specialCounter;
     float specialBarHeight;
 
     Sprite* indicator;
