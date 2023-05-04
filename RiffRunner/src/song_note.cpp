@@ -68,6 +68,10 @@ unsigned int SongNote::getIndex() {
     return this->index;
 }
 
+unsigned int SongNote::getValue() {
+    return this->value;
+}
+
 Rect SongNote::getBounds() {
     float left = this->note->getBounds().left;
     float top = hasTail() ? this->tail->getBounds().top : this->note->getBounds().top;
@@ -79,10 +83,6 @@ Rect SongNote::getBounds() {
 void SongNote::disable() {
     this->disabled = true;
 
-    glm::vec4 noteColor = this->note->getColor();
-    noteColor.a = 0.3f;
-    this->note->setColor(noteColor);
-
     if (hasTail()) {
         glm::vec4 tailColor = this->tail->getColor();
         tailColor.a = 0.3f;
@@ -91,9 +91,18 @@ void SongNote::disable() {
 }
 
 void SongNote::update(unsigned int positionY) {
+    if (note->getPosition().y < positionY) {
+        return;
+    }
+    // Hide note
+    note->setColor(glm::vec4(0.0f));
+    // Update tail length
     if (hasTail()) {
         float newLength = tail->getSize().y - (tail->getBounds().height - positionY);
-        tail->setSize(tail->getSize().x, newLength);
+        if (newLength > 0) {
+            tail->setSize(tail->getSize().x, newLength);
+            note->setPosition(note->getPosition().x, positionY);
+        }
     }
 }
 

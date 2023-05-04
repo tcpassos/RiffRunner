@@ -10,16 +10,12 @@
 
 class Animation {
 public:
-	Animation(Sprite &sprite);
+	Animation();
 	void addFrame(Frame frame);
-	void reset() { this->totalProgress = 0.0; }
-	void update();
-	bool isRunning() { return totalProgress < totalLength;  }
+	void update(Sprite* sprite, double elapsedTime);
+	double getTotalLength() { return totalLength; }
 
 private:
-	Sprite* sprite;
 	std::vector<Frame> frames;
 	double totalLength;
-	double totalProgress;
-	double lastTime;
 };

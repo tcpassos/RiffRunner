@@ -159,6 +159,7 @@
     <ClCompile Include="src\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\animated_sprite.h" />
     <ClInclude Include="include\animation.h" />
     <ClInclude Include="include\game_config.h" />
     <ClInclude Include="include\sound.h" />

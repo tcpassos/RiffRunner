@@ -19,6 +19,7 @@ public:
     bool isDisabled();
     bool hasTail();
     unsigned int getIndex();
+    unsigned int getValue();
     Rect getBounds();
     void disable();
     void update(unsigned int positionY);

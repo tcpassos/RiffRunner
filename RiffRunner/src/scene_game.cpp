@@ -7,7 +7,7 @@
 #include <fstream>
 #include <string>
 
-#include "animation.h"
+#include "animated_sprite.h"
 #include "sound.h"
 #include "hud.h"
 #include "rectangle_shape.h"
@@ -78,17 +78,20 @@ SceneId acceptGame(GLFWwindow* window) {
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
-    Sprite flame(flamesTexture);
-    flame.setSize(40, 40);
-    flame.setOrigin(flame.getSize() / 2.0f);
-    flame.setPosition(detectors[0].getPosition().x, track.getSize().y - 45);
-    flame.setColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.8f));
-    flame.setProjection(*track.getProjection(), true);
-    Animation flameAnimation(flame);
-    for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
-        flameAnimation.addFrame(*(new Frame(10.0f + flameOffset * 10.0f, flame.getSize().x / 8, flame.getSize().y, flameOffset)));
-    }
+    std::vector<AnimatedSprite*> flames;
 
+    for (int i = 0; i < 5; i++) {
+        AnimatedSprite* flame = new AnimatedSprite(flamesTexture);
+        flame->setSize(40, 40);
+        flame->setOrigin(flame->getSize() / 2.0f);
+        flame->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 30);
+        flame->setColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.8f));
+        flame->setProjection(*track.getProjection(), true);
+        for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
+            flame->addFrame(Frame(0.01f + flameOffset * 0.005f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));
+        }
+        flames.push_back(flame);
+    }
 
     // Song information
     std::string selectedSongFolder = "resources/music/" + selectedSong + "/";
@@ -162,8 +165,10 @@ SceneId acceptGame(GLFWwindow* window) {
         int pixelsPerFrame = elapsetTime * pixelsPerSecond;
 
         // Exit on ESC
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, true);
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            Sound::stopAll();
+            return SceneMusicSelector;
+        }
 
         // Score
         if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
@@ -175,11 +180,6 @@ SceneId acceptGame(GLFWwindow* window) {
             hud.incrementStreak();
             hud.addPoints(1);
         }
-
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            flameAnimation.reset();
-        }
-        flameAnimation.update();
 
         if (hud.getPerformance() == 0)
             return SceneFailure;
@@ -232,33 +232,31 @@ SceneId acceptGame(GLFWwindow* window) {
         
         // Process input
         for (auto note = notes.begin(); note != notes.end(); ) {
-            if (note->intersects(inputBounds)) {
-                if (note->checkInput(input)) {
-                    if (note->hasTail()) {
-                        // TODO: Incrementar o streak/performance somente uma vez
-                        hud.addPoints(1);
-                        note->update(inputBounds.top);
-                        ++note;
-                    } else {
-                        hud.incrementPerformance();
-                        hud.incrementStreak();
-                        hud.addPoints(2);
-                        note = notes.erase(note);
-                    }
-                } else {
+            // Before detector
+            if (note->isBefore(inputBounds)) {
+                ++note;
+            // On detector
+            } else if (note->intersects(inputBounds) && note->checkInput(input)) {
+                // Long note
+                if (note->hasTail()) {
+                    note->update(inputBounds.top - 5);
                     ++note;
+                // Short note
+                } else {
+                    hud.incrementPerformance();
+                    hud.incrementStreak();
+                    hud.addPoints(2);
+                    flames[note->getIndex()]->resetAnimation();
+                    note = notes.erase(note);
                 }
-            } else if (note->isAfter(inputBounds)) {
+            // Afer detector
+            } else {
                 note->disable();
-                note->update(inputBounds.top - 5);
-                if (note->getBounds().top > inputBounds.height + 100) {
+                if (note->getBounds().top > track.getSize().y + 100) {
                     note = notes.erase(note);
                 } else {
                     ++note;
                 }
-            }
-            else {
-                ++note;
             }
         }
 
@@ -269,8 +267,11 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         // Flames
-        if (flameAnimation.isRunning()) {
-            flame.draw(window);
+        for (auto& flame : flames) {
+            flame->update();
+            if (flame->isRunning()) {
+                flame->draw(window);
+            }
         }
 
         // ==========================================================
