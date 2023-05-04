@@ -24,8 +24,13 @@ Shader ResourceManager::GetShader(std::string name)
 
 Texture2D ResourceManager::LoadTexture(const char* file, std::string name)
 {
-    Textures[name] = loadTextureFromFile(file);
-    return Textures[name];
+    auto textureIt = Textures.find(name);
+    // If isn't present
+    if (textureIt == Textures.end()) {
+        Textures[name] = loadTextureFromFile(file);
+        return Textures[name];
+    }
+    return textureIt->second;
 }
 
 Texture2D ResourceManager::GetTexture(std::string name)

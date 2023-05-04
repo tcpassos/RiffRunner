@@ -10,8 +10,8 @@
 
 class Animation {
 public:
-	Animation(Sprite& sprite);
-	void addFrame(Frame& frame);
+	Animation(Sprite &sprite);
+	void addFrame(Frame frame);
 	void reset() { this->totalProgress = 0.0; }
 	void update();
 	bool isRunning() { return totalProgress < totalLength;  }

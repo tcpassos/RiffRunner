@@ -1,15 +1,15 @@
 #include "animation.h"
 
-Animation::Animation(Sprite& sprite) {
+Animation::Animation(Sprite &sprite) {
 	this->sprite = &sprite;
 	this->totalLength = 0.0;
 	this->totalProgress = 0.0;
     this->lastTime = 0.0;
 }
 
-void Animation::addFrame(Frame& frame) {
+void Animation::addFrame(Frame frame) {
 	totalLength += frame.duration;
-	this->frames.push_back(std::move(frame));
+	this->frames.push_back(frame);
 }
 
 void Animation::update() {

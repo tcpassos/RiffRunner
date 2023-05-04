@@ -77,13 +77,15 @@ SceneId acceptGame(GLFWwindow* window) {
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
-    Sprite flames(flamesTexture);
-    flames.setSize(80.0f, 80.0f);
-    flames.setPosition(210.0f, 450.0f);
-    flames.setColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.8f));
-    Animation flamesAnimation(flames);
+    Sprite flame(flamesTexture);
+    flame.setSize(40, 40);
+    flame.setOrigin(flame.getSize() / 2.0f);
+    flame.setPosition(detectors[0].getPosition().x, track.getSize().y - 45);
+    flame.setColor(glm::vec4(1.0f, 1.0f, 1.0f, 0.8f));
+    flame.setProjection(*track.getProjection(), true);
+    Animation flameAnimation(flame);
     for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
-        flamesAnimation.addFrame(*(new Frame(10.0f + flameOffset*10.0f, flames.getSize().x / 8, flames.getSize().y, flameOffset)));
+        flameAnimation.addFrame(*(new Frame(10.0f + flameOffset * 10.0f, flame.getSize().x / 8, flame.getSize().y, flameOffset)));
     }
 
     // Setup speed
@@ -95,8 +97,8 @@ SceneId acceptGame(GLFWwindow* window) {
     TimedDispatcher<SongNote> noteDispatcher;
     noteDispatcher.setDispatchDelay(-timeToReachDetector);
 
-    //std::ifstream file("resources/music/Scorpions - Rock You Like A Hurricane/seq2.txt");
-    std::ifstream file("resources/music/seq.txt");
+    std::ifstream file("resources/music/Scorpions - Rock You Like A Hurricane/seq2.txt");
+    //std::ifstream file("resources/music/seq.txt");
     std::string line;
     while (getline(file, line)) {
         std::istringstream iss(line);
@@ -104,15 +106,20 @@ SceneId acceptGame(GLFWwindow* window) {
         int noteValue;
         iss >> noteStart >> noteDuration >> noteValue;
         unsigned int tailLength = noteDuration - 1.0;
-        noteDispatcher.add(noteStart, SongNote(track, noteValue, noteDuration * pixelsPerSecond));
+
+        if (noteValue & 1) noteDispatcher.add(noteStart, SongNote(track, 1, noteDuration * pixelsPerSecond));
+        if (noteValue & 2) noteDispatcher.add(noteStart, SongNote(track, 2, noteDuration * pixelsPerSecond));
+        if (noteValue & 4) noteDispatcher.add(noteStart, SongNote(track, 4, noteDuration * pixelsPerSecond));
+        if (noteValue & 8) noteDispatcher.add(noteStart, SongNote(track, 8, noteDuration * pixelsPerSecond));
+        if (noteValue & 16) noteDispatcher.add(noteStart, SongNote(track, 16, noteDuration * pixelsPerSecond));
     }
     file.close();
 
     // Load song
     Sound background("resources/music/Scorpions - Rock You Like A Hurricane/background.ogg");
     Sound song("resources/music/Scorpions - Rock You Like A Hurricane/song.ogg");
-    //background.play();
-    //song.play();
+    background.play();
+    song.play();
 
     // Song timer
     TextRenderer timerText(windowWidth, windowHeight);
@@ -146,9 +153,9 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            flamesAnimation.reset();
+            flameAnimation.reset();
         }
-        flamesAnimation.update();
+        flameAnimation.update();
 
         if (hud.getPerformance() == 0)
             return SceneFailure;
@@ -179,8 +186,9 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Track
         Rect trackTextureRect = track.getTextureRect();
-        trackTextureRect.top -= pixelsPerFrame;
-        trackTextureRect.height -= pixelsPerFrame;
+        float wtfFactor = pixelsPerFrame * 0.92;
+        trackTextureRect.top -= wtfFactor;
+        trackTextureRect.height -= wtfFactor;
         track.setTextureRect(trackTextureRect);        
         track.draw(window);
 
@@ -203,21 +211,22 @@ SceneId acceptGame(GLFWwindow* window) {
             if (note->intersects(inputBounds)) {
                 if (note->checkInput(input)) {
                     if (note->hasTail()) {
-                        // TODO: Atualizar tamanho da nota
                         // TODO: Incrementar o streak/performance somente uma vez
                         hud.addPoints(1);
+                        note->update(inputBounds.top);
                         ++note;
                     } else {
-                        note = notes.erase(note);
                         hud.incrementPerformance();
                         hud.incrementStreak();
                         hud.addPoints(2);
+                        note = notes.erase(note);
                     }
                 } else {
                     ++note;
                 }
             } else if (note->isAfter(inputBounds)) {
                 note->disable();
+                note->update(inputBounds.top - 5);
                 if (note->getBounds().top > inputBounds.height + 100) {
                     note = notes.erase(note);
                 } else {
@@ -236,8 +245,8 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         // Flames
-        if (flamesAnimation.isRunning()) {
-            flames.draw(window);
+        if (flameAnimation.isRunning()) {
+            flame.draw(window);
         }
 
         // ==========================================================

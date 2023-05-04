@@ -34,7 +34,7 @@ public:
     void setOrigin(float x, float y) { this->origin.x = x; this->origin.y = y; }
     glm::vec2 getOrigin() { return this->origin; }
 
-    void setProjection(Projection &projection) { this->projection = &projection; }
+    void setProjection(Projection& projection, bool preserveModel = false) { this->projection = &projection; this->preserveModel = preserveModel; }
     Projection* getProjection() { return this->projection; }
 
     Rect getBounds();
@@ -48,6 +48,7 @@ protected:
     glm::vec2 size;
     glm::vec2 origin;
     float rotation;
+    bool preserveModel;
 
     glm::mat4 getProjectionMatrix(float width, float height);
     glm::mat4 getModelMatrix();

@@ -2,6 +2,7 @@
 
 SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     this->value = value;
+    this->index = log2(value); // 1=0 2=1 4=2 8=3 16=4
     this->tailLength = tailLength;
     this->disabled = false;
 
@@ -9,17 +10,16 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     Texture2D noteTexture = ResourceManager::LoadTexture("resources/img/notes.png", "notes");
     this->note = new Sprite(noteTexture);
 
-    unsigned int noteIndex = log2(value); // 1=0 2=1 4=2 8=3 16=4
     float noteSize = 40.0f;
     float noteWidth = noteSize / 5;
-    float notePosition = track.getBounds().left + (noteIndex * track.getSize().x / 5) + track.getSize().x / 10;
-    Rect noteTextureRect(glm::vec2(noteIndex * noteWidth, 0.0f), glm::vec2((noteIndex + 1) * noteWidth, noteSize / 6));
+    float notePosition = track.getBounds().left + (this->index * track.getSize().x / 5) + track.getSize().x / 10;
+    Rect noteTextureRect(glm::vec2(this->index * noteWidth, 0.0f), glm::vec2((this->index + 1) * noteWidth, noteSize / 6));
 
     this->note->setSize(glm::vec2(noteSize));
     this->note->setOrigin(this->note->getSize().x / 2, 0.0f);
     this->note->setPosition(notePosition, 0.0f);
     this->note->setTextureRect(noteTextureRect);
-    this->note->setProjection(*track.getProjection());
+    this->note->setProjection(*track.getProjection(), true);
 
     // Tail
     if (tailLength > 0) {
@@ -64,6 +64,18 @@ bool SongNote::hasTail() {
     return this->tailLength > 0;
 }
 
+unsigned int SongNote::getIndex() {
+    return this->index;
+}
+
+Rect SongNote::getBounds() {
+    float left = this->note->getBounds().left;
+    float top = hasTail() ? this->tail->getBounds().top : this->note->getBounds().top;
+    float width = this->note->getBounds().width;
+    float height = this->note->getBounds().height;
+    return Rect(left, top, width, height);
+}
+
 void SongNote::disable() {
     this->disabled = true;
 
@@ -78,12 +90,11 @@ void SongNote::disable() {
     }
 }
 
-Rect SongNote::getBounds() {
-    float left = this->note->getBounds().left;
-    float top = hasTail() ? this->tail->getBounds().top : this->note->getBounds().top;
-    float width = this->note->getBounds().width;
-    float height = this->note->getBounds().height;
-    return Rect(left, top, width, height);
+void SongNote::update(unsigned int positionY) {
+    if (hasTail()) {
+        float newLength = tail->getSize().y - (tail->getBounds().height - positionY);
+        tail->setSize(tail->getSize().x, newLength);
+    }
 }
 
 void SongNote::move(int value) {

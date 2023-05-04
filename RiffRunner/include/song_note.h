@@ -18,13 +18,16 @@ public:
     bool isAfter(Rect rect);
     bool isDisabled();
     bool hasTail();
-    void disable();
+    unsigned int getIndex();
     Rect getBounds();
+    void disable();
+    void update(unsigned int positionY);
     void move(int value);
     void draw(GLFWwindow* window);
 
 private:
     unsigned int value;
+    unsigned int index;
     bool disabled;
     Sprite* note;
     RectangleShape* tail;
