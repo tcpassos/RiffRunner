@@ -7,6 +7,7 @@
 #include "scene.h"
 #include "sprite.h"
 #include "text_renderer.h"
+//#include "game_config.h"
 
 namespace fs = std::filesystem;
 
@@ -77,8 +78,10 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             return SceneMenu;
 
-        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+            //selectedSong = musicSelectorMenu.getSelectedItem();
             return SceneDifficultySelector;
+        }
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

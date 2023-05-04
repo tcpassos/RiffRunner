@@ -17,6 +17,7 @@
 #include "sprite.h"
 #include "text_renderer.h"
 #include "timed_dispatcher.h"
+#include "game_config.h"
 
 // ======================================================================================
 // Game scene
@@ -92,12 +93,33 @@ SceneId acceptGame(GLFWwindow* window) {
     const int pixelsPerSecond = 400;
     const float timeToReachDetector = inputBounds.top / pixelsPerSecond;
 
+    //Begin to load song information
+
+    std::string selectedSongFolder = "resources/music/" + selectedSong + "/";
+
     // Load notes
     std::vector<SongNote> notes;
     TimedDispatcher<SongNote> noteDispatcher;
     noteDispatcher.setDispatchDelay(-timeToReachDetector);
 
-    std::ifstream file("resources/music/Scorpions - Rock You Like A Hurricane/seq2.txt");
+    std::string notesFilename;
+
+    switch(selectedDifficulty) {
+        case 0:
+            notesFilename = selectedSongFolder + "seq1.txt";
+            break;
+        case 1:
+            notesFilename = selectedSongFolder + "seq2.txt";
+            break;
+        case 2:
+            notesFilename = selectedSongFolder + "seq3.txt";
+            break;
+        case 3:
+            notesFilename = selectedSongFolder + "seq4.txt";
+            break;
+    }
+
+    std::ifstream file(notesFilename);
     //std::ifstream file("resources/music/seq.txt");
     std::string line;
     while (getline(file, line)) {
@@ -116,8 +138,8 @@ SceneId acceptGame(GLFWwindow* window) {
     file.close();
 
     // Load song
-    Sound background("resources/music/Scorpions - Rock You Like A Hurricane/background.ogg");
-    Sound song("resources/music/Scorpions - Rock You Like A Hurricane/song.ogg");
+    Sound background((selectedSongFolder + "background.ogg").c_str());
+    Sound song((selectedSongFolder + "song.ogg").c_str());
     background.play();
     song.play();
 

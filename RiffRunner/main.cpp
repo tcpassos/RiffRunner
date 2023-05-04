@@ -6,6 +6,10 @@
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
+#include "game_config.h"
+
+std::string selectedSong;
+int selectedDifficulty;
 
 int main(void) {
     glfwInit();
@@ -35,7 +39,7 @@ int main(void) {
     stbi_image_free(icons[0].pixels);
 
     // Run scenes
-    accept(window, SceneGame);
+    accept(window, SceneMenu);
 
     // Delete all resources as loaded using the resource manager
     ResourceManager::Clear();

@@ -5,6 +5,7 @@
 #include "resource_manager.h"
 #include "scene.h"
 #include "sprite.h"
+#include "game_config.h"
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -80,6 +81,13 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
         // Exit on ESC
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             return SceneMusicSelector;
+
+        // Song is selected (ENTER)
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+            selectedDifficulty = difficultySelectorMenu.getItemIndex();
+            return SceneGame;
+        }
+            
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
