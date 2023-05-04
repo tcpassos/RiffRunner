@@ -4,7 +4,8 @@
 #include <vector>
 #include <map>
 #include <text_renderer.h>
-#include <audio_player.h>
+
+#include "sound.h"
 
 using namespace std;
 
@@ -24,7 +25,8 @@ public:
 
 private:
     TextRenderer* textRenderer;
-    AudioPlayer clickSound;
+    Sound* clickSound;
+    Sound* customSound;
 
     int selectedItem;
     vector<string> menuItens;

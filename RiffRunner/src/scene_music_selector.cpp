@@ -1,18 +1,12 @@
-#include <iostream>
-
-#include <map>
-#include "scene.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <stb/stb_image.h>
-#include "resource_manager.h"
-#include "sprite.h"
 #include <filesystem>
+#include <string>
 #include <vector>
-#include <string.h>
-#include "audio_player.h"
-#include "text_renderer.h"
+
 #include "menu.h"
+#include "resource_manager.h"
+#include "scene.h"
+#include "sprite.h"
+#include "text_renderer.h"
 
 namespace fs = std::filesystem;
 
@@ -50,10 +44,10 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     // Load album covers
     std::vector<Sprite> albumCovers;
     for (fs::recursive_directory_iterator it("resources\\music\\"), end; it != end; ++it) {
-        std::string path = it->path().string();
-        if (path.find("!") == std::string::npos) {
+        string path = it->path().string();
+        if (path.find("!") == string::npos) {
 
-            if (path.find("album.") != std::string::npos) {
+            if (path.find("album.") != string::npos) {
                 if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") ) {
                     string musicName = it->path().parent_path().filename().string();
                     Texture2D coverTexture = ResourceManager::LoadTexture(("resources/music/" + musicName + "/album.png").c_str(), musicName);

@@ -12,7 +12,7 @@ public:
     std::vector<T> get(double time) {
         std::vector<T> result;
         for (auto it = elements.begin(); it != elements.end();) {
-            if (it->first < time) {
+            if (it->first < time - delay) {
                 result.push_back(it->second);
                 it = elements.erase(it);
             }

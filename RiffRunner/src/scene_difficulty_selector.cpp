@@ -1,17 +1,10 @@
-#include <iostream>
-
-#include <string>
-#include "scene.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <stb/stb_image.h>
-#include "resource_manager.h"
-#include "sprite.h"
 #include <vector>
-#include <string.h>
-#include "audio_player.h"
-#include "text_renderer.h"
+#include <string>
+
 #include "menu.h"
+#include "resource_manager.h"
+#include "scene.h"
+#include "sprite.h"
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -41,7 +34,6 @@ void key_callback_difficulty_selector(GLFWwindow* window, int key, int scancode,
                 menu->playSound("resources/sound/chuck.wav");
                 break;
         }
-
 }
 
 // ======================================================================================
@@ -64,7 +56,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     // Load album covers
     std::vector<Sprite> difficulties;
     for (int x = 0; x < 4; x++) {
-        std::string file = to_string(x);
+        string file = to_string(x);
         Texture2D texture = ResourceManager::LoadTexture( ("resources/img/difficulty/" + file + ".jpg").c_str(), "dificulty_" + file);
         Sprite difficulty(texture);
         float difficultyWidth = width;

@@ -111,7 +111,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;OpenAL\OpenAL32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;irrklang\irrKlang.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -130,13 +130,12 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;OpenAL\OpenAL32.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freetype\freetype.lib;GLFW\glfw3.lib;opengl32.lib;irrklang\irrKlang.lib;user32.lib;gdi32.lib;shell32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\animation.cpp" />
-    <ClCompile Include="src\audio_player.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\hud.cpp" />
     <ClCompile Include="src\menu.cpp" />
@@ -153,6 +152,7 @@
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\song_note.cpp" />
+    <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\stb.cpp" />
     <ClCompile Include="src\texture.cpp" />
@@ -160,7 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\animation.h" />
-    <ClInclude Include="include\audio_player.h" />
+    <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\hud.h" />
     <ClInclude Include="include\menu.h" />

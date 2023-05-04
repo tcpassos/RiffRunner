@@ -7,7 +7,7 @@
 #include <string>
 
 #include "animation.h"
-#include "audio_player.h"
+#include "sound.h"
 #include "hud.h"
 #include "rectangle_shape.h"
 #include "resource_manager.h"
@@ -86,8 +86,9 @@ SceneId acceptGame(GLFWwindow* window) {
     // Load notes
     std::vector<SongNote> notes;
     TimedDispatcher<SongNote> noteDispatcher;
+    noteDispatcher.setDispatchDelay(-1.0);
 
-    std::ifstream file("resources/music/Aerosmith - Dream On/seq0.txt");
+    std::ifstream file("resources/music/Aerosmith - Dream On/seq1.txt");
     std::string line;
     while (getline(file, line)) {
         std::istringstream iss(line);
@@ -99,11 +100,10 @@ SceneId acceptGame(GLFWwindow* window) {
     file.close();
 
     // Load song
-    AudioPlayer background;
-    background.loadAudio("resources/music/Aerosmith - Dream On/background.ogg");
-    //song.loadAudio("resources/music/Aerosmith - Dream On/song.ogg");
+    Sound background("resources/music/Aerosmith - Dream On/background.ogg");
+    Sound song("resources/music/Aerosmith - Dream On/song.ogg");
     background.play();
-    //song.play();
+    song.play();
 
     // Start song timer
     const double timerStart = glfwGetTime();

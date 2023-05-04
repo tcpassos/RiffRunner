@@ -1,17 +1,8 @@
-#include <iostream>
-
-#include <string>
-#include "scene.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <stb/stb_image.h>
-#include "resource_manager.h"
-#include "sprite.h"
-#include <vector>
-#include <string.h>
-#include "audio_player.h"
-#include "text_renderer.h"
 #include "menu.h"
+#include "resource_manager.h"
+#include "scene.h"
+#include "sound.h"
+#include "sprite.h"
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -52,15 +43,12 @@ SceneId acceptFailure(GLFWwindow* window) {
     Sprite backgroundImage(backgroundTexture);
 
     // Failure audios
-
-    AudioPlayer failureSong;
-    failureSong.loadAudio("resources/sound/musicaTristeDoNaruto.wav");
+    Sound failureSong("resources/sound/musicaTristeDoNaruto.wav");
     failureSong.play();
-
-    AudioPlayer failureAudio;
-    failureAudio.loadAudio("resources/sound/rocky.wav");
+    Sound failureAudio("resources/sound/rocky.wav");
     failureAudio.setVolume(45);
     failureAudio.play();
+    Sound naoConsegue("resources/sound/naoconsegue.wav");
 
 
     while (!glfwWindowShouldClose(window)) {
@@ -70,7 +58,7 @@ SceneId acceptFailure(GLFWwindow* window) {
         glfwPollEvents();
 
         if (failureMenu.getItemIndex() != oldOption && failureMenu.getItemIndex() == 1)
-            failureMenu.playSound("resources/sound/naoconsegue.wav");
+            naoConsegue.play();
 
         // Volta ao menu
         if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS && failureMenu.getItemIndex() == FAILURE_GIVEUP)

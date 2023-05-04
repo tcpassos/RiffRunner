@@ -11,12 +11,17 @@ Menu::Menu(int screenWidth, int screenHeigth, int initialPosX, int initialPosY, 
     selectedItem = 0;
     textRenderer = new TextRenderer(width, heigth);
     textRenderer->Load(font, 52);
-    clickSound.loadAudio("resources/sound/click.wav");
+    clickSound = new Sound("resources/sound/click.wav");
 }
 
 int Menu::addItem(string label) {
     menuItens.push_back(label);
     return menuItens.size() - 1;
+}
+
+void Menu::playSound(std::string sound) {
+    customSound = new Sound(sound.c_str());
+    customSound->playOnce();
 }
 
 void Menu::draw() {
@@ -46,21 +51,14 @@ void Menu::draw() {
 void Menu::previous() {
     if (selectedItem - 1 >= 0) {
         selectedItem--;
-        clickSound.loadAudio("resources/sound/click.wav");
-        clickSound.play();
+        clickSound->playOnce();
     }
 }
 
 void Menu::next() {
     if (selectedItem + 1 < menuItens.size()) {
         selectedItem++;
-        clickSound.loadAudio("resources/sound/click.wav");
-        clickSound.play();
+        clickSound->playOnce();
     }
-}
-
-void Menu::playSound(std::string sound) {
-    clickSound.loadAudio(sound.c_str());
-    clickSound.play();
 }
 

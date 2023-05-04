@@ -1,9 +1,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <stb/stb_image.h>
+
 #include "text_renderer.h"
 #include "resource_manager.h"
 #include "scene.h"
+#include "sound.h"
 
 int main(void) {
     glfwInit();
@@ -37,6 +39,7 @@ int main(void) {
 
     // Delete all resources as loaded using the resource manager
     ResourceManager::Clear();
+    Sound::dropEngine();
     glfwTerminate();
     return 0;
 }

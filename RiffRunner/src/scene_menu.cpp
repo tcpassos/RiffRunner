@@ -3,12 +3,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "scene.h"
 #include "menu.h"
-#include "audio_player.h"
-#include "resource_manager.h"
-#include "sprite.h"
 #include "rect.h"
+#include "resource_manager.h"
+#include "scene.h"
+#include "sound.h"
+#include "sprite.h"
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -62,9 +62,8 @@ SceneId acceptMenu(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &menu);
 
     // Menu music
-    AudioPlayer menuMusic;
-    menuMusic.loadAudio("resources/sound/menu.wav");
-    menuMusic.setVolume(50.0);
+    Sound menuMusic("resources/sound/menu.wav");
+    menuMusic.setVolume(50);
     menuMusic.play();
 
     // Background image
