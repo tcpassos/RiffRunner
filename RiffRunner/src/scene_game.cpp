@@ -2,6 +2,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb/stb_image.h>
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include <fstream>
 #include <string>
@@ -14,6 +15,7 @@
 #include "scene.h"
 #include "song_note.h"
 #include "sprite.h"
+#include "text_renderer.h"
 #include "timed_dispatcher.h"
 
 // ======================================================================================
@@ -70,7 +72,8 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f));
     detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
-    Rect inputBounds(detectors[0].getBounds().left, detectors[0].getBounds().top, detectors[0].getBounds().width * 5, detectors[0].getBounds().height);
+
+    Rect inputBounds(track.getBounds().left, track.getBounds().height - 15, track.getBounds().width, track.getBounds().height);
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -83,34 +86,49 @@ SceneId acceptGame(GLFWwindow* window) {
         flamesAnimation.addFrame(*(new Frame(10.0f + flameOffset*10.0f, flames.getSize().x / 8, flames.getSize().y, flameOffset)));
     }
 
+    // Setup speed
+    const int pixelsPerSecond = 400;
+    const float timeToReachDetector = inputBounds.top / pixelsPerSecond;
+
     // Load notes
     std::vector<SongNote> notes;
     TimedDispatcher<SongNote> noteDispatcher;
-    noteDispatcher.setDispatchDelay(-1.0);
+    noteDispatcher.setDispatchDelay(-timeToReachDetector);
 
-    std::ifstream file("resources/music/Aerosmith - Dream On/seq1.txt");
+    //std::ifstream file("resources/music/Scorpions - Rock You Like A Hurricane/seq2.txt");
+    std::ifstream file("resources/music/seq.txt");
     std::string line;
     while (getline(file, line)) {
         std::istringstream iss(line);
         double noteStart, noteDuration;
         int noteValue;
         iss >> noteStart >> noteDuration >> noteValue;
-        noteDispatcher.add(noteStart, SongNote(track, noteValue, noteDuration));
+        unsigned int tailLength = noteDuration - 1.0;
+        noteDispatcher.add(noteStart, SongNote(track, noteValue, noteDuration * pixelsPerSecond));
     }
     file.close();
 
     // Load song
-    Sound background("resources/music/Aerosmith - Dream On/background.ogg");
-    Sound song("resources/music/Aerosmith - Dream On/song.ogg");
-    background.play();
-    song.play();
+    Sound background("resources/music/Scorpions - Rock You Like A Hurricane/background.ogg");
+    Sound song("resources/music/Scorpions - Rock You Like A Hurricane/song.ogg");
+    //background.play();
+    //song.play();
 
-    // Start song timer
+    // Song timer
+    TextRenderer timerText(windowWidth, windowHeight);
+    timerText.Load("resources/fonts/digital-7.ttf", 30);
     const double timerStart = glfwGetTime();
+    double timerCurrent = timerStart;
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
         glfwPollEvents();
+
+        // Update the amount of pixels objects shoud move
+        double timerPrevious = timerCurrent;
+        timerCurrent = glfwGetTime() - timerStart;
+        float elapsetTime = timerCurrent - timerPrevious;
+        int pixelsPerFrame = elapsetTime * pixelsPerSecond;
 
         // Exit on ESC
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -150,14 +168,19 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Background
         backgroundImage.draw(window);
+
+        // Timer
+        std::stringstream timerString;
+        timerString << std::fixed << std::setprecision(2) << timerCurrent;
+        timerText.RenderText(timerString.str(), 70.0f, 20.0f, 1.0f);
         
         // HUD
         hud.draw(window);
 
         // Track
         Rect trackTextureRect = track.getTextureRect();
-        trackTextureRect.top--;
-        trackTextureRect.height--;
+        trackTextureRect.top -= pixelsPerFrame;
+        trackTextureRect.height -= pixelsPerFrame;
         track.setTextureRect(trackTextureRect);        
         track.draw(window);
 
@@ -172,8 +195,7 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         // Put new notes on screen
-        double elapsedTime = glfwGetTime() - timerStart;
-        std::vector<SongNote> newNotes = noteDispatcher.get(elapsedTime);
+        std::vector<SongNote> newNotes = noteDispatcher.get(timerCurrent);
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
         
         // Process input
@@ -209,7 +231,7 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Draw notes
         for (auto note : notes) {
-            note.move(1);
+            note.move(pixelsPerFrame);
             note.draw(window);
         }
 

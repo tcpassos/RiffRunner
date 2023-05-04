@@ -1,8 +1,8 @@
 #include "song_note.h"
 
-SongNote::SongNote(Sprite& track, unsigned int value, double duration) {
+SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     this->value = value;
-    this->duration = duration;
+    this->tailLength = tailLength;
     this->disabled = false;
 
     // Note
@@ -22,8 +22,8 @@ SongNote::SongNote(Sprite& track, unsigned int value, double duration) {
     this->note->setProjection(*track.getProjection());
 
     // Tail
-    if (duration > 0) {
-        this->tail = new RectangleShape(10, duration * 10);
+    if (tailLength > 0) {
+        this->tail = new RectangleShape(10, tailLength);
         this->tail->setOrigin(this->tail->getSize().x / 2, this->tail->getSize().y);
         this->tail->setPosition(this->note->getPosition().x, 0.0f);
         this->tail->setProjection(*track.getProjection());
@@ -61,7 +61,7 @@ bool SongNote::isDisabled() {
 }
 
 bool SongNote::hasTail() {
-    return this->duration > 0.0;
+    return this->tailLength > 0;
 }
 
 void SongNote::disable() {

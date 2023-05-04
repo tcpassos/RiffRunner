@@ -11,7 +11,7 @@
 
 class SongNote {
 public:
-    SongNote(Sprite &track, unsigned int value, double duration = 0);
+    SongNote(Sprite &track, unsigned int value, unsigned int tailLength = 0);
     bool checkInput(unsigned int input);
     bool intersects(Rect rect);
     bool isBefore(Rect rect);
@@ -25,8 +25,8 @@ public:
 
 private:
     unsigned int value;
-    double duration;
     bool disabled;
     Sprite* note;
     RectangleShape* tail;
+    unsigned int tailLength;
 };
