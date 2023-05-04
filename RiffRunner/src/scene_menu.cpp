@@ -90,7 +90,6 @@ SceneId acceptMenu(GLFWwindow* window) {
             case MenuTypeMain:
                 if (selected == MENU_MAIN_START) {
                     return SceneMusicSelector;
-                    glfwSetWindowShouldClose(window, true);
                 // Enter settings menu
                 } else if (selected == MENU_MAIN_SETTINGS) {
                     menuType = MenuTypeSettings;

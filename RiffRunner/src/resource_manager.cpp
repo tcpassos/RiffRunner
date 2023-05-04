@@ -93,16 +93,25 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
 }
 
 Texture2D ResourceManager::loadTextureFromFile(const char* file) {
-    // Load image
+    // Load info
     int width, height, nrChannels;
-    unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
+    // Load image
+    unsigned char* data;
+    data = stbi_load(file, &width, &height, &nrChannels, STBI_default);
     if (data == nullptr) {
         std::cout << "Failed to load file " << file << std::endl;
     }
     // Create texture object
     Texture2D texture;
     // Determine format
-    GLenum format = nrChannels == 4 ? GL_RGBA : GL_RGB;
+    GLenum format;
+    if (nrChannels == 4) {
+        format = GL_RGBA;
+    } else if (nrChannels == 1) {
+        format = GL_RED;
+    } else {
+        format = GL_RGB;
+    }
     texture.Internal_Format = format;
     texture.Image_Format = format;
     // Now generate texture

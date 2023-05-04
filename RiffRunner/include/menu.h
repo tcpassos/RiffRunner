@@ -20,7 +20,7 @@ public:
     void setAlignmentVertical() { this->isVertical = true; };
     void setAlignmentHorizontal() { this->isVertical = false; };
     int getItemIndex() { return selectedItem; }
-    std::string getSelectedItem() { return menuItens[selectedItem]; }
+    std::string getItemValue() { return menuItens[selectedItem]; }
     void playSound(std::string sound);
     void draw();
 

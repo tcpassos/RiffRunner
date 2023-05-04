@@ -7,6 +7,10 @@ Sound::Sound(const char* filePath) {
     sound = engine->play2D(filePath, false, true, true);
 }
 
+void Sound::stopAll() {
+    engine->stopAllSounds();
+}
+
 void Sound::dropEngine() {
     engine->drop();
 }

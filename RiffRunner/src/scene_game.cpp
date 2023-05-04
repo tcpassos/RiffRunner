@@ -89,35 +89,37 @@ SceneId acceptGame(GLFWwindow* window) {
         flameAnimation.addFrame(*(new Frame(10.0f + flameOffset * 10.0f, flame.getSize().x / 8, flame.getSize().y, flameOffset)));
     }
 
-    // Setup speed
-    const int pixelsPerSecond = 400;
-    const float timeToReachDetector = inputBounds.top / pixelsPerSecond;
 
-    //Begin to load song information
-
+    // Song information
     std::string selectedSongFolder = "resources/music/" + selectedSong + "/";
+    std::string notesFilename;
+    int pixelsPerSecond;
+
+    switch(selectedDifficulty) {
+        case 0:
+            pixelsPerSecond = 400;
+            notesFilename = selectedSongFolder + "seq1.txt";
+            break;
+        case 1:
+            pixelsPerSecond = 500;
+            notesFilename = selectedSongFolder + "seq2.txt";
+            break;
+        case 2:
+            pixelsPerSecond = 600;
+            notesFilename = selectedSongFolder + "seq3.txt";
+            break;
+        case 3:
+            pixelsPerSecond = 700;
+            notesFilename = selectedSongFolder + "seq4.txt";
+            break;
+    }
+
+    const float timeToReachDetector = inputBounds.top / pixelsPerSecond;
 
     // Load notes
     std::vector<SongNote> notes;
     TimedDispatcher<SongNote> noteDispatcher;
     noteDispatcher.setDispatchDelay(-timeToReachDetector);
-
-    std::string notesFilename;
-
-    switch(selectedDifficulty) {
-        case 0:
-            notesFilename = selectedSongFolder + "seq1.txt";
-            break;
-        case 1:
-            notesFilename = selectedSongFolder + "seq2.txt";
-            break;
-        case 2:
-            notesFilename = selectedSongFolder + "seq3.txt";
-            break;
-        case 3:
-            notesFilename = selectedSongFolder + "seq4.txt";
-            break;
-    }
 
     std::ifstream file(notesFilename);
     //std::ifstream file("resources/music/seq.txt");

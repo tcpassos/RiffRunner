@@ -85,6 +85,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
         // Song is selected (ENTER)
         if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
             selectedDifficulty = difficultySelectorMenu.getItemIndex();
+            Sound::stopAll();
             return SceneGame;
         }
             

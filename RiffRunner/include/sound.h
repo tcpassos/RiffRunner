@@ -10,6 +10,7 @@ public:
     void pause();
     void stop();
     void setVolume(unsigned int volume);
+    static void stopAll();
     static void dropEngine();
 
 private:
