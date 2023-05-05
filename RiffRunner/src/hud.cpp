@@ -59,6 +59,9 @@ HUD::HUD() {
 	this->specialBar->setPosition(this->multiplier->getPosition().x + 143, this->multiplier->getBounds().height - 55);
 	this->specialBar->setSize(this->specialBar->getSize().x, 0.0f);
 	this->specialBar->setColor(glm::vec4(0.3f, 0.8f, 0.9f, 1.0f));
+
+	// Sound
+	this->specialSound = new Sound("resources/sound/special.wav");
 }
 
 void HUD::incrementPerformance() {
@@ -113,7 +116,8 @@ void HUD::clearStreak() {
 }
 
 void HUD::activateSpecial() {
-	if (specialCounter > SPECIAL_BAR_MAX / 2) {
+	if (specialCounter > (SPECIAL_BAR_MAX / 2) && !specialActive) {
+		specialSound->playOnce();
 		specialActive = true;
 		updateMultiplier();
 	}

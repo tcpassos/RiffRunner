@@ -176,7 +176,6 @@ SceneId acceptGame(GLFWwindow* window) {
     Sound background((selectedSongFolder + "background.ogg").c_str());
     Sound song((selectedSongFolder + "song.ogg").c_str());
     Sound pluck("resources/sound/click02.wav");
-    Sound specialSound("resources/sound/special.wav");
     background.play();
     song.play();
 
@@ -204,9 +203,6 @@ SceneId acceptGame(GLFWwindow* window) {
         // Activate special
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
             hud.activateSpecial();
-            if (hud.isSpecialActive()) {
-                specialSound.playOnce();
-            }
         }
 
         // Fail

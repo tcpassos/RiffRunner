@@ -6,6 +6,7 @@
 
 #include "resource_manager.h"
 #include "texture.h"
+#include "sound.h"
 #include "sprite.h"
 #include "text_renderer.h"
 
@@ -41,6 +42,7 @@ private:
     TextRenderer* scoreText;
     Sprite* multiplier;
     Sprite* specialBar;
+    Sound* specialSound;
 
     void updatePerformanceIndicator();
     void updateMultiplier();
