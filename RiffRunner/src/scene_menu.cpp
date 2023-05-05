@@ -48,8 +48,10 @@ void key_callback_menu(GLFWwindow* window, int key, int scancode, int action, in
 
         switch (menuType) {
             case MenuTypeMain:
-                if (selected == MENU_MAIN_START)
+                if (selected == MENU_MAIN_START) {
+                    Sound::stopAll();
                     accept(window, SceneMusicSelector);
+                }
                 else if (selected == MENU_MAIN_SETTINGS)
                     menuType = MenuTypeSettings;
                 else if (selected == MENU_MAIN_EXIT)

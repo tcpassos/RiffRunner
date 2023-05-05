@@ -25,7 +25,6 @@ void key_callback_difficulty_selector(GLFWwindow* window, int key, int scancode,
     //Starts to play the game with enter
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
         selectedDifficulty = menu->getItemIndex();
-        Sound::stopAll();
         accept(window, SceneGame);
     }
     //Return to music selector with ESC

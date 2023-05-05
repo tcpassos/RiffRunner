@@ -24,7 +24,7 @@ public:
     Rect getBounds();
     void disable();
     unsigned int hold(unsigned int positionY);
-    void move(int value);
+    void move(float value);
     void draw(GLFWwindow* window);
 
 private:

@@ -125,7 +125,7 @@ unsigned int SongNote::hold(unsigned int positionY) {
     return points;
 }
 
-void SongNote::move(int value) {
+void SongNote::move(float value) {
     this->note->moveY(value);
     if (hasTail()) this->tail->moveY(value);
 }

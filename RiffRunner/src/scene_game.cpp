@@ -6,6 +6,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <thread>
 
 #include "animated_sprite.h"
 #include "sound.h"
@@ -182,17 +183,22 @@ SceneId acceptGame(GLFWwindow* window) {
     TextRenderer timerText(windowWidth, windowHeight);
     timerText.Load("resources/fonts/digital-7.ttf", 30);
     const double timerStart = glfwGetTime();
-    double timerCurrent = timerStart;
+    double currentTime = timerStart;
+
+    // FPS text
+    TextRenderer fpsText(windowWidth, windowHeight);
+    fpsText.Load("resources/fonts/digital-7.ttf", 30);
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
         glfwPollEvents();
 
         // Update the amount of pixels objects shoud move
-        double timerPrevious = timerCurrent;
-        timerCurrent = glfwGetTime() - timerStart;
-        float elapsetTime = timerCurrent - timerPrevious;
-        int pixelsPerFrame = elapsetTime * pixelsPerSecond;
+        double previousTime = currentTime;
+        currentTime = glfwGetTime() - timerStart;
+        float frameTime = currentTime - previousTime;
+        float pixelsPerFrame = frameTime * pixelsPerSecond;
+        int framesPerSecond = 1 / frameTime;
 
         // Fail
         if (hud.getPerformance() == 0) {
@@ -230,7 +236,7 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         // Put new notes on screen
-        std::vector<SongNote> newNotes = noteDispatcher.get(timerCurrent);
+        std::vector<SongNote> newNotes = noteDispatcher.get(currentTime);
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
         
         // Process missclick notes
@@ -316,12 +322,21 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Timer
         std::stringstream timerString;
-        timerString << std::fixed << std::setprecision(2) << timerCurrent;
+        timerString << "Timer: " << std::fixed << std::setprecision(2) << currentTime;
         timerText.RenderText(timerString.str(), 70.0f, 20.0f, 1.0f);
+
+        // FPS
+        std::stringstream fpsString;
+        fpsString << "FPS: " << std::fixed << framesPerSecond;
+        fpsText.RenderText(fpsString.str(), 70.0f, 60.0f, 1.0f);
 
         // ==========================================================
         // Switch buffers
         glfwSwapBuffers(window);
+
+        // Limit FPS
+        //double waitTime = (1.0 / FPS) - frameTime;
+        //if (waitTime > 0.0) std::this_thread::sleep_for(std::chrono::milliseconds((int)waitTime));
     }
 
     return SceneExit;
