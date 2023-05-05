@@ -79,8 +79,8 @@ SceneId acceptPause(GLFWwindow* window) {
         glfwPollEvents();
 
         // Clear color buffer
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        //glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        //glClear(GL_COLOR_BUFFER_BIT);
 
         backgroundImage.draw(window);
         pauseMenu.draw();
