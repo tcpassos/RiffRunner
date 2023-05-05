@@ -12,14 +12,15 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     Texture2D noteTexture = ResourceManager::LoadTexture("resources/img/notes.png", "notes");
     this->note = new Sprite(noteTexture);
 
-    float noteSize = 40.0f;
-    float noteWidth = noteSize / 5;
-    float noteHeigth = noteSize / 6;
+    float notesWidth = 40.0f;
+    float notesHeight = 20.0f;
+    float noteWidth = notesWidth / 5;
+    float noteHeigth = notesHeight / 2;
     float notePosition = track.getBounds().left + (this->index * track.getSize().x / 5) + track.getSize().x / 10;
     noteNormalTextureRect = new Rect(glm::vec2(this->index * noteWidth, 0.0f), glm::vec2((this->index + 1) * noteWidth, noteHeigth));
     noteSpecialTextureRect = new Rect(glm::vec2(this->index * noteWidth, noteHeigth * 5), glm::vec2((this->index + 1) * noteWidth, noteHeigth * 6));
 
-    this->note->setSize(glm::vec2(noteSize));
+    this->note->setSize(notesWidth, notesHeight);
     this->note->setOrigin(this->note->getSize().x / 2, 0.0f);
     this->note->setPosition(notePosition, 0.0f);
     this->note->setTextureRect(*noteNormalTextureRect);
@@ -27,7 +28,15 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
 
     // Tail
     if (tailLength > 0) {
+        switch (index) {
+            case 0: this->originalColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.7f); break;
+            case 1: this->originalColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.7f); break;
+            case 2: this->originalColor = glm::vec4(1.0f, 1.0f, 0.0f, 0.7f); break;
+            case 3: this->originalColor = glm::vec4(0.0f, 0.0f, 1.0f, 0.7f); break;
+            case 4: this->originalColor = glm::vec4(1.0f, 0.65f, 0.0f, 0.7f); break;
+        }
         this->tail = new RectangleShape(10, tailLength);
+        this->tail->setColor(originalColor);
         this->tail->setOrigin(this->tail->getSize().x / 2, this->tail->getSize().y);
         this->tail->setPosition(this->note->getPosition().x, 0.0f);
         this->tail->setProjection(*track.getProjection());
@@ -84,7 +93,7 @@ void SongNote::disable() {
     this->disabled = true;
 
     if (hasTail()) {
-        glm::vec4 tailColor = this->tail->getColor();
+        glm::vec4 tailColor = originalColor;
         tailColor.a = 0.3f;
         this->tail->setColor(tailColor);
     }
@@ -105,7 +114,7 @@ unsigned int SongNote::hold(unsigned int positionY) {
     // Hide note
     note->setColor(glm::vec4(0.0f));
     // Increases tail opacity
-    glm::vec4 tailColor = tail->getColor();
+    glm::vec4 tailColor = originalColor;
     tailColor.a = 1.0f;
     tail->setColor(tailColor);
     // Update tail length
@@ -127,16 +136,17 @@ void SongNote::move(float value) {
 void SongNote::draw(GLFWwindow* window, bool specialActive) {
     // Draw tail
     if (hasTail()) {
+        glm::vec4 tailColor = tail->getColor();
         if (specialActive) {
-            tail->setColor(glm::vec4(0.0f, 0.85f, 1.0f, 1.0f));
+            tailColor.r = 0.0f;
+            tailColor.g = 0.85f;
+            tailColor.b = 1.0f;
+            tail->setColor(tailColor);
         } else {
-            switch (value) {
-                case 1: tail->setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.7f)); break;
-                case 2: tail->setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.7f)); break;
-                case 4: tail->setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.7f)); break;
-                case 8: tail->setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.7f)); break;
-                case 16: tail->setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.7f)); break;
-            }
+            tailColor.r = originalColor.r;
+            tailColor.g = originalColor.g;
+            tailColor.b = originalColor.b;
+            tail->setColor(tailColor);
         }
         tail->draw(window);
     }

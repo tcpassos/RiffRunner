@@ -38,4 +38,5 @@ private:
     double lastHoldingPointTime;
     Rect* noteNormalTextureRect;
     Rect* noteSpecialTextureRect;
+    glm::vec4 originalColor;
 };

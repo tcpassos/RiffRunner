@@ -116,11 +116,11 @@ void HUD::clearStreak() {
 }
 
 void HUD::activateSpecial() {
-	if (specialCounter > (SPECIAL_BAR_MAX / 2) && !specialActive) {
+	//if (specialCounter > (SPECIAL_BAR_MAX / 2) && !specialActive) {
 		specialSound->playOnce();
 		specialActive = true;
 		updateMultiplier();
-	}
+	//}
 }
 
 unsigned int HUD::getMultiplier() {

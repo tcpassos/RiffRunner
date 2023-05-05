@@ -106,7 +106,7 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
 
-    Rect inputBounds(track.getBounds().left, track.getBounds().height - 15, track.getBounds().width, track.getBounds().height + 15);
+    Rect inputBounds(track.getBounds().left, track.getBounds().height - 25, track.getBounds().width, track.getBounds().height + 25);
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -135,15 +135,15 @@ SceneId acceptGame(GLFWwindow* window) {
             notesFilename = selectedSongFolder + "seq1.txt";
             break;
         case 1:
-            pixelsPerSecond = 550;
+            pixelsPerSecond = 500;
             notesFilename = selectedSongFolder + "seq2.txt";
             break;
         case 2:
-            pixelsPerSecond = 700;
+            pixelsPerSecond = 550;
             notesFilename = selectedSongFolder + "seq3.txt";
             break;
         case 3:
-            pixelsPerSecond = 700;
+            pixelsPerSecond = 600;
             notesFilename = selectedSongFolder + "seq4.txt";
             break;
     }
@@ -268,7 +268,7 @@ SceneId acceptGame(GLFWwindow* window) {
                 if (note->checkInput(input)) {
                     // Long note
                     if (note->hasTail()) {
-                        hud.addPoints(note->hold(inputBounds.top - 7));
+                        hud.addPoints(note->hold(inputBounds.top - 2));
                         if (!flames[note->getIndex()]->isRunning()) {
                             flames[note->getIndex()]->resetAnimation();
                         }
