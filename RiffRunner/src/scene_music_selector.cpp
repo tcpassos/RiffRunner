@@ -17,12 +17,24 @@ namespace fs = std::filesystem;
 void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
 
+    //Left and Right to select the song
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
         menu->previous();
     }
     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
         menu->next();
     }
+
+    //Go to difficulty selector with ENTER
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+        selectedSong = menu->getItemValue();
+        accept(window, SceneDifficultySelector);
+    }
+    //Return to main menu with ESC
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        accept(window, SceneMenu);
+    }
+
 }
 
 // ======================================================================================
@@ -73,15 +85,6 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, width, height);
         glfwPollEvents();
-
-        // Exit on ESC
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            return SceneMenu;
-
-        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-            selectedSong = musicSelectorMenu.getItemValue();
-            return SceneDifficultySelector;
-        }
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

@@ -36,6 +36,10 @@ void key_callback_game(GLFWwindow* window, int key, int scancode, int action, in
     if (key == GLFW_KEY_J && action == GLFW_RELEASE) *input &= ~4;
     if (key == GLFW_KEY_K && action == GLFW_RELEASE) *input &= ~8;
     if (key == GLFW_KEY_L && action == GLFW_RELEASE) *input &= ~16;
+
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        accept(window, ScenePause);
+    }
 }
 
 // ======================================================================================
@@ -189,12 +193,6 @@ SceneId acceptGame(GLFWwindow* window) {
         timerCurrent = glfwGetTime() - timerStart;
         float elapsetTime = timerCurrent - timerPrevious;
         int pixelsPerFrame = elapsetTime * pixelsPerSecond;
-
-        // Exit on ESC
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            Sound::stopAll();
-            return SceneMusicSelector;
-        }
 
         // Fail
         if (hud.getPerformance() == 0) {

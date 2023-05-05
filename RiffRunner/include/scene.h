@@ -9,6 +9,7 @@ typedef enum SceneId {
     SceneDifficultySelector,
     SceneGame,
     SceneFailure,
+    ScenePause,
     SceneExit
 } SceneId;
 
@@ -17,4 +18,5 @@ SceneId acceptMusicSelector(GLFWwindow* window);
 SceneId acceptGame(GLFWwindow* window);
 SceneId acceptDifficultySelector(GLFWwindow* window);
 SceneId acceptFailure(GLFWwindow* window);
+SceneId acceptPause(GLFWwindow* window);
 void accept(GLFWwindow* window, SceneId id);

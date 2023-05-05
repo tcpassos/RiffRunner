@@ -4,13 +4,14 @@
 #include "sound.h"
 #include "sprite.h"
 
-const int FAILURE_RESTART = 0;
-const int FAILURE_GIVEUP = 1;
+const int PAUSE_CONTINUE = 0;
+const int PAUSE_RESTART = 1;
+const int PAUSE_EXIT = 2;
 
 // ======================================================================================
 // Keyboard navigation keys callback
 // ======================================================================================
-void key_callback_failure(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void key_callback_pause(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
 
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
@@ -24,10 +25,17 @@ void key_callback_failure(GLFWwindow* window, int key, int scancode, int action,
     //Deal with selected options when ENTER is pressed
     if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
         Sound::stopAll();
-        if (menu->getItemIndex() == FAILURE_RESTART)
-            accept(window, SceneGame);
-        if (menu->getItemIndex() == FAILURE_GIVEUP)
-            accept(window, SceneMenu);
+        switch (menu->getItemIndex()) {
+            case PAUSE_CONTINUE:
+                accept(window, SceneGame);
+                break;
+            case PAUSE_RESTART:
+                accept(window, SceneGame);
+                break;
+            case PAUSE_EXIT:
+                accept(window, SceneMenu);
+                break;
+        }
     }
     //Return to menu
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -40,50 +48,42 @@ void key_callback_failure(GLFWwindow* window, int key, int scancode, int action,
 // ======================================================================================
 // Failure scene
 // ======================================================================================
-SceneId acceptFailure(GLFWwindow* window) {
+SceneId acceptPause(GLFWwindow* window) {
 
     // Screen size
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
-    // Failure menu
-    Menu failureMenu(width, height, width / 12 * 3, height / 8 * 6);
+    // Background
+    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/pauseMenu.png", "Pause");
+    Sprite backgroundImage(backgroundTexture);
+    backgroundImage.setOrigin(glm::vec2(backgroundTexture.Width / 2, backgroundTexture.Height / 2));
+    backgroundImage.setPosition(glm::vec2(width / 2, height / 2));
 
-    failureMenu.addItem("<Reiniciar>");
-    failureMenu.addItem("<Desistir>");
+    // Pause menu
+    Menu pauseMenu(width, height, 0, 0);
+
+    pauseMenu.addItem("<Continuar>");
+    pauseMenu.addItem("<Reiniciar>");
+    pauseMenu.addItem("<Desistir>");
 
     // Menu key callback
-    glfwSetKeyCallback(window, key_callback_failure);
-    glfwSetWindowUserPointer(window, &failureMenu);
+    glfwSetKeyCallback(window, key_callback_pause);
+    glfwSetWindowUserPointer(window, &pauseMenu);
 
-    // Background
-    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/sadPepe.jpg", "Failure");
-    Sprite backgroundImage(backgroundTexture);
-
-    // Failure audios
-    Sound failureSong("resources/sound/musicaTristeDoNaruto.wav");
-    failureSong.play();
-    Sound failureAudio("resources/sound/rocky.wav");
-    failureAudio.setVolume(45);
-    failureAudio.play();
-    Sound naoConsegue("resources/sound/naoconsegue.wav");
-
+    Sound::stopAll();
 
     while (!glfwWindowShouldClose(window)) {
-        int oldOption = failureMenu.getItemIndex();
 
         glViewport(0, 0, width, height);
         glfwPollEvents();
-
-        if (failureMenu.getItemIndex() != oldOption && failureMenu.getItemIndex() == 1)
-            naoConsegue.play();
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         backgroundImage.draw(window);
-        failureMenu.draw();
+        pauseMenu.draw();
         // ==========================================================
         // Switch buffers
         glfwSwapBuffers(window);

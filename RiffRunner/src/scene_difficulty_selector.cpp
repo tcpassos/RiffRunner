@@ -14,12 +14,25 @@ void key_callback_difficulty_selector(GLFWwindow* window, int key, int scancode,
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
     int oldOption = menu->getItemIndex();
 
+    //Select the difficulty with UP and DOWN
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
         menu->previous();
     }
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
         menu->next();
     }
+
+    //Starts to play the game with enter
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
+        selectedDifficulty = menu->getItemIndex();
+        Sound::stopAll();
+        accept(window, SceneGame);
+    }
+    //Return to music selector with ESC
+    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+        accept(window, SceneMusicSelector);
+    }
+
     if (oldOption != menu->getItemIndex())
         switch (menu->getItemIndex()) {
             case 0:
@@ -76,19 +89,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, width, height);
-        glfwPollEvents();
-
-        // Exit on ESC
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-            return SceneMusicSelector;
-
-        // Song is selected (ENTER)
-        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-            selectedDifficulty = difficultySelectorMenu.getItemIndex();
-            Sound::stopAll();
-            return SceneGame;
-        }
-            
+        glfwPollEvents();      
 
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
