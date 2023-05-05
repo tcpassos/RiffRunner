@@ -13,10 +13,10 @@ void RectangleShape::draw(GLFWwindow* window) {
     glm::mat4 model = getModelMatrix();
 
     // Prepare shader
-    this->shader.Use();
-    this->shader.SetMatrix4("projection", projection);
-    this->shader.SetMatrix4("model", model);
-    this->shader.SetVector4f("fillColor", this->color);
+    this->shader.use();
+    this->shader.setMatrix4("projection", projection);
+    this->shader.setMatrix4("model", model);
+    this->shader.setVector4f("fillColor", this->color);
 
     // Prepare blending
     glEnable(GL_DEPTH_TEST);

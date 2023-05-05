@@ -1,9 +1,8 @@
 #pragma once
 
-#include <map>
-
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <map>
 
 #include "texture.h"
 #include "shader.h"
@@ -11,10 +10,16 @@
 
 /// Holds all state information relevant to a character as loaded using FreeType
 struct Character {
-    unsigned int TextureID; // ID handle of the glyph texture
-    glm::ivec2   Size;      // size of glyph
-    glm::ivec2   Bearing;   // offset from baseline to left/top of glyph
-    unsigned int Advance;   // horizontal offset to advance to next glyph
+    unsigned int textureId; // ID handle of the glyph texture
+    glm::ivec2   size;      // size of glyph
+    glm::ivec2   bearing;   // offset from baseline to left/top of glyph
+    unsigned int advance;   // horizontal offset to advance to next glyph
+};
+
+enum TextAlignment {
+    TextLeft,
+    TextCenter,
+    TextRight
 };
 
 
@@ -25,18 +30,27 @@ class TextRenderer
 {
 public:
     // holds a list of pre-compiled Characters
-    std::map<char, Character> Characters;
+    std::map<char, Character> characters;
     // shader used for text rendering
-    Shader TextShader;
-    // constructor
+    Shader shader;
+
     TextRenderer(unsigned int width, unsigned int height);
     // pre-compiles a list of characters from the given font
-    void Load(std::string font, unsigned int fontSize);
+    void load(std::string font, unsigned int fontSize);
     // renders a string of text using the precompiled list of characters
-    void RenderText(std::string text, float x, float y, float scale, glm::vec3 color = glm::vec3(1.0f));
+    void renderText(std::string text, float x, float y);
+
+    void setHorizontalAlignment(TextAlignment alignment) { horizontalAlignment = alignment; }
+    void setColor(float red, float green, float blue, float alpha = 1.0f) { color.r = red; color.g = green; color.b = blue; color.a = alpha; };
+    void setColor(glm::vec4 color) { this->color = color; };
+    void setScale(float scale) { this->scale = scale; }
+
+
 private:
-    // render state
     unsigned int VAO, VBO;
+    TextAlignment horizontalAlignment;
+    glm::vec4 color;
+    float scale;
     
-    unsigned int getCentralizedPosX(unsigned int posX, std::string text, float scale);
+    unsigned int getPositionX(unsigned int posX, std::string text, float scale);
 };

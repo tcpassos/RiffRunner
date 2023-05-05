@@ -1,10 +1,10 @@
 #include "sprite.h"
 #include "resource_manager.h"
 
-Sprite::Sprite(Texture2D texture) : Shape(texture.Width, texture.Height) {
+Sprite::Sprite(Texture2D texture) : Shape(texture.width, texture.height) {
     this->shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "shaderSprite");
     this->texture = texture;
-    this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.Width, this->texture.Height));
+    this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.width, this->texture.height));
 }
 
 void Sprite::setTextureRect(Rect &textureRect) {
@@ -48,15 +48,15 @@ void Sprite::draw(GLFWwindow* window) {
     glm::mat4 model = getModelMatrix();
 
     // Prepare shader
-    this->shader.Use();
-    this->shader.SetMatrix4("projection", projection);
-    this->shader.SetMatrix4("model", model);
-    this->shader.SetVector4f("texColor", this->color);
-    this->shader.SetInteger("texBuff", 0);
+    this->shader.use();
+    this->shader.setMatrix4("projection", projection);
+    this->shader.setMatrix4("model", model);
+    this->shader.setVector4f("texColor", this->color);
+    this->shader.setInteger("texBuff", 0);
 
     // Prepare texture
     glActiveTexture(GL_TEXTURE0);
-    this->texture.Bind();
+    this->texture.bind();
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_ALWAYS);
     glEnable(GL_BLEND);

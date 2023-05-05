@@ -10,7 +10,7 @@ Menu::Menu(int screenWidth, int screenHeigth, int initialPosX, int initialPosY, 
     isVertical = true;
     selectedItem = 0;
     textRenderer = new TextRenderer(width, heigth);
-    textRenderer->Load(font, 52);
+    textRenderer->load(font, 52);
     clickSound = new Sound("resources/sound/click.wav");
 }
 
@@ -38,12 +38,14 @@ void Menu::draw() {
             }
 
             // The selected item will be red and slightly larger
-            glm::vec3 itemColor = selectedItem == i ? glm::vec3{1.0f, 0.0f, 0.0f} : glm::vec3{1.0f, 1.0f, 1.0f};
+            glm::vec4 itemColor = selectedItem == i ? glm::vec4(1.0f, 0.0f, 0.0f, 1.0f) : glm::vec4(1.0f);
             float itemScale = selectedItem == i ? 1.2f : 1.0f;
-            textRenderer->RenderText(menuItens[i], x, y, itemScale, itemColor);
+            textRenderer->setColor(itemColor);
+            textRenderer->setScale(itemScale);
+            textRenderer->renderText(menuItens[i], x, y);
         }
     } else {
-        textRenderer->RenderText(menuItens[this->selectedItem], posX, posY, 1.0f, glm::vec3{ 1.0f, 1.0f, 1.0f });
+        textRenderer->renderText(menuItens[this->selectedItem], posX, posY);
     }
 
 }

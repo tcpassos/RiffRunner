@@ -182,13 +182,13 @@ SceneId acceptGame(GLFWwindow* window) {
 
     // Song timer
     TextRenderer timerText(windowWidth, windowHeight);
-    timerText.Load("resources/fonts/digital-7.ttf", 30);
+    timerText.load("resources/fonts/digital-7.ttf", 30);
     const double timerStart = glfwGetTime();
     double currentTime = timerStart;
 
     // FPS text
     TextRenderer fpsText(windowWidth, windowHeight);
-    fpsText.Load("resources/fonts/digital-7.ttf", 30);
+    fpsText.load("resources/fonts/digital-7.ttf", 30);
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
@@ -333,12 +333,12 @@ SceneId acceptGame(GLFWwindow* window) {
         // Timer
         std::stringstream timerString;
         timerString << "Timer: " << std::fixed << std::setprecision(2) << currentTime;
-        timerText.RenderText(timerString.str(), 70.0f, 20.0f, 1.0f);
+        timerText.renderText(timerString.str(), 70.0f, 20.0f);
 
         // FPS
         std::stringstream fpsString;
         fpsString << "FPS: " << std::fixed << framesPerSecond;
-        fpsText.RenderText(fpsString.str(), 70.0f, 60.0f, 1.0f);
+        fpsText.renderText(fpsString.str(), 70.0f, 60.0f);
 
         // ==========================================================
         // Switch buffers

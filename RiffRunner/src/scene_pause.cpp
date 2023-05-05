@@ -57,7 +57,7 @@ SceneId acceptPause(GLFWwindow* window) {
     // Background
     Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/pauseMenu.png", "Pause");
     Sprite backgroundImage(backgroundTexture);
-    backgroundImage.setOrigin(glm::vec2(backgroundTexture.Width / 2, backgroundTexture.Height / 2));
+    backgroundImage.setOrigin(glm::vec2(backgroundTexture.width / 2, backgroundTexture.height / 2));
     backgroundImage.setPosition(glm::vec2(width / 2, height / 2));
 
     // Pause menu

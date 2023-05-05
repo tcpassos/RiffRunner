@@ -45,7 +45,7 @@ void ResourceManager::Clear()
         glDeleteProgram(iter.second.ID);
     // (properly) delete all textures
     for (auto iter : Textures)
-        glDeleteTextures(1, &iter.second.ID);
+        glDeleteTextures(1, &iter.second.id);
 }
 
 Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile)
@@ -88,7 +88,7 @@ Shader ResourceManager::loadShaderFromFile(const char* vShaderFile, const char* 
     const char* gShaderCode = geometryCode.c_str();
     // 2. now create shader object from source code
     Shader shader;
-    shader.Compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
+    shader.compile(vShaderCode, fShaderCode, gShaderFile != nullptr ? gShaderCode : nullptr);
     return shader;
 }
 
@@ -114,10 +114,10 @@ Texture2D ResourceManager::loadTextureFromFile(const char* file) {
     } else {
         format = GL_RGB;
     }
-    texture.Internal_Format = format;
-    texture.Image_Format = format;
+    texture.internalFormat = format;
+    texture.imageFormat = format;
     // Now generate texture
-    texture.Generate(width, height, data);
+    texture.generate(width, height, data);
     // And finally free image data
     stbi_image_free(data);
     return texture;
