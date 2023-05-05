@@ -176,6 +176,7 @@ SceneId acceptGame(GLFWwindow* window) {
     Sound background((selectedSongFolder + "background.ogg").c_str());
     Sound song((selectedSongFolder + "song.ogg").c_str());
     Sound pluck("resources/sound/click02.wav");
+    Sound specialSound("resources/sound/special.wav");
     background.play();
     song.play();
 
@@ -200,6 +201,14 @@ SceneId acceptGame(GLFWwindow* window) {
         float pixelsPerFrame = frameTime * pixelsPerSecond;
         int framesPerSecond = 1 / frameTime;
 
+        // Activate special
+        if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+            hud.activateSpecial();
+            if (hud.isSpecialActive()) {
+                specialSound.playOnce();
+            }
+        }
+
         // Fail
         if (hud.getPerformance() == 0) {
             Sound::stopAll();
@@ -215,6 +224,7 @@ SceneId acceptGame(GLFWwindow* window) {
         backgroundImage.draw(window);
         
         // HUD
+        hud.update(currentTime);
         hud.draw(window);
 
         // Track
@@ -306,7 +316,7 @@ SceneId acceptGame(GLFWwindow* window) {
         // Draw notes
         for (auto note : notes) {
             note.move(pixelsPerFrame);
-            note.draw(window);
+            note.draw(window, hud.isSpecialActive());
         }
 
         // Flames

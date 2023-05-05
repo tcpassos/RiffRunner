@@ -10,6 +10,7 @@ HUD::HUD() {
 	this->performance = limit / 2;
 	this->score = 0;
 	this->streak = 0;
+	this->lastUpdateTime = 0.0;
 
 	// Indicator
 							  ResourceManager::LoadTexture("resources/img/hud/green.png", "performanceGreen");
@@ -44,6 +45,7 @@ HUD::HUD() {
 						  ResourceManager::LoadTexture("resources/img/hud/x4.png", "x4");
 						  ResourceManager::LoadTexture("resources/img/hud/sx2.png", "sx2");
 						  ResourceManager::LoadTexture("resources/img/hud/sx4.png", "sx4");
+						  ResourceManager::LoadTexture("resources/img/hud/sx6.png", "sx6");
 						  ResourceManager::LoadTexture("resources/img/hud/sx8.png", "sx8");
 	this->multiplier = new Sprite(x1Texture);
 	this->multiplier->setPosition(800.0f - this->multiplier->getSize().x, this->indicator->getPosition().y);
@@ -109,6 +111,13 @@ void HUD::clearStreak() {
 	updateMultiplier();
 }
 
+void HUD::activateSpecial() {
+	if (specialCounter > SPECIAL_BAR_MAX / 2) {
+		specialActive = true;
+		updateMultiplier();
+	}
+}
+
 unsigned int HUD::getMultiplier() {
 	if (this->streak < MULTIPLIER_TRESHOLD) {
 		return 1;
@@ -122,14 +131,40 @@ unsigned int HUD::getMultiplier() {
 }
 void HUD::updateMultiplier() {
 	unsigned int multiplier = getMultiplier();
-	if (multiplier == 1) {
-		this->multiplier->setTexture(ResourceManager::GetTexture("x1"));
-	} else if (multiplier == 2) {
-		this->multiplier->setTexture(ResourceManager::GetTexture("x2"));
-	} else if (multiplier == 3) {
-		this->multiplier->setTexture(ResourceManager::GetTexture("x3"));
-	} else if (multiplier == 4) {
-		this->multiplier->setTexture(ResourceManager::GetTexture("x4"));
+	if (!specialActive) {
+		if (multiplier == 1) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("x1"));
+		} else if (multiplier == 2) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("x2"));
+		} else if (multiplier == 3) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("x3"));
+		} else if (multiplier == 4) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("x4"));
+		}
+	} else {
+		if (multiplier == 1) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("sx2"));
+		} else if (multiplier == 2) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("sx4"));
+		} else if (multiplier == 3) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("sx6"));
+		} else if (multiplier == 4) {
+			this->multiplier->setTexture(ResourceManager::GetTexture("sx8"));
+		}
+	}
+}
+
+void HUD::update(double elapsedTime) {
+	if (elapsedTime - lastUpdateTime < 1.0) /* 1 sec */ {
+		return;
+	}
+	lastUpdateTime = elapsedTime;
+	if (specialActive) {
+		specialCounter--;
+		if (specialCounter == 0) {
+			specialActive = false;
+			updateMultiplier();
+		}
 	}
 }
 

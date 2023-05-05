@@ -25,7 +25,7 @@ public:
     void disable();
     unsigned int hold(unsigned int positionY);
     void move(float value);
-    void draw(GLFWwindow* window);
+    void draw(GLFWwindow* window, bool specialActive = false);
 
 private:
     unsigned int value;
@@ -36,4 +36,6 @@ private:
     RectangleShape* tail;
     unsigned int tailLength;
     double lastHoldingPointTime;
+    Rect* noteNormalTextureRect;
+    Rect* noteSpecialTextureRect;
 };

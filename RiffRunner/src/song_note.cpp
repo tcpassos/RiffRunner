@@ -14,13 +14,15 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
 
     float noteSize = 40.0f;
     float noteWidth = noteSize / 5;
+    float noteHeigth = noteSize / 6;
     float notePosition = track.getBounds().left + (this->index * track.getSize().x / 5) + track.getSize().x / 10;
-    Rect noteTextureRect(glm::vec2(this->index * noteWidth, 0.0f), glm::vec2((this->index + 1) * noteWidth, noteSize / 6));
+    noteNormalTextureRect = new Rect(glm::vec2(this->index * noteWidth, 0.0f), glm::vec2((this->index + 1) * noteWidth, noteHeigth));
+    noteSpecialTextureRect = new Rect(glm::vec2(this->index * noteWidth, noteHeigth * 5), glm::vec2((this->index + 1) * noteWidth, noteHeigth * 6));
 
     this->note->setSize(glm::vec2(noteSize));
     this->note->setOrigin(this->note->getSize().x / 2, 0.0f);
     this->note->setPosition(notePosition, 0.0f);
-    this->note->setTextureRect(noteTextureRect);
+    this->note->setTextureRect(*noteNormalTextureRect);
     this->note->setProjection(*track.getProjection(), true);
 
     // Tail
@@ -130,7 +132,12 @@ void SongNote::move(float value) {
     if (hasTail()) this->tail->moveY(value);
 }
 
-void SongNote::draw(GLFWwindow* window) {
+void SongNote::draw(GLFWwindow* window, bool specialActive) {
     if (hasTail()) this->tail->draw(window);
-    this->note->draw(window);
+    if (specialActive) {
+        note->setTextureRect(*noteSpecialTextureRect);
+    } else {
+        note->setTextureRect(*noteNormalTextureRect);
+    }
+    note->draw(window);
 }

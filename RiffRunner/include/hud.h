@@ -17,9 +17,12 @@ public:
     void addPoints(unsigned int points);
     void incrementStreak();
     void clearStreak();
+    void activateSpecial();
+    bool isSpecialActive() { return this->specialActive; }
     unsigned int getPerformance() { return this->performance; }
     unsigned int getScore() { return this->score; }
     unsigned int getMultiplier();
+    void update(double elapsedTime);
     void draw(GLFWwindow* window);
 
 private:
@@ -29,6 +32,8 @@ private:
     unsigned int streak;
     unsigned int specialCounter;
     float specialBarHeight;
+    bool specialActive;
+    double lastUpdateTime;
 
     Sprite* indicator;
     Sprite* pointer;
