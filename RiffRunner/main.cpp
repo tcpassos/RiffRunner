@@ -10,6 +10,7 @@
 
 std::string selectedSong;
 int selectedDifficulty;
+unsigned int finalScore;
 
 int main(void) {
     glfwInit();

@@ -15,6 +15,9 @@ void accept(GLFWwindow* window, SceneId id) {
         case SceneGame:
             id = acceptGame(window);
             break;
+        case SceneResults:
+            id = acceptResults(window);
+            break;
         case SceneFailure:
             id = acceptFailure(window);
             break;

@@ -225,6 +225,13 @@ SceneId acceptGame(GLFWwindow* window) {
             return SceneFailure;
         }
 
+        // Finish
+        if (song.isFinished()) {
+            Sound::stopAll();
+            finalScore = hud.getScore();
+            return SceneResults;
+        }
+
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

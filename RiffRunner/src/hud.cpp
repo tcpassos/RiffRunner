@@ -2,7 +2,7 @@
 
 #include "hud.h"
 
-#define MULTIPLIER_TRESHOLD 30
+#define MULTIPLIER_TRESHOLD 15
 #define SPECIAL_BAR_MAX 500
 
 HUD::HUD() {

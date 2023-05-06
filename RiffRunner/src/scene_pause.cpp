@@ -20,7 +20,7 @@ void key_callback_pause(GLFWwindow* window, int key, int scancode, int action, i
 }
 
 // ======================================================================================
-// Failure scene
+// Pause scene
 // ======================================================================================
 SceneId acceptPause(GLFWwindow* window) {
 

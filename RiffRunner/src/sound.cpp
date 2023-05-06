@@ -37,3 +37,7 @@ void Sound::stop() {
 void Sound::setVolume(unsigned int volume) {
     sound->setVolume((float)volume / 100.0);
 }
+
+bool Sound::isFinished() {
+    return sound->isFinished();
+}

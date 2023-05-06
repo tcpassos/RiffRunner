@@ -23,6 +23,10 @@ public:
         return result;
     }
 
+    bool isEmpty() {
+        return this->elements.empty();
+    }
+
 private:
     double delay = 0;
     std::map<double, T> elements;

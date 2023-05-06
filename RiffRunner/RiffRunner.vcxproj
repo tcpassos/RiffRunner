@@ -149,6 +149,7 @@
     <ClCompile Include="src\scene_menu.cpp" />
     <ClCompile Include="src\scene_music_selector.cpp" />
     <ClCompile Include="src\scene_pause.cpp" />
+    <ClCompile Include="src\scene_results.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\song_note.cpp" />
