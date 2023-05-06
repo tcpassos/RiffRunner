@@ -15,6 +15,8 @@ public:
     ~Shape();
     void setColor(glm::vec4 color) { this->color = color; }
     glm::vec4 getColor() { return this->color; }
+    void setOpacity(float opacity) { this->color.a = opacity; }
+    float getOpacity() { return this->color.a; }
 
     void setPosition(glm::vec2 position) { this->position = position; }
     void setPosition(float x, float y) { this->position.x = x; this->position.y = y; }

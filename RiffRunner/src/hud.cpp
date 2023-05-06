@@ -12,7 +12,7 @@ HUD::HUD() {
 	this->streak = 0;
 	this->lastUpdateTime = 0.0;
 	this->specialActive = false;
-	this->specialCounter = 250;
+	this->specialCounter = 0;
 
 	// Indicator
 							  ResourceManager::LoadTexture("resources/img/hud/green.png", "performanceGreen");

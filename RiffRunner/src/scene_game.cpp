@@ -37,10 +37,6 @@ void key_callback_game(GLFWwindow* window, int key, int scancode, int action, in
     if (key == GLFW_KEY_J && action == GLFW_RELEASE) *input &= ~4;
     if (key == GLFW_KEY_K && action == GLFW_RELEASE) *input &= ~8;
     if (key == GLFW_KEY_L && action == GLFW_RELEASE) *input &= ~16;
-
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-        accept(window, ScenePause);
-    }
 }
 
 // ======================================================================================
@@ -89,14 +85,17 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Input zone
+    Rect inputBounds(track.getBounds().left, track.getBounds().height - 40, track.getBounds().width, track.getBounds().height + 15);
+
     std::vector<RectangleShape> detectors;
     for (int i = 0; i < 5; i++) {
         float detectorWidth = track.getSize().x / 5;
+        float detectorHeight = (inputBounds.height - inputBounds.top) * 0.4;
         float detectorPosition = track.getBounds().left + detectorWidth * i + detectorWidth / 2;
         RectangleShape detector(track.getSize().x, track.getSize().y);
-        detector.setSize(detectorWidth, 15.0f);
-        detector.setOrigin(detector.getSize() / 2.0f);
-        detector.setPosition(detectorPosition, track.getBounds().height - 20);
+        detector.setSize(detectorWidth, detectorHeight);
+        detector.setOrigin(detector.getSize().x / 2.0f, detector.getSize().y);
+        detector.setPosition(detectorPosition, inputBounds.height - 25);
         detector.setProjection(*track.getProjection());
         detectors.push_back(detector);
     }
@@ -105,8 +104,6 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f));
     detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
-
-    Rect inputBounds(track.getBounds().left, track.getBounds().height - 25, track.getBounds().width, track.getBounds().height + 25);
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -183,8 +180,8 @@ SceneId acceptGame(GLFWwindow* window) {
     TextRenderer textRenderer(windowWidth, windowHeight);
     textRenderer.load("resources/fonts/digital-7.ttf", 30);
     textRenderer.setHorizontalAlignment(TextLeft);
-    const double timerStart = glfwGetTime();
-    double currentTime = timerStart;
+    double offsetTime = glfwGetTime();
+    double currentTime = offsetTime;
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
@@ -192,7 +189,7 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Update the amount of pixels objects shoud move
         double previousTime = currentTime;
-        currentTime = glfwGetTime() - timerStart;
+        currentTime = glfwGetTime() - offsetTime;
         float frameTime = currentTime - previousTime;
         float pixelsPerFrame = frameTime * pixelsPerSecond;
         int framesPerSecond = 1 / frameTime;
@@ -200,6 +197,23 @@ SceneId acceptGame(GLFWwindow* window) {
         // Activate special
         if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
             hud.activateSpecial();
+        }
+
+        // Pause
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            song.pause();
+            background.pause();
+            double pauseTime = glfwGetTime();
+
+            SceneId nextScene = acceptPause(window);
+            if (nextScene != SceneCurrent) {
+                Sound::stopAll();
+                return nextScene;
+            }
+
+            offsetTime += (glfwGetTime() - pauseTime);
+            song.play();
+            background.play();
         }
 
         // Fail
@@ -251,6 +265,18 @@ SceneId acceptGame(GLFWwindow* window) {
             pluck.playOnce();
         }
 
+        // Highlight
+        float detector0Opacity = (validInputMask & 1) > 0 ? 1.0f : 0.5f;
+        float detector1Opacity = (validInputMask & 2) > 0 ? 1.0f : 0.5f;
+        float detector2Opacity = (validInputMask & 4) > 0 ? 1.0f : 0.5f;
+        float detector3Opacity = (validInputMask & 8) > 0 ? 1.0f : 0.5f;
+        float detector4Opacity = (validInputMask & 16) > 0 ? 1.0f : 0.5f;
+        detectors[0].setOpacity(detector0Opacity);
+        detectors[1].setOpacity(detector1Opacity);
+        detectors[2].setOpacity(detector2Opacity);
+        detectors[3].setOpacity(detector3Opacity);
+        detectors[4].setOpacity(detector4Opacity);
+
         // Process input
         for (auto note = notes.begin(); note != notes.end(); ) {
             // Before detector
@@ -261,7 +287,7 @@ SceneId acceptGame(GLFWwindow* window) {
                 if (note->checkInput(input)) {
                     // Long note
                     if (note->hasTail()) {
-                        hud.addPoints(note->hold(inputBounds.top - 2));
+                        hud.addPoints(note->hold(inputBounds.top + 15));
                         if (!flames[note->getIndex()]->isRunning()) {
                             flames[note->getIndex()]->resetAnimation();
                         }
@@ -281,6 +307,10 @@ SceneId acceptGame(GLFWwindow* window) {
                 }
             // Afer detector
             } else {
+                // Deactivate highlight
+                if ((note->getValue() & validInputMask) == 0) {
+                    detectors[note->getIndex()].setOpacity(0.5f);
+                }
                 if (note->getBounds().height > track.getSize().y) {
                     if (!note->isDisabled()) {
                         input &= ~note->getValue(); // Release input

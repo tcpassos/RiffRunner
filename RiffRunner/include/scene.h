@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 
 typedef enum SceneId {
+    SceneCurrent,
     SceneMenu,
     SceneMusicSelector,
     SceneDifficultySelector,

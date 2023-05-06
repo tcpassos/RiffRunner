@@ -1,12 +1,9 @@
+#include "game_config.h"
 #include "menu.h"
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
 #include "sprite.h"
-
-const int PAUSE_CONTINUE = 0;
-const int PAUSE_RESTART = 1;
-const int PAUSE_EXIT = 2;
 
 // ======================================================================================
 // Keyboard navigation keys callback
@@ -16,33 +13,10 @@ void key_callback_pause(GLFWwindow* window, int key, int scancode, int action, i
 
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
         menu->previous();
-        
     }
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
         menu->next();
     }
-
-    //Deal with selected options when ENTER is pressed
-    if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-        Sound::stopAll();
-        switch (menu->getItemIndex()) {
-            case PAUSE_CONTINUE:
-                accept(window, SceneGame);
-                break;
-            case PAUSE_RESTART:
-                accept(window, SceneGame);
-                break;
-            case PAUSE_EXIT:
-                accept(window, SceneMenu);
-                break;
-        }
-    }
-    //Return to menu
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        Sound::stopAll();
-        accept(window, SceneMenu);
-    }
-
 }
 
 // ======================================================================================
@@ -63,24 +37,35 @@ SceneId acceptPause(GLFWwindow* window) {
     // Pause menu
     Menu pauseMenu(width, height, 0, 0);
 
-    pauseMenu.addItem("<Continuar>");
-    pauseMenu.addItem("<Reiniciar>");
-    pauseMenu.addItem("<Desistir>");
+    const int PAUSE_CONTINUE = pauseMenu.addItem("<Continuar>");;
+    const int PAUSE_RESTART = pauseMenu.addItem("<Reiniciar>");;
+    const int PAUSE_EXIT = pauseMenu.addItem("<Desistir>");;
 
     // Menu key callback
     glfwSetKeyCallback(window, key_callback_pause);
     glfwSetWindowUserPointer(window, &pauseMenu);
 
-    Sound::stopAll();
-
     while (!glfwWindowShouldClose(window)) {
+
+        //Deal with selected options when ENTER is pressed
+        if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+            if (pauseMenu.getItemIndex() == PAUSE_CONTINUE) {
+                return SceneCurrent;
+            }
+            if (pauseMenu.getItemIndex() == PAUSE_RESTART) {
+                return SceneGame;
+            }
+            if (pauseMenu.getItemIndex() == PAUSE_EXIT) {
+                return SceneMenu;
+            }
+        }
 
         glViewport(0, 0, width, height);
         glfwPollEvents();
 
         // Clear color buffer
-        //glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        //glClear(GL_COLOR_BUFFER_BIT);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         backgroundImage.draw(window);
         pauseMenu.draw();
