@@ -214,6 +214,9 @@ SceneId acceptGame(GLFWwindow* window) {
             offsetTime += (glfwGetTime() - pauseTime);
             song.play();
             background.play();
+            // Re-bind key callback
+            glfwSetKeyCallback(window, key_callback_game);
+            glfwSetWindowUserPointer(window, &input);
         }
 
         // Fail
