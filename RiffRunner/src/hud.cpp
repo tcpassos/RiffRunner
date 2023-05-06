@@ -39,6 +39,7 @@ HUD::HUD() {
 	this->display->setColor(glm::vec4(1.0, 1.0, 1.0, 0.5));
 	this->scoreText = new TextRenderer(800, 600);
 	this->scoreText->load("resources/fonts/digital-7.ttf", 45);
+	this->scoreText->setHorizontalAlignment(TextRight);
 
 	// Special Multiplier
 	Texture2D x1Texture = ResourceManager::LoadTexture("resources/img/hud/x1.png", "x1");
@@ -185,7 +186,7 @@ void HUD::draw(GLFWwindow* window) {
 	this->pointer->draw(window);
 	this->display->draw(window);
 	this->scoreText->renderText(std::to_string(this->score),
-								this->display->getPosition().x + this->display->getSize().x / 2, this->display->getBounds().top + 35);
+								this->display->getPosition().x + this->display->getSize().x - 30, this->display->getBounds().top + 35);
 	this->specialBar->draw(window);
 	this->multiplier->draw(window);
 }

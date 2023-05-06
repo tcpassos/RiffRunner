@@ -149,7 +149,7 @@ void TextRenderer::renderText(std::string text, float x, float y) {
 unsigned int TextRenderer::getPositionX(unsigned int posX, std::string text, float scale) {
     // Position at start
     if (horizontalAlignment == TextLeft)
-        return 0;
+        return posX;
 
     unsigned int textWidth = 0;
     std::string::const_iterator c;
@@ -163,6 +163,6 @@ unsigned int TextRenderer::getPositionX(unsigned int posX, std::string text, flo
         return posX - (textWidth / 2);
 
     // Position at end
-    if (horizontalAlignment == TextCenter)
+    if (horizontalAlignment == TextRight)
         return posX - textWidth;
 }

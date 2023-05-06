@@ -179,15 +179,12 @@ SceneId acceptGame(GLFWwindow* window) {
     background.play();
     song.play();
 
-    // Song timer
-    TextRenderer timerText(windowWidth, windowHeight);
-    timerText.load("resources/fonts/digital-7.ttf", 30);
+    // FPS/Timer text
+    TextRenderer textRenderer(windowWidth, windowHeight);
+    textRenderer.load("resources/fonts/digital-7.ttf", 30);
+    textRenderer.setHorizontalAlignment(TextLeft);
     const double timerStart = glfwGetTime();
     double currentTime = timerStart;
-
-    // FPS text
-    TextRenderer fpsText(windowWidth, windowHeight);
-    fpsText.load("resources/fonts/digital-7.ttf", 30);
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
@@ -319,22 +316,22 @@ SceneId acceptGame(GLFWwindow* window) {
             }
         }
 
+        // Background front
+        backgroundImageFront.draw(window);
+
         // HUD
         hud.update(currentTime);
         hud.draw(window);
 
-        // Background front
-        backgroundImageFront.draw(window);
-
         // Timer
         std::stringstream timerString;
         timerString << "Timer: " << std::fixed << std::setprecision(2) << currentTime;
-        timerText.renderText(timerString.str(), 70.0f, 20.0f);
+        textRenderer.renderText(timerString.str(), 10.0f, 10.0f);
 
         // FPS
         std::stringstream fpsString;
         fpsString << "FPS: " << std::fixed << framesPerSecond;
-        fpsText.renderText(fpsString.str(), 70.0f, 60.0f);
+        textRenderer.renderText(fpsString.str(), 10.0f, 40.0f);
 
         // ==========================================================
         // Switch buffers
