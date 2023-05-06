@@ -219,10 +219,6 @@ SceneId acceptGame(GLFWwindow* window) {
         // Background
         backgroundImage.draw(window);
         
-        // HUD
-        hud.update(currentTime);
-        hud.draw(window);
-
         // Track
         Rect trackTextureRect = track.getTextureRect();
         float wtfFactor = pixelsPerFrame * 0.92;
@@ -322,6 +318,10 @@ SceneId acceptGame(GLFWwindow* window) {
                 flame->draw(window);
             }
         }
+
+        // HUD
+        hud.update(currentTime);
+        hud.draw(window);
 
         // Background front
         backgroundImageFront.draw(window);

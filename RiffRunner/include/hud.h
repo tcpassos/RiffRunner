@@ -31,8 +31,8 @@ private:
     unsigned int limit;
     unsigned int score;
     unsigned int streak;
-    unsigned int specialCounter;
-    float specialBarHeight;
+    int specialCounter;
+    float specialBarUnit;
     bool specialActive;
     double lastUpdateTime;
 
@@ -46,4 +46,5 @@ private:
 
     void updatePerformanceIndicator();
     void updateMultiplier();
+    void updateSpecialBar();
 };
