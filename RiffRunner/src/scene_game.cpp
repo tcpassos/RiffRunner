@@ -26,6 +26,13 @@
 void key_callback_game(GLFWwindow* window, int key, int scancode, int action, int mods) {
     unsigned int* input = (unsigned int*)glfwGetWindowUserPointer(window);
 
+    /* KEY MAPPING */
+    // A = 00001 = 1
+    // S = 00010 = 2
+    // J = 00100 = 4
+    // K = 01000 = 8
+    // L = 10000 = 16
+
     if (key == GLFW_KEY_A && action == GLFW_PRESS) *input |= 1;
     if (key == GLFW_KEY_S && action == GLFW_PRESS) *input |= 2;
     if (key == GLFW_KEY_J && action == GLFW_PRESS) *input |= 4;
@@ -169,6 +176,10 @@ SceneId acceptGame(GLFWwindow* window) {
     }
     file.close();
 
+    // Number of notes / hit notes (used to calculate progress)
+    noteCount = noteDispatcher.size();
+    hitNotes = 0;
+
     // Load song
     Sound background((selectedSongFolder + "background.ogg").c_str());
     Sound song((selectedSongFolder + "song.ogg").c_str());
@@ -297,6 +308,9 @@ SceneId acceptGame(GLFWwindow* window) {
                 if (note->checkInput(input)) {
                     // Long note
                     if (note->hasTail()) {
+                        if (note->getState() == NoteUnpressed) {
+                            hitNotes++;
+                        }
                         hud.addPoints(note->hold(inputBounds.top + 15));
                         if (!flames[note->getIndex()]->isRunning()) {
                             flames[note->getIndex()]->resetAnimation();
@@ -304,6 +318,7 @@ SceneId acceptGame(GLFWwindow* window) {
                         ++note;
                     // Short note
                     } else {
+                        hitNotes++;
                         input &= ~note->getValue(); // Release input
                         hud.incrementPerformance();
                         hud.incrementStreak();
@@ -322,7 +337,7 @@ SceneId acceptGame(GLFWwindow* window) {
                     detectors[note->getIndex()].setOpacity(0.5f);
                 }
                 if (note->getBounds().height > track.getSize().y) {
-                    if (!note->isDisabled()) {
+                    if (note->getState() != NoteDisabled) {
                         input &= ~note->getValue(); // Release input
                         note->disable();
                         if (!note->isConsumed()) {

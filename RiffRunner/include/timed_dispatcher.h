@@ -27,6 +27,10 @@ public:
         return this->elements.empty();
     }
 
+    int size() {
+        return this->elements.size();
+    }
+
 private:
     double delay = 0;
     std::map<double, T> elements;

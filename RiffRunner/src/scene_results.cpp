@@ -38,10 +38,13 @@ SceneId acceptResults(GLFWwindow* window) {
         textRenderer.setColor(glm::vec4(1.0, 1.0, 1.0, 1.0)); // white
         std::stringstream scoreString;
         scoreString << "Score: " << std::fixed << finalScore;
-        textRenderer.renderText(scoreString.str(), width / 2, height / 2 - 50);
+        textRenderer.renderText(scoreString.str(), width / 2, height / 2 - 70);
+        std::stringstream progressString;
+        progressString << "Progresso: " << std::fixed << std::setprecision(2) << ((float)hitNotes / noteCount) * 100 << "%";
+        textRenderer.renderText(progressString.str(), width / 2, height / 2);
 
         textRenderer.setColor(glm::vec4(1.0, 0.0, 0.0, 1.0)); // red
-        textRenderer.renderText("[ Continue ]", width / 2, height / 2 + 20);
+        textRenderer.renderText("[ Continue ]", width / 2, height / 2 + 80);
 
         // ==========================================================
         // Switch buffers

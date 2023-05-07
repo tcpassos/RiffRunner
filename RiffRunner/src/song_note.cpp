@@ -4,7 +4,7 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     this->value = value;
     this->index = log2(value); // 1=0 2=1 4=2 8=3 16=4
     this->tailLength = tailLength;
-    this->disabled = false;
+    this->state = NoteUnpressed;
     this->consumed = false;
     this->lastHoldingPointTime = 0;
 
@@ -61,10 +61,6 @@ bool SongNote::isAfter(Rect rect) {
     return this->note->getBounds().top > rect.height;
 }
 
-bool SongNote::isDisabled() {
-    return this->disabled;
-}
-
 bool SongNote::isConsumed() {
     return this->consumed;
 }
@@ -89,8 +85,12 @@ Rect SongNote::getBounds() {
     return Rect(left, top, width, height);
 }
 
+NoteState SongNote::getState() {
+    return this->state;
+}
+
 void SongNote::disable() {
-    this->disabled = true;
+    this->state = NoteDisabled;
 
     if (hasTail()) {
         glm::vec4 tailColor = originalColor;
@@ -100,6 +100,7 @@ void SongNote::disable() {
 }
 
 unsigned int SongNote::hold(unsigned int positionY) {
+    this->state = NoteHolding;
     if (note->getPosition().y < positionY) {
         return 0;
     }
