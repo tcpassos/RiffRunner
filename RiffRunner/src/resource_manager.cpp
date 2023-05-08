@@ -7,49 +7,49 @@
 #include <stb/stb_image.h>
 
 // Instantiate static variables
-std::map<std::string, Texture2D>    ResourceManager::Textures;
-std::map<std::string, Shader>       ResourceManager::Shaders;
+std::map<std::string, Texture2D>    ResourceManager::textures;
+std::map<std::string, Shader>       ResourceManager::shaders;
 
 
-Shader ResourceManager::LoadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
+Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
-    auto shaderIt = Shaders.find(name);
+    auto shaderIt = shaders.find(name);
     // If isn't present
-    if (shaderIt == Shaders.end()) {
-        Shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
-        return Shaders[name];
+    if (shaderIt == shaders.end()) {
+        shaders[name] = loadShaderFromFile(vShaderFile, fShaderFile, gShaderFile);
+        return shaders[name];
     }
     return shaderIt->second;
 }
 
-Shader ResourceManager::GetShader(std::string name)
+Shader ResourceManager::getShader(std::string name)
 {
-    return Shaders[name];
+    return shaders[name];
 }
 
-Texture2D ResourceManager::LoadTexture(const char* file, std::string name)
+Texture2D ResourceManager::loadTexture(const char* file, std::string name)
 {
-    auto textureIt = Textures.find(name);
+    auto textureIt = textures.find(name);
     // If isn't present
-    if (textureIt == Textures.end()) {
-        Textures[name] = loadTextureFromFile(file);
-        return Textures[name];
+    if (textureIt == textures.end()) {
+        textures[name] = loadTextureFromFile(file);
+        return textures[name];
     }
     return textureIt->second;
 }
 
-Texture2D ResourceManager::GetTexture(std::string name)
+Texture2D ResourceManager::getTexture(std::string name)
 {
-    return Textures[name];
+    return textures[name];
 }
 
-void ResourceManager::Clear()
+void ResourceManager::clear()
 {
     // (properly) delete all shaders	
-    for (auto iter : Shaders)
+    for (auto iter : shaders)
         glDeleteProgram(iter.second.ID);
     // (properly) delete all textures
-    for (auto iter : Textures)
+    for (auto iter : textures)
         glDeleteTextures(1, &iter.second.id);
 }
 

@@ -70,7 +70,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     std::vector<Sprite> difficulties;
     for (int x = 0; x < 4; x++) {
         string file = to_string(x);
-        Texture2D texture = ResourceManager::LoadTexture( ("resources/img/difficulty/" + file + ".jpg").c_str(), "dificulty_" + file);
+        Texture2D texture = ResourceManager::loadTexture( ("resources/img/difficulty/" + file + ".jpg").c_str(), "dificulty_" + file);
         Sprite difficulty(texture);
         float difficultyWidth = width;
         float difficultyHeight = height / 4;
@@ -83,7 +83,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     }
 
     // Background
-    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/difficulty/fundo.png", "difficultySelectorBackground");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/difficulty/fundo.png", "difficultySelectorBackground");
     Sprite backgroundImage(backgroundTexture);
 
     while (!glfwWindowShouldClose(window)) {

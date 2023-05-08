@@ -59,10 +59,10 @@ SceneId acceptGame(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &input);
 
     // Game background
-    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/game_background.jpg", "gameBackground");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/game_background.jpg", "gameBackground");
     Sprite backgroundImage(backgroundTexture);
     backgroundImage.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
-    Texture2D backgroundFrontTexture = ResourceManager::LoadTexture("resources/img/game_background_front.png", "gameBackgroundFront");
+    Texture2D backgroundFrontTexture = ResourceManager::loadTexture("resources/img/game_background_front.png", "gameBackgroundFront");
     Sprite backgroundImageFront(backgroundFrontTexture);
     backgroundImageFront.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
 
@@ -70,7 +70,7 @@ SceneId acceptGame(GLFWwindow* window) {
     HUD hud;
 
     // Track
-    Texture2D trackTexture = ResourceManager::LoadTexture("resources/img/track.jpg", "track");
+    Texture2D trackTexture = ResourceManager::loadTexture("resources/img/track.jpg", "track");
     Sprite track(trackTexture);
     track.setOrigin(track.getSize() / 2.0f);
     track.setPosition(windowWidth / 2, windowHeight / 2);
@@ -113,7 +113,7 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.3f));
 
     // Flames
-    Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
+    Texture2D flamesTexture = ResourceManager::loadTexture("resources/img/flames.png", "flames");
     std::vector<AnimatedSprite*> flames;
 
     for (int i = 0; i < 5; i++) {
@@ -132,7 +132,7 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Sparkles
-    Texture2D sparkleTexture = ResourceManager::LoadTexture("resources/img/sparkle.png", "sparkle");
+    Texture2D sparkleTexture = ResourceManager::loadTexture("resources/img/sparkle.png", "sparkle");
     std::vector<Sprite*> sparkles;
 
     for (int i = 0; i < 5; i++) {

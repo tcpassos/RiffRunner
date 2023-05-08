@@ -15,15 +15,15 @@ HUD::HUD() {
 	this->specialCounter = 0;
 
 	// Indicator
-							  ResourceManager::LoadTexture("resources/img/hud/green.png", "performanceGreen");
-    Texture2D yellowTexture = ResourceManager::LoadTexture("resources/img/hud/yellow.png", "performanceYellow");
-							  ResourceManager::LoadTexture("resources/img/hud/red.png", "performanceRed");
+							  ResourceManager::loadTexture("resources/img/hud/green.png", "performanceGreen");
+    Texture2D yellowTexture = ResourceManager::loadTexture("resources/img/hud/yellow.png", "performanceYellow");
+							  ResourceManager::loadTexture("resources/img/hud/red.png", "performanceRed");
 	this->indicator = new Sprite(yellowTexture);
 	this->indicator->setSize(yellowTexture.width * 0.55, yellowTexture.height * 0.55);
 	this->indicator->setPosition(0, 200);
 
 	// Pointer
-	Texture2D pointerTexture = ResourceManager::LoadTexture("resources/img/hud/pointer.png", "performancePointer");
+	Texture2D pointerTexture = ResourceManager::loadTexture("resources/img/hud/pointer.png", "performancePointer");
 	float pointerWidth = pointerTexture.width * 0.27;
 	float pointerHeight = pointerTexture.height * 0.25;
 	this->pointer = new Sprite(pointerTexture);
@@ -32,7 +32,7 @@ HUD::HUD() {
 	this->pointer->setPosition(this->indicator->getPosition().x + this->indicator->getSize().x / 2, this->indicator->getPosition().y + 140);
 
 	// Score
-	Texture2D displayTexture = ResourceManager::LoadTexture("resources/img/hud/display.png", "scoreDisplay");
+	Texture2D displayTexture = ResourceManager::loadTexture("resources/img/hud/display.png", "scoreDisplay");
 	this->display = new Sprite(displayTexture);
 	this->display->setPosition(0.0, this->indicator->getBounds().height);
 	this->display->setSize(displayTexture.width * 0.8, displayTexture.height * 0.8);
@@ -42,18 +42,18 @@ HUD::HUD() {
 	this->scoreText->setHorizontalAlignment(TextRight);
 
 	// Special Multiplier
-	Texture2D x1Texture = ResourceManager::LoadTexture("resources/img/hud/x1.png", "x1");
-						  ResourceManager::LoadTexture("resources/img/hud/x2.png", "x2");
-						  ResourceManager::LoadTexture("resources/img/hud/x3.png", "x3");
-						  ResourceManager::LoadTexture("resources/img/hud/x4.png", "x4");
-						  ResourceManager::LoadTexture("resources/img/hud/sx2.png", "sx2");
-						  ResourceManager::LoadTexture("resources/img/hud/sx4.png", "sx4");
-						  ResourceManager::LoadTexture("resources/img/hud/sx6.png", "sx6");
-						  ResourceManager::LoadTexture("resources/img/hud/sx8.png", "sx8");
+	Texture2D x1Texture = ResourceManager::loadTexture("resources/img/hud/x1.png", "x1");
+						  ResourceManager::loadTexture("resources/img/hud/x2.png", "x2");
+						  ResourceManager::loadTexture("resources/img/hud/x3.png", "x3");
+						  ResourceManager::loadTexture("resources/img/hud/x4.png", "x4");
+						  ResourceManager::loadTexture("resources/img/hud/sx2.png", "sx2");
+						  ResourceManager::loadTexture("resources/img/hud/sx4.png", "sx4");
+						  ResourceManager::loadTexture("resources/img/hud/sx6.png", "sx6");
+						  ResourceManager::loadTexture("resources/img/hud/sx8.png", "sx8");
 	this->multiplier = new Sprite(x1Texture);
 	this->multiplier->setPosition(800.0f - this->multiplier->getSize().x, this->indicator->getPosition().y);
 
-	Texture2D specialBarTexture = ResourceManager::LoadTexture("resources/img/hud/special_bar.png", "specialBar");
+	Texture2D specialBarTexture = ResourceManager::loadTexture("resources/img/hud/special_bar.png", "specialBar");
 	this->specialBar = new Sprite(specialBarTexture);
 	this->specialBar->setColor(glm::vec4(0.3f, 0.8f, 0.9f, 1.0f));
 	float specialBarHeight = specialBarTexture.height;
@@ -129,13 +129,13 @@ void HUD::updatePerformanceIndicator() {
 	this->pointer->setRotation(glm::radians(rotationDegrees));
 
 	if (this->performance < this->limit / 3) {
-		this->indicator->setTexture(ResourceManager::GetTexture("performanceRed"));
+		this->indicator->setTexture(ResourceManager::getTexture("performanceRed"));
 	}
 	else if (this->performance > (this->limit / 3) * 2) {
-		this->indicator->setTexture(ResourceManager::GetTexture("performanceGreen"));
+		this->indicator->setTexture(ResourceManager::getTexture("performanceGreen"));
 	}
 	else {
-		this->indicator->setTexture(ResourceManager::GetTexture("performanceYellow"));
+		this->indicator->setTexture(ResourceManager::getTexture("performanceYellow"));
 	}
 }
 
@@ -143,23 +143,23 @@ void HUD::updateMultiplier() {
 	unsigned int multiplier = getMultiplier();
 	if (!specialActive) {
 		if (multiplier == 1) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("x1"));
+			this->multiplier->setTexture(ResourceManager::getTexture("x1"));
 		} else if (multiplier == 2) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("x2"));
+			this->multiplier->setTexture(ResourceManager::getTexture("x2"));
 		} else if (multiplier == 3) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("x3"));
+			this->multiplier->setTexture(ResourceManager::getTexture("x3"));
 		} else if (multiplier == 4) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("x4"));
+			this->multiplier->setTexture(ResourceManager::getTexture("x4"));
 		}
 	} else {
 		if (multiplier == 1) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("sx2"));
+			this->multiplier->setTexture(ResourceManager::getTexture("sx2"));
 		} else if (multiplier == 2) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("sx4"));
+			this->multiplier->setTexture(ResourceManager::getTexture("sx4"));
 		} else if (multiplier == 3) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("sx6"));
+			this->multiplier->setTexture(ResourceManager::getTexture("sx6"));
 		} else if (multiplier == 4) {
-			this->multiplier->setTexture(ResourceManager::GetTexture("sx8"));
+			this->multiplier->setTexture(ResourceManager::getTexture("sx8"));
 		}
 	}
 }

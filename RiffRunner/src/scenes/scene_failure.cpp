@@ -57,7 +57,7 @@ SceneId acceptFailure(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &failureMenu);
 
     // Background
-    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/sadPepe.jpg", "Failure");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/sadPepe.jpg", "Failure");
     Sprite backgroundImage(backgroundTexture);
 
     // Failure audios

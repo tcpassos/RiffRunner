@@ -63,7 +63,7 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
             if (path.find("album.") != string::npos) {
                 if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") || (it->path().extension() == ".jpg") || (it->path().extension() == ".JPG")) {
                     string musicName = it->path().parent_path().filename().string();
-                    Texture2D coverTexture = ResourceManager::LoadTexture(it->path().string().c_str(), musicName);
+                    Texture2D coverTexture = ResourceManager::loadTexture(it->path().string().c_str(), musicName);
                     
                     Sprite cover(coverTexture);
                     float coverWidth = width * 0.4;
@@ -79,7 +79,7 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     }
 
     // Background
-    Texture2D backgroundTexture = ResourceManager::LoadTexture("resources/img/music_selector_background.jpg", "musicSelectorBackground");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/music_selector_background.jpg", "musicSelectorBackground");
     Sprite backgroundImage(backgroundTexture);
 
     while (!glfwWindowShouldClose(window)) {

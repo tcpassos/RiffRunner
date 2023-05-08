@@ -39,7 +39,7 @@ int main(void) {
     accept(window, SceneMenu);
 
     // Delete all resources as loaded using the resource manager
-    ResourceManager::Clear();
+    ResourceManager::clear();
     Sound::dropEngine();
     glfwTerminate();
     return 0;
