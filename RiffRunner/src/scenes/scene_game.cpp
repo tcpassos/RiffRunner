@@ -21,7 +21,7 @@
 #include "game_info.h"
 
 // ======================================================================================
-// Keyboard input
+//      Keyboard input callback
 // ======================================================================================
 void key_callback_game(GLFWwindow* window, int key, int scancode, int action, int mods) {
     unsigned int* input = (unsigned int*)glfwGetWindowUserPointer(window);
@@ -47,7 +47,7 @@ void key_callback_game(GLFWwindow* window, int key, int scancode, int action, in
 }
 
 // ======================================================================================
-// Game scene
+//      Game scene
 // ======================================================================================
 SceneId acceptGame(GLFWwindow* window) {
     int windowWidth, windowHeight;
@@ -154,19 +154,19 @@ SceneId acceptGame(GLFWwindow* window) {
     int pixelsPerSecond;
 
     switch(GameInfo::selectedDifficulty) {
-        case 0:
+        case 0: // Easy
             pixelsPerSecond = 450;
             notesFilename = selectedSongFolder + "seq1.txt";
             break;
-        case 1:
+        case 1: // Normal
             pixelsPerSecond = 500;
             notesFilename = selectedSongFolder + "seq2.txt";
             break;
-        case 2:
+        case 2: // Hard
             pixelsPerSecond = 550;
             notesFilename = selectedSongFolder + "seq3.txt";
             break;
-        case 3:
+        case 3: // Chuck Norris
             pixelsPerSecond = 600;
             notesFilename = selectedSongFolder + "seq4.txt";
             break;
@@ -213,6 +213,10 @@ SceneId acceptGame(GLFWwindow* window) {
     textRenderer.setHorizontalAlignment(TextLeft);
     double offsetTime = glfwGetTime();
     double currentTime = offsetTime;
+
+// ======================================================================================
+//      Main loop
+// ======================================================================================
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, windowWidth, windowHeight);
@@ -263,32 +267,6 @@ SceneId acceptGame(GLFWwindow* window) {
             return SceneResults;
         }
 
-        // Clear color buffer
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        // ==========================================================
-
-        // Background
-        backgroundImage.draw(window);
-        
-        // Track
-        Rect trackTextureRect = track.getTextureRect();
-        float wtfFactor = pixelsPerFrame * 0.92;
-        trackTextureRect.top -= wtfFactor;
-        trackTextureRect.height -= wtfFactor;
-        track.setTextureRect(trackTextureRect);        
-        track.draw(window);
-
-        // Track lines
-        for (auto& trackLine : trackLines) {
-            trackLine.draw(window);
-        }
-
-        // Detectors
-        for (auto& detector : detectors) {
-            detector.draw(window);
-        }
-
         // Put new notes on screen
         std::vector<SongNote> newNotes = noteDispatcher.get(currentTime);
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
@@ -306,17 +284,24 @@ SceneId acceptGame(GLFWwindow* window) {
             pluck.playOnce();
         }
 
-        // Process input
+// ======================================================================================
+//      Input witchcraft
+// ======================================================================================
+
         for (auto note = notes.begin(); note != notes.end(); ) {
             sparkles[note->getIndex()]->setOpacity(0.0f);
 
-            // Before detector
+            /* ========= Note BEFORE detector ========= */
             if (note->isBefore(inputBounds)) {
                 ++note;
-            // On detector
+
+            /* ========= Note ON detector ============= */
             } else if (note->intersects(inputBounds)) {
-                if (note->checkInput(input)) {
-                    // Long note
+                if (note->checkInput(input)) { // If player hits the note
+
+                    // ----------------------------------------------------------------
+                    /* For sustained notes, it will gradually increment the score as the player holds it down.
+                       The flame animation will trigger and the sprite with sparks will be displayed */
                     if (note->hasTail()) {
                         if (note->getState() == NoteUnpressed) {
                             GameInfo::hitNotes++;
@@ -325,8 +310,11 @@ SceneId acceptGame(GLFWwindow* window) {
                         hud.addPoints(note->hold(inputBounds.top + 15));
                         sparkles[note->getIndex()]->setOpacity(0.8f);
                         ++note;
-                    // Short note
+                    // ----------------------------------------------------------------
                     } else {
+                    /* For short notes that are pressed into the sensor,
+                       the score will increase by 2 points (plus multiplication),
+                       the flame animation will be reset, and the note and its sprite will be destroyed */
                         GameInfo::hitNotes++;
                         input &= ~note->getValue(); // Release input
                         hud.incrementPerformance();
@@ -339,8 +327,12 @@ SceneId acceptGame(GLFWwindow* window) {
                 } else {
                     ++note;
                 }
-            // Afer detector
+
+            /* ========= Note AFTER detector ========== */
             } else {
+                /* If the note has passed the sensor, it will
+                   decrement the score and reset the multiplier only
+                   if it is not a sustained note that has already been pressed. */
                 if (note->getBounds().height > track.getSize().y) {
                     if (note->getState() != NoteDisabled) {
                         input &= ~note->getValue(); // Release input
@@ -353,13 +345,42 @@ SceneId acceptGame(GLFWwindow* window) {
                         }
                     }
                 }
-
+                /* The note is destroyed as soon as it leaves the screen. */
                 if (note->getBounds().top > track.getSize().y + 100) {
                     note = notes.erase(note);
                 } else {
                     ++note;
                 }
             }
+        }
+
+// ======================================================================================
+// Draw things
+// ======================================================================================
+
+        // Clear color buffer
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // Background
+        backgroundImage.draw(window);
+
+        // Track
+        Rect trackTextureRect = track.getTextureRect();
+        float wtfFactor = pixelsPerFrame * 0.92;
+        trackTextureRect.top -= wtfFactor;
+        trackTextureRect.height -= wtfFactor;
+        track.setTextureRect(trackTextureRect);
+        track.draw(window);
+
+        // Track lines
+        for (auto& trackLine : trackLines) {
+            trackLine.draw(window);
+        }
+
+        // Detectors
+        for (auto& detector : detectors) {
+            detector.draw(window);
         }
 
         // Draw notes
@@ -401,10 +422,6 @@ SceneId acceptGame(GLFWwindow* window) {
         // ==========================================================
         // Switch buffers
         glfwSwapBuffers(window);
-
-        // Limit FPS
-        //double waitTime = (1.0 / FPS) - frameTime;
-        //if (waitTime > 0.0) std::this_thread::sleep_for(std::chrono::milliseconds((int)waitTime));
     }
 
     return SceneExit;

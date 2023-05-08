@@ -14,9 +14,7 @@ const int MENU_MAIN_START    = 0;
 const int MENU_MAIN_SETTINGS = 1;
 const int MENU_MAIN_EXIT     = 2;
 
-const int MENU_SETTINGS_GRAPHICS = 0;
-const int MENU_SETTINGS_AUDIO    = 1;
-const int MENU_SETTINGS_BACK     = 2;
+const int MENU_SETTINGS_BACK = 0;
 
 
 /* Enum used to identify the current menu */
@@ -84,8 +82,6 @@ SceneId acceptMenu(GLFWwindow* window) {
 
     // Settings menu
     Menu settingsMenu(width, height, 0, 0);
-    settingsMenu.addItem("<Opcoes graficas>");
-    settingsMenu.addItem("<Audio>");
     settingsMenu.addItem("<Voltar>");
 
     // Current menu
