@@ -121,6 +121,9 @@ SceneId acceptGame(GLFWwindow* window) {
         flame->setSize(40, 40);
         flame->setOrigin(flame->getSize() / 2.0f);
         flame->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 30);
+        flame->setEffect(EffectShine);
+        flame->setEffectIntensity(0.8f);
+        flame->setEffectSpeed(3.0f);
         flame->setProjection(*track.getProjection(), true);
         for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
             flame->addFrame(Frame(0.02f + flameOffset * 0.002f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));

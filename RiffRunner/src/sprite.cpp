@@ -5,6 +5,9 @@ Sprite::Sprite(Texture2D texture) : Shape(texture.width, texture.height) {
     this->shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "shaderSprite");
     this->texture = texture;
     this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.width, this->texture.height));
+    this->effect = EffectNone;
+    this->effectIntensity = 0.0f;
+    this->effectSpeed = 0.0f;
 }
 
 void Sprite::setTextureRect(Rect &textureRect) {
@@ -32,6 +35,20 @@ void Sprite::setTextureRect(Rect &textureRect) {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+void Sprite::setEffect(Effect effect) {
+    this->effect = effect;
+    switch (effect) {
+    case EffectNone:
+        shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "shaderSprite");
+        effectIntensity = 0.0f;
+        effectSpeed = 0.0f;
+        break;
+    case EffectShine:
+        shader = ResourceManager::LoadShader("resources/shaders/sprite.vs", "resources/shaders/sprite_shine.fs", nullptr, "shaderSpriteShine");
+        break;
+    }
+}
+
 void Sprite::updateTextureCoord(int index, float x, float y) {
     GLintptr offsetS = 3 * sizeof(GLfloat);
     GLintptr offsetT = 4 * sizeof(GLfloat);
@@ -53,6 +70,9 @@ void Sprite::draw(GLFWwindow* window) {
     this->shader.setMatrix4("model", model);
     this->shader.setVector4f("texColor", this->color);
     this->shader.setInteger("texBuff", 0);
+    this->shader.setFloat("time", glfwGetTime());
+    this->shader.setFloat("effectIntensity", effectIntensity);
+    this->shader.setFloat("effectSpeed", effectSpeed);
 
     // Prepare texture
     glActiveTexture(GL_TEXTURE0);
