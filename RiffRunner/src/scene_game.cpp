@@ -276,6 +276,18 @@ SceneId acceptGame(GLFWwindow* window) {
         std::vector<SongNote> newNotes = noteDispatcher.get(currentTime);
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
         
+        // Highlight
+        float detector0Opacity = (input & 1) > 0 ? 1.0f : 0.5f;
+        float detector1Opacity = (input & 2) > 0 ? 1.0f : 0.5f;
+        float detector2Opacity = (input & 4) > 0 ? 1.0f : 0.5f;
+        float detector3Opacity = (input & 8) > 0 ? 1.0f : 0.5f;
+        float detector4Opacity = (input & 16) > 0 ? 1.0f : 0.5f;
+        detectors[0].setOpacity(detector0Opacity);
+        detectors[1].setOpacity(detector1Opacity);
+        detectors[2].setOpacity(detector2Opacity);
+        detectors[3].setOpacity(detector3Opacity);
+        detectors[4].setOpacity(detector4Opacity);
+
         // Process missclick notes
         unsigned int validInputMask = 0;
         for (auto note = notes.rbegin(); note != notes.rend(); ++note) {
@@ -288,18 +300,6 @@ SceneId acceptGame(GLFWwindow* window) {
             hud.clearStreak();
             pluck.playOnce();
         }
-
-        // Highlight
-        float detector0Opacity = (validInputMask & 1) > 0 ? 1.0f : 0.5f;
-        float detector1Opacity = (validInputMask & 2) > 0 ? 1.0f : 0.5f;
-        float detector2Opacity = (validInputMask & 4) > 0 ? 1.0f : 0.5f;
-        float detector3Opacity = (validInputMask & 8) > 0 ? 1.0f : 0.5f;
-        float detector4Opacity = (validInputMask & 16) > 0 ? 1.0f : 0.5f;
-        detectors[0].setOpacity(detector0Opacity);
-        detectors[1].setOpacity(detector1Opacity);
-        detectors[2].setOpacity(detector2Opacity);
-        detectors[3].setOpacity(detector3Opacity);
-        detectors[4].setOpacity(detector4Opacity);
 
         // Process input
         for (auto note = notes.begin(); note != notes.end(); ) {
@@ -335,10 +335,6 @@ SceneId acceptGame(GLFWwindow* window) {
                 }
             // Afer detector
             } else {
-                // Deactivate highlight
-                if ((note->getValue() & validInputMask) == 0) {
-                    detectors[note->getIndex()].setOpacity(0.5f);
-                }
                 if (note->getBounds().height > track.getSize().y) {
                     if (note->getState() != NoteDisabled) {
                         input &= ~note->getValue(); // Release input

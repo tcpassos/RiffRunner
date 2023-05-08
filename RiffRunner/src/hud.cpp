@@ -58,7 +58,10 @@ HUD::HUD() {
 	this->specialBar->setColor(glm::vec4(0.3f, 0.8f, 0.9f, 1.0f));
 	float specialBarHeight = specialBarTexture.height;
 	this->specialBarUnit = specialBarHeight / SPECIAL_BAR_MAX;
-	this->specialBar->setPosition(this->multiplier->getPosition().x + 143, this->multiplier->getBounds().height - 55);
+	this->specialBar->setPosition(this->multiplier->getPosition().x + 143, this->multiplier->getBounds().height - 60);
+	this->specialBar->setEffect(EffectShine);
+	this->specialBar->setEffectIntensity(0.6f);
+	this->specialBar->setEffectSpeed(1.0f);
 	updateSpecialBar();
 
 	// Sound
