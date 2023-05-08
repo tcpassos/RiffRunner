@@ -6,13 +6,7 @@
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
-#include "game_config.h"
-
-std::string selectedSong;
-int selectedDifficulty;
-unsigned int finalScore;
-unsigned int noteCount;
-unsigned int hitNotes;
+#include "game_info.h"
 
 int main(void) {
     glfwInit();

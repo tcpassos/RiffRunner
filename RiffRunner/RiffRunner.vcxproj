@@ -136,20 +136,21 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\animation.cpp" />
+    <ClCompile Include="src\game_info.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\hud.cpp" />
     <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\rect.cpp" />
     <ClCompile Include="src\rectangle_shape.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
-    <ClCompile Include="src\scene.cpp" />
-    <ClCompile Include="src\scene_difficulty_selector.cpp" />
-    <ClCompile Include="src\scene_failure.cpp" />
-    <ClCompile Include="src\scene_game.cpp" />
-    <ClCompile Include="src\scene_menu.cpp" />
-    <ClCompile Include="src\scene_music_selector.cpp" />
-    <ClCompile Include="src\scene_pause.cpp" />
-    <ClCompile Include="src\scene_results.cpp" />
+    <ClCompile Include="src\scenes\scene.cpp" />
+    <ClCompile Include="src\scenes\scene_difficulty_selector.cpp" />
+    <ClCompile Include="src\scenes\scene_failure.cpp" />
+    <ClCompile Include="src\scenes\scene_game.cpp" />
+    <ClCompile Include="src\scenes\scene_menu.cpp" />
+    <ClCompile Include="src\scenes\scene_music_selector.cpp" />
+    <ClCompile Include="src\scenes\scene_pause.cpp" />
+    <ClCompile Include="src\scenes\scene_results.cpp" />
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\song_note.cpp" />
@@ -162,7 +163,7 @@
   <ItemGroup>
     <ClInclude Include="include\animated_sprite.h" />
     <ClInclude Include="include\animation.h" />
-    <ClInclude Include="include\game_config.h" />
+    <ClInclude Include="include\game_info.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\hud.h" />

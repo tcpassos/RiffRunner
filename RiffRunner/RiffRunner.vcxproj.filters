@@ -16,6 +16,9 @@
     <Filter Include="Arquivos de Origem\dependencies">
       <UniqueIdentifier>{7c3a9c1f-9e10-4b50-83e3-7c292847300f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Arquivos de Origem\scenes">
+      <UniqueIdentifier>{8f75c289-1619-4ce2-bd77-a7429288503e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -42,28 +45,10 @@
     <ClCompile Include="src\resource_manager.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_menu.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="src\sprite.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_music_selector.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_game.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="src\hud.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_difficulty_selector.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene_failure.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="src\animation.cpp">
@@ -84,10 +69,31 @@
     <ClCompile Include="src\sound.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_pause.cpp">
-      <Filter>Arquivos de Origem</Filter>
+    <ClCompile Include="src\scenes\scene.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
     </ClCompile>
-    <ClCompile Include="src\scene_results.cpp">
+    <ClCompile Include="src\scenes\scene_difficulty_selector.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_failure.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_game.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_menu.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_music_selector.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_pause.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scenes\scene_results.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_info.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
   </ItemGroup>
@@ -143,7 +149,7 @@
     <ClInclude Include="include\sound.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="include\game_config.h">
+    <ClInclude Include="include\game_info.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="include\animated_sprite.h">
