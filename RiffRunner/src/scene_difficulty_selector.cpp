@@ -38,7 +38,7 @@ void key_callback_difficulty_selector(GLFWwindow* window, int key, int scancode,
                 menu->playSound("resources/sound/izzi.wav");
                 break;
             case 1:
-                menu->playSound("resources/sound/family.wav");
+                menu->playSound("resources/sound/family.mp3");
                 break;
             case 2:
                 menu->playSound("resources/sound/serjao.wav");

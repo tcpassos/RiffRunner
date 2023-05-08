@@ -97,12 +97,12 @@ SceneId acceptGame(GLFWwindow* window) {
     std::vector<RectangleShape> detectors;
     for (int i = 0; i < 5; i++) {
         float detectorWidth = track.getSize().x / 5;
-        float detectorHeight = (inputBounds.height - inputBounds.top) * 0.4;
+        float detectorHeight = (inputBounds.height - inputBounds.top) * 0.2;
         float detectorPosition = track.getBounds().left + detectorWidth * i + detectorWidth / 2;
         RectangleShape detector(track.getSize().x, track.getSize().y);
         detector.setSize(detectorWidth, detectorHeight);
         detector.setOrigin(detector.getSize().x / 2.0f, detector.getSize().y);
-        detector.setPosition(detectorPosition, inputBounds.height - 25);
+        detector.setPosition(detectorPosition, inputBounds.height - 30);
         detector.setProjection(*track.getProjection());
         detectors.push_back(detector);
     }
