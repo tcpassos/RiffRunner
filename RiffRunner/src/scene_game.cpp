@@ -123,7 +123,7 @@ SceneId acceptGame(GLFWwindow* window) {
         flame->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 30);
         flame->setProjection(*track.getProjection(), true);
         for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
-            flame->addFrame(Frame(0.01f + flameOffset * 0.005f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));
+            flame->addFrame(Frame(0.02f + flameOffset * 0.002f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));
         }
         flames.push_back(flame);
     }
