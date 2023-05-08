@@ -61,9 +61,9 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
         if (path.find("!") == string::npos) {
 
             if (path.find("album.") != string::npos) {
-                if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") ) {
+                if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") || (it->path().extension() == ".jpg") || (it->path().extension() == ".JPG")) {
                     string musicName = it->path().parent_path().filename().string();
-                    Texture2D coverTexture = ResourceManager::LoadTexture(("resources/music/" + musicName + "/album.png").c_str(), musicName);
+                    Texture2D coverTexture = ResourceManager::LoadTexture(it->path().string().c_str(), musicName);
                     
                     Sprite cover(coverTexture);
                     float coverWidth = width * 0.4;

@@ -83,8 +83,10 @@ void HUD::addPoints(unsigned int points) {
 	unsigned int newPoints = points * getMultiplier();
 	this->score += newPoints;
 	// Update special bar
-	specialCounter += newPoints;
-	if (specialCounter > SPECIAL_BAR_MAX) specialCounter = SPECIAL_BAR_MAX;
+	if (!specialActive) {
+		specialCounter += newPoints;
+		if (specialCounter > SPECIAL_BAR_MAX) specialCounter = SPECIAL_BAR_MAX;
+	}
 	updateSpecialBar();
 }
 
@@ -176,8 +178,8 @@ void HUD::update(double elapsedTime) {
 			specialActive = false;
 			specialSound->playOnce();
 			updateMultiplier();
-			updateSpecialBar();
 		}
+		updateSpecialBar();
 	}
 }
 
