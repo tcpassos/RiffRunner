@@ -33,5 +33,5 @@ public:
 
 private:
     double delay = 0;
-    std::map<double, T> elements;
+    std::multimap<double, T> elements;
 };
