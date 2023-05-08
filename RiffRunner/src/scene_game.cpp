@@ -106,11 +106,11 @@ SceneId acceptGame(GLFWwindow* window) {
         detector.setProjection(*track.getProjection());
         detectors.push_back(detector);
     }
-    detectors[0].setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.5f));
-    detectors[1].setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.5f));
-    detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.5f));
-    detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.5f));
-    detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.5f));
+    detectors[0].setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.3f));
+    detectors[1].setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.3f));
+    detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.3f));
+    detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.3f));
+    detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.3f));
 
     // Flames
     Texture2D flamesTexture = ResourceManager::LoadTexture("resources/img/flames.png", "flames");
@@ -129,6 +129,23 @@ SceneId acceptGame(GLFWwindow* window) {
             flame->addFrame(Frame(0.02f + flameOffset * 0.002f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));
         }
         flames.push_back(flame);
+    }
+
+    // Sparkles
+    Texture2D sparkleTexture = ResourceManager::LoadTexture("resources/img/sparkle.png", "sparkle");
+    std::vector<Sprite*> sparkles;
+
+    for (int i = 0; i < 5; i++) {
+        Sprite* sparkle = new AnimatedSprite(sparkleTexture);
+        sparkle->setSize(55, 25);
+        sparkle->setOrigin(sparkle->getSize() / 2.0f);
+        sparkle->setPosition(track.getBounds().left + i * 40 + 20, track.getSize().y - 22);
+        sparkle->setOpacity(0.0f);
+        sparkle->setEffect(EffectShine);
+        sparkle->setEffectIntensity(1.2f);
+        sparkle->setEffectSpeed(6.0f);
+        sparkle->setProjection(*track.getProjection(), true);
+        sparkles.push_back(sparkle);
     }
 
     // Song information
@@ -275,18 +292,6 @@ SceneId acceptGame(GLFWwindow* window) {
         // Put new notes on screen
         std::vector<SongNote> newNotes = noteDispatcher.get(currentTime);
         notes.insert(notes.begin(), newNotes.begin(), newNotes.end());
-        
-        // Highlight
-        float detector0Opacity = (input & 1) > 0 ? 1.0f : 0.5f;
-        float detector1Opacity = (input & 2) > 0 ? 1.0f : 0.5f;
-        float detector2Opacity = (input & 4) > 0 ? 1.0f : 0.5f;
-        float detector3Opacity = (input & 8) > 0 ? 1.0f : 0.5f;
-        float detector4Opacity = (input & 16) > 0 ? 1.0f : 0.5f;
-        detectors[0].setOpacity(detector0Opacity);
-        detectors[1].setOpacity(detector1Opacity);
-        detectors[2].setOpacity(detector2Opacity);
-        detectors[3].setOpacity(detector3Opacity);
-        detectors[4].setOpacity(detector4Opacity);
 
         // Process missclick notes
         unsigned int validInputMask = 0;
@@ -303,6 +308,8 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Process input
         for (auto note = notes.begin(); note != notes.end(); ) {
+            sparkles[note->getIndex()]->setOpacity(0.0f);
+
             // Before detector
             if (note->isBefore(inputBounds)) {
                 ++note;
@@ -315,9 +322,7 @@ SceneId acceptGame(GLFWwindow* window) {
                             hitNotes++;
                         }
                         hud.addPoints(note->hold(inputBounds.top + 15));
-                        if (!flames[note->getIndex()]->isRunning()) {
-                            flames[note->getIndex()]->resetAnimation();
-                        }
+                        sparkles[note->getIndex()]->setOpacity(0.8f);
                         ++note;
                     // Short note
                     } else {
@@ -368,6 +373,11 @@ SceneId acceptGame(GLFWwindow* window) {
             if (flame->isRunning()) {
                 flame->draw(window);
             }
+        }
+
+        // Sparkles
+        for (auto& sparkle : sparkles) {
+            sparkle->draw(window);
         }
 
         // Background front
