@@ -1,10 +1,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stb/stb_image.h>
+#include <MidiFile.h>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
-#include <fstream>
 #include <string>
 #include <thread>
 
@@ -19,6 +19,42 @@
 #include "text_renderer.h"
 #include "timed_dispatcher.h"
 #include "game_info.h"
+
+bool fileExists(const std::string& filename) {
+    std::ifstream file(filename);
+    return file.good();
+}
+
+void loadNotes(std::string filename, TimedDispatcher<SongNote> &noteDispatcher, int midiKeyOffeset, int pixelsPerSecond, Sprite &track) {
+    smf::MidiFile midifile;
+    if (!midifile.read(filename)) {
+        std::cerr << "Error reading MIDI file" << std::endl;
+        return;
+    }
+
+    midifile.doTimeAnalysis();
+    midifile.linkNotePairs();
+    
+    for (int trackIndex = 0; trackIndex < midifile.getTrackCount(); trackIndex++) {
+        for (int event = 0; event < midifile[trackIndex].size(); event++) {
+            int key = midifile[trackIndex][event].getKeyNumber() - midiKeyOffeset;
+            if (!midifile[trackIndex][event].isNoteOn() || (key < 0 || key > 4)) continue;
+
+            double noteStart = midifile[trackIndex][event].seconds;
+            double noteDuration = midifile[trackIndex][event].getDurationInSeconds();
+            if (noteDuration < 0.5) noteDuration = 0.0;
+
+            if (key == 0) noteDispatcher.add(noteStart, SongNote(track, 1, noteDuration * pixelsPerSecond));
+            else if (key == 1) noteDispatcher.add(noteStart, SongNote(track, 2, noteDuration * pixelsPerSecond));
+            else if (key == 2) noteDispatcher.add(noteStart, SongNote(track, 4, noteDuration * pixelsPerSecond));
+            else if (key == 3) noteDispatcher.add(noteStart, SongNote(track, 8, noteDuration * pixelsPerSecond));
+            else if (key == 4) noteDispatcher.add(noteStart, SongNote(track, 16, noteDuration * pixelsPerSecond));
+        }
+        if (!noteDispatcher.isEmpty()) {
+            break;
+        }
+    }
+}
 
 // ======================================================================================
 //      Keyboard input callback
@@ -150,25 +186,26 @@ SceneId acceptGame(GLFWwindow* window) {
 
     // Song information
     std::string selectedSongFolder = "resources/music/" + GameInfo::selectedSong + "/";
-    std::string notesFilename;
     int pixelsPerSecond;
+    int keyOffeset = 0;
+    int midiKeyOffeset = 0;
 
     switch(GameInfo::selectedDifficulty) {
         case 0: // Easy
             pixelsPerSecond = 450;
-            notesFilename = selectedSongFolder + "seq1.txt";
+            midiKeyOffeset = 60;
             break;
         case 1: // Normal
             pixelsPerSecond = 500;
-            notesFilename = selectedSongFolder + "seq2.txt";
+            midiKeyOffeset = 72;
             break;
         case 2: // Hard
             pixelsPerSecond = 550;
-            notesFilename = selectedSongFolder + "seq3.txt";
+            midiKeyOffeset = 84;
             break;
         case 3: // Chuck Norris
             pixelsPerSecond = 600;
-            notesFilename = selectedSongFolder + "seq4.txt";
+            midiKeyOffeset = 96;
             break;
     }
 
@@ -178,34 +215,28 @@ SceneId acceptGame(GLFWwindow* window) {
     std::vector<SongNote> notes;
     TimedDispatcher<SongNote> noteDispatcher;
     noteDispatcher.setDispatchDelay(-timeToReachDetector);
-
-    std::ifstream file(notesFilename);
-    std::string line;
-    while (getline(file, line)) {
-        std::istringstream iss(line);
-        double noteStart, noteDuration;
-        int noteValue;
-        iss >> noteStart >> noteDuration >> noteValue;
-        unsigned int tailLength = noteDuration - 1.0;
-
-        if (noteValue & 1) noteDispatcher.add(noteStart, SongNote(track, 1, noteDuration * pixelsPerSecond));
-        if (noteValue & 2) noteDispatcher.add(noteStart, SongNote(track, 2, noteDuration * pixelsPerSecond));
-        if (noteValue & 4) noteDispatcher.add(noteStart, SongNote(track, 4, noteDuration * pixelsPerSecond));
-        if (noteValue & 8) noteDispatcher.add(noteStart, SongNote(track, 8, noteDuration * pixelsPerSecond));
-        if (noteValue & 16) noteDispatcher.add(noteStart, SongNote(track, 16, noteDuration * pixelsPerSecond));
-    }
-    file.close();
+    loadNotes(selectedSongFolder + "notes.mid", noteDispatcher, midiKeyOffeset, pixelsPerSecond, track);
 
     // Number of notes / hit notes (used to calculate progress)
     GameInfo::noteCount = noteDispatcher.size();
     GameInfo::hitNotes = 0;
 
     // Load song
-    Sound background((selectedSongFolder + "background.ogg").c_str());
-    Sound song((selectedSongFolder + "song.ogg").c_str());
     Sound pluck("resources/sound/click02.wav");
-    background.play();
-    song.play();
+    Sound guitar((selectedSongFolder + "guitar.ogg").c_str());
+    Sound* song = nullptr;
+    Sound* rhythm = nullptr;
+
+    if (fileExists(selectedSongFolder + "song.ogg")) {
+        song = new Sound((selectedSongFolder + "song.ogg").c_str());
+        song->play();
+    }
+    if (fileExists(selectedSongFolder + "rhythm.ogg")) {
+        rhythm = new Sound((selectedSongFolder + "rhythm.ogg").c_str());
+        rhythm->play();
+    }
+    guitar.play();
+
 
     // FPS/Timer text
     TextRenderer textRenderer(windowWidth, windowHeight);
@@ -236,8 +267,9 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Pause
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            song.pause();
-            background.pause();
+            if (song != nullptr) song->pause();
+            if (rhythm != nullptr) rhythm->pause();
+            guitar.pause();
             double pauseTime = glfwGetTime();
 
             SceneId nextScene = acceptPause(window);
@@ -247,8 +279,9 @@ SceneId acceptGame(GLFWwindow* window) {
             }
 
             offsetTime += (glfwGetTime() - pauseTime);
-            song.play();
-            background.play();
+            if (song != nullptr) song->play();
+            if (rhythm != nullptr) rhythm->play();
+            guitar.play();
             // Re-bind key callback
             glfwSetKeyCallback(window, key_callback_game);
             glfwSetWindowUserPointer(window, &input);
@@ -261,7 +294,7 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         // Finish
-        if (song.isFinished()) {
+        if (guitar.isFinished()) {
             Sound::stopAll();
             GameInfo::finalScore = hud.getScore();
             return SceneResults;
@@ -323,7 +356,7 @@ SceneId acceptGame(GLFWwindow* window) {
                         flames[note->getIndex()]->resetAnimation();
                         note = notes.erase(note);
                     }
-                    song.setVolume(100);
+                    guitar.setVolume(100);
                 } else {
                     ++note;
                 }
@@ -341,7 +374,7 @@ SceneId acceptGame(GLFWwindow* window) {
                             hud.decrementPerformance();
                             hud.decrementPerformance();
                             hud.clearStreak();
-                            song.setVolume(0);
+                            guitar.setVolume(0);
                         }
                     }
                 }
@@ -384,7 +417,8 @@ SceneId acceptGame(GLFWwindow* window) {
         }
 
         // Draw notes
-        for (auto note : notes) {
+        for (auto it = notes.rbegin(); it != notes.rend(); ++it) {
+            SongNote& note = *it;
             note.move(pixelsPerFrame);
             note.draw(window, hud.isSpecialActive());
         }

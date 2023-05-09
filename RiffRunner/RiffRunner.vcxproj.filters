@@ -96,6 +96,21 @@
     <ClCompile Include="src\game_info.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
+    <ClCompile Include="src\midifile\Binasc.cpp">
+      <Filter>Arquivos de Origem\dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midifile\MidiEvent.cpp">
+      <Filter>Arquivos de Origem\dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midifile\MidiEventList.cpp">
+      <Filter>Arquivos de Origem\dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midifile\MidiFile.cpp">
+      <Filter>Arquivos de Origem\dependencies</Filter>
+    </ClCompile>
+    <ClCompile Include="src\midifile\MidiMessage.cpp">
+      <Filter>Arquivos de Origem\dependencies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\menu.h">
