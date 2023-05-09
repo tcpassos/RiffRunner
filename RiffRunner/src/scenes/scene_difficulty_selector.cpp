@@ -35,16 +35,16 @@ void key_callback_difficulty_selector(GLFWwindow* window, int key, int scancode,
     if (oldOption != menu->getItemIndex())
         switch (menu->getItemIndex()) {
             case 0:
-                menu->playSound("resources/sound/izzi.wav");
+                menu->playSound("assets/sound/izzi.wav");
                 break;
             case 1:
-                menu->playSound("resources/sound/family.mp3");
+                menu->playSound("assets/sound/family.mp3");
                 break;
             case 2:
-                menu->playSound("resources/sound/serjao.wav");
+                menu->playSound("assets/sound/serjao.wav");
                 break;
             case 3:
-                menu->playSound("resources/sound/chuck.wav");
+                menu->playSound("assets/sound/chuck.wav");
                 break;
         }
 }
@@ -59,7 +59,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     // Difficulty selector menu
-    Menu difficultySelectorMenu(width, height, 0, 0, "resources/fonts/Queen of Clubs.otf");
+    Menu difficultySelectorMenu(width, height, 0, 0, "assets/fonts/Queen of Clubs.otf");
     difficultySelectorMenu.setAlignmentHorizontal();
 
     // Menu key callback
@@ -70,7 +70,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     std::vector<Sprite> difficulties;
     for (int x = 0; x < 4; x++) {
         string file = to_string(x);
-        Texture2D texture = ResourceManager::loadTexture( ("resources/img/difficulty/" + file + ".jpg").c_str(), "dificulty_" + file);
+        Texture2D texture = ResourceManager::loadTexture( ("assets/img/difficulty/" + file + ".jpg").c_str(), "dificulty_" + file);
         Sprite difficulty(texture);
         float difficultyWidth = width;
         float difficultyHeight = height / 4;
@@ -83,7 +83,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     }
 
     // Background
-    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/difficulty/fundo.png", "difficultySelectorBackground");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/difficulty/fundo.png", "difficultySelectorBackground");
     Sprite backgroundImage(backgroundTexture);
 
     while (!glfwWindowShouldClose(window)) {

@@ -2,7 +2,7 @@
 #include "resource_manager.h"
 
 Sprite::Sprite(Texture2D texture) : Shape(texture.width, texture.height) {
-    this->shader = ResourceManager::loadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "shaderSprite");
+    this->shader = ResourceManager::loadShader("assets/shaders/sprite.vs", "assets/shaders/sprite.fs", nullptr, "shaderSprite");
     this->texture = texture;
     this->textureRect = new Rect(glm::vec2(0.0f, 0.0f), glm::vec2(this->texture.width, this->texture.height));
     this->effect = EffectNone;
@@ -39,12 +39,12 @@ void Sprite::setEffect(Effect effect) {
     this->effect = effect;
     switch (effect) {
     case EffectNone:
-        shader = ResourceManager::loadShader("resources/shaders/sprite.vs", "resources/shaders/sprite.fs", nullptr, "shaderSprite");
+        shader = ResourceManager::loadShader("assets/shaders/sprite.vs", "assets/shaders/sprite.fs", nullptr, "shaderSprite");
         effectIntensity = 0.0f;
         effectSpeed = 0.0f;
         break;
     case EffectShine:
-        shader = ResourceManager::loadShader("resources/shaders/sprite.vs", "resources/shaders/sprite_shine.fs", nullptr, "shaderSpriteShine");
+        shader = ResourceManager::loadShader("assets/shaders/sprite.vs", "assets/shaders/sprite_shine.fs", nullptr, "shaderSpriteShine");
         break;
     }
 }

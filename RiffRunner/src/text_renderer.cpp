@@ -14,7 +14,7 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
     this->scale = 1.0f;
 
     // load and configure shader
-    this->shader = ResourceManager::loadShader("resources/shaders/text_2d.vs", "resources/shaders/text_2d.fs", nullptr, "text");
+    this->shader = ResourceManager::loadShader("assets/shaders/text_2d.vs", "assets/shaders/text_2d.fs", nullptr, "text");
     this->shader.setMatrix4("projection", glm::ortho(0.0f, static_cast<float>(width), static_cast<float>(height), 0.0f), true);
     this->shader.setInteger("text", 0);
     // configure VAO/VBO for texture quads

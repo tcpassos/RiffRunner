@@ -31,7 +31,7 @@ int main(void) {
 
     // Sets the window icon
     GLFWimage icons[1];
-    icons[0].pixels = stbi_load("resources/img/icon.png", &icons[0].width, &icons[0].height, 0, 4);
+    icons[0].pixels = stbi_load("assets/img/icon.png", &icons[0].width, &icons[0].height, 0, 4);
     glfwSetWindowIcon(window, 1, icons);
     stbi_image_free(icons[0].pixels);
 

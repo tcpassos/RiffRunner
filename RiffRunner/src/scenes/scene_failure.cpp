@@ -57,16 +57,16 @@ SceneId acceptFailure(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &failureMenu);
 
     // Background
-    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/sadPepe.jpg", "Failure");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/sadPepe.jpg", "Failure");
     Sprite backgroundImage(backgroundTexture);
 
     // Failure audios
-    Sound failureSong("resources/sound/musicaTristeDoNaruto.wav");
+    Sound failureSong("assets/sound/musicaTristeDoNaruto.wav");
     failureSong.play();
-    Sound failureAudio("resources/sound/rocky.wav");
+    Sound failureAudio("assets/sound/rocky.wav");
     failureAudio.setVolume(45);
     failureAudio.play();
-    Sound naoConsegue("resources/sound/naoconsegue.wav");
+    Sound naoConsegue("assets/sound/naoconsegue.wav");
 
 
     while (!glfwWindowShouldClose(window)) {

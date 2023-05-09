@@ -12,7 +12,7 @@ using namespace std;
 class Menu
 {
 public:
-    Menu(int screenWidth, int screenHeight, int initialPosX = 0, int initialPosY = 0, string font = "resources/fonts/TribalBox.ttf");
+    Menu(int screenWidth, int screenHeight, int initialPosX = 0, int initialPosY = 0, string font = "assets/fonts/TribalBox.ttf");
 
     int addItem(string label);
     void previous();

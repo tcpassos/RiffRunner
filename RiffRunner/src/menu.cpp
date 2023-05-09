@@ -11,7 +11,7 @@ Menu::Menu(int screenWidth, int screenHeigth, int initialPosX, int initialPosY, 
     selectedItem = 0;
     textRenderer = new TextRenderer(width, heigth);
     textRenderer->load(font, 52);
-    clickSound = new Sound("resources/sound/click.wav");
+    clickSound = new Sound("assets/sound/click.wav");
 }
 
 int Menu::addItem(string label) {

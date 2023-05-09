@@ -1,7 +1,7 @@
 #include "rectangle_shape.h"
 
 RectangleShape::RectangleShape(unsigned int width, unsigned int heigth) : Shape(width, heigth) {
-    this->shader = ResourceManager::loadShader("resources/shaders/shape.vs", "resources/shaders/shape.fs", nullptr, "shaderShape");
+    this->shader = ResourceManager::loadShader("assets/shaders/shape.vs", "assets/shaders/shape.fs", nullptr, "shaderShape");
 };
 
 void RectangleShape::draw(GLFWwindow* window) {

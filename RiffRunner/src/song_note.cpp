@@ -9,7 +9,7 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     this->lastHoldingPointTime = 0;
 
     // Note
-    Texture2D noteTexture = ResourceManager::loadTexture("resources/img/notes.png", "notes");
+    Texture2D noteTexture = ResourceManager::loadTexture("assets/img/notes.png", "notes");
     this->note = new Sprite(noteTexture);
 
     float notesWidth = 40.0f;

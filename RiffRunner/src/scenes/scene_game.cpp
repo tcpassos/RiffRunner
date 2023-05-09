@@ -95,10 +95,10 @@ SceneId acceptGame(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &input);
 
     // Game background
-    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/game_background.jpg", "gameBackground");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/game_background.jpg", "gameBackground");
     Sprite backgroundImage(backgroundTexture);
     backgroundImage.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
-    Texture2D backgroundFrontTexture = ResourceManager::loadTexture("resources/img/game_background_front.png", "gameBackgroundFront");
+    Texture2D backgroundFrontTexture = ResourceManager::loadTexture("assets/img/game_background_front.png", "gameBackgroundFront");
     Sprite backgroundImageFront(backgroundFrontTexture);
     backgroundImageFront.setSize(glm::vec3(windowWidth, windowHeight, 1.0f));
 
@@ -106,7 +106,7 @@ SceneId acceptGame(GLFWwindow* window) {
     HUD hud;
 
     // Track
-    Texture2D trackTexture = ResourceManager::loadTexture("resources/img/track.jpg", "track");
+    Texture2D trackTexture = ResourceManager::loadTexture("assets/img/track.jpg", "track");
     Sprite track(trackTexture);
     track.setOrigin(track.getSize() / 2.0f);
     track.setPosition(windowWidth / 2, windowHeight / 2);
@@ -149,7 +149,7 @@ SceneId acceptGame(GLFWwindow* window) {
     detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.3f));
 
     // Flames
-    Texture2D flamesTexture = ResourceManager::loadTexture("resources/img/flames.png", "flames");
+    Texture2D flamesTexture = ResourceManager::loadTexture("assets/img/flames.png", "flames");
     std::vector<AnimatedSprite*> flames;
 
     for (int i = 0; i < 5; i++) {
@@ -168,7 +168,7 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Sparkles
-    Texture2D sparkleTexture = ResourceManager::loadTexture("resources/img/sparkle.png", "sparkle");
+    Texture2D sparkleTexture = ResourceManager::loadTexture("assets/img/sparkle.png", "sparkle");
     std::vector<Sprite*> sparkles;
 
     for (int i = 0; i < 5; i++) {
@@ -185,7 +185,7 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Song information
-    std::string selectedSongFolder = "resources/music/" + GameInfo::selectedSong + "/";
+    std::string selectedSongFolder = "songs/" + GameInfo::selectedSong + "/";
     int pixelsPerSecond;
     int keyOffeset = 0;
     int midiKeyOffeset = 0;
@@ -222,7 +222,7 @@ SceneId acceptGame(GLFWwindow* window) {
     GameInfo::hitNotes = 0;
 
     // Load song
-    Sound pluck("resources/sound/click02.wav");
+    Sound pluck("assets/sound/click02.wav");
     Sound guitar((selectedSongFolder + "guitar.ogg").c_str());
     Sound* song = nullptr;
     Sound* rhythm = nullptr;
@@ -240,7 +240,7 @@ SceneId acceptGame(GLFWwindow* window) {
 
     // FPS/Timer text
     TextRenderer textRenderer(windowWidth, windowHeight);
-    textRenderer.load("resources/fonts/digital-7.ttf", 30);
+    textRenderer.load("assets/fonts/digital-7.ttf", 30);
     textRenderer.setHorizontalAlignment(TextLeft);
     double offsetTime = glfwGetTime();
     double currentTime = offsetTime;

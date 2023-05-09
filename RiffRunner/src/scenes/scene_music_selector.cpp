@@ -47,7 +47,7 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     // Music selector menu
-    Menu musicSelectorMenu(width, height, width/2 - 30, 450, "resources/fonts/Queen of Clubs.otf");
+    Menu musicSelectorMenu(width, height, width/2 - 30, 450, "assets/fonts/Queen of Clubs.otf");
     musicSelectorMenu.setAlignmentHorizontal();
 
     // Menu key callback
@@ -56,7 +56,7 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
 
     // Load album covers
     std::vector<Sprite> albumCovers;
-    for (fs::recursive_directory_iterator it("resources\\music\\"), end; it != end; ++it) {
+    for (fs::recursive_directory_iterator it("songs\\"), end; it != end; ++it) {
         string path = it->path().string();
         if (path.find("!") == string::npos) {
 
@@ -79,7 +79,7 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     }
 
     // Background
-    Texture2D backgroundTexture = ResourceManager::loadTexture("resources/img/music_selector_background.jpg", "musicSelectorBackground");
+    Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/music_selector_background.jpg", "musicSelectorBackground");
     Sprite backgroundImage(backgroundTexture);
 
     while (!glfwWindowShouldClose(window)) {

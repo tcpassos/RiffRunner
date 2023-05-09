@@ -19,7 +19,7 @@ SceneId acceptResults(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     TextRenderer textRenderer(width, height);
-    textRenderer.load("resources/fonts/Queen of Clubs.otf", 52);
+    textRenderer.load("assets/fonts/Queen of Clubs.otf", 52);
 
     while (!glfwWindowShouldClose(window)) {
 

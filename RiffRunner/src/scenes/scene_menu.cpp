@@ -93,12 +93,12 @@ SceneId acceptMenu(GLFWwindow* window) {
     glfwSetWindowUserPointer(window, &menu);
 
     // Menu music
-    Sound menuMusic("resources/sound/menu.wav");
+    Sound menuMusic("assets/sound/menu.wav");
     menuMusic.setVolume(50);
     menuMusic.play();
 
     // Background image
-    Sprite* menuImage = new Sprite(ResourceManager::loadTexture("resources/img/menu.jpg", "menu"));
+    Sprite* menuImage = new Sprite(ResourceManager::loadTexture("assets/img/menu.jpg", "menu"));
 
     // Indicates that an item has been selected from the menu with enter
     MenuType previousMenuType;
