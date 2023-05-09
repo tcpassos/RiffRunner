@@ -185,7 +185,7 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Song information
-    std::string selectedSongFolder = "songs/" + GameInfo::selectedSong + "/";
+    std::string selectedSongFolder = GameInfo::songFolders[GameInfo::selectedSong].string() + "/";
     int pixelsPerSecond;
     int keyOffeset = 0;
     int midiKeyOffeset = 0;

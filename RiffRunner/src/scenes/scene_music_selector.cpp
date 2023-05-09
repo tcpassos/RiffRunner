@@ -1,4 +1,3 @@
-#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -27,7 +26,7 @@ void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int 
 
     //Go to difficulty selector with ENTER
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
-        GameInfo::selectedSong = menu->getItemValue();
+        GameInfo::selectedSong = menu->getItemIndex();
         accept(window, SceneDifficultySelector);
     }
     //Return to main menu with ESC
@@ -56,26 +55,27 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
 
     // Load album covers
     std::vector<Sprite> albumCovers;
-    for (fs::recursive_directory_iterator it("songs\\"), end; it != end; ++it) {
-        string path = it->path().string();
-        if (path.find("!") == string::npos) {
-
-            if (path.find("album.") != string::npos) {
-                if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") || (it->path().extension() == ".jpg") || (it->path().extension() == ".JPG")) {
-                    string musicName = it->path().parent_path().filename().string();
-                    Texture2D coverTexture = ResourceManager::loadTexture(it->path().string().c_str(), musicName);
-                    
-                    Sprite cover(coverTexture);
-                    float coverWidth = width * 0.4;
-                    float coverHeight = height * 0.5;
-                    cover.setPosition((width / 2) - (coverWidth / 2), height/6);
-                    cover.setSize(coverWidth, coverHeight);
-                    albumCovers.push_back(cover);
-
-                    musicSelectorMenu.addItem(musicName);
-                }
+    GameInfo::loadSongs();
+    for (auto songPath : GameInfo::songFolders) {
+        string musicName = songPath.filename().string();
+        std::string albumCoverImage;
+        // Search for album cover
+        for (fs::directory_iterator it(songPath), end; it != end; ++it) {
+            if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") || (it->path().extension() == ".jpg") || (it->path().extension() == ".JPG")) {
+                albumCoverImage = it->path().string();
+                break;
             }
         }
+
+        Texture2D coverTexture = ResourceManager::loadTexture(albumCoverImage.c_str(), musicName);
+        Sprite cover(coverTexture);
+        float coverWidth = width * 0.4;
+        float coverHeight = height * 0.5;
+        cover.setPosition((width / 2) - (coverWidth / 2), height / 6);
+        cover.setSize(coverWidth, coverHeight);
+        albumCovers.push_back(cover);
+
+        musicSelectorMenu.addItem(musicName);
     }
 
     // Background

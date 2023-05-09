@@ -53,14 +53,18 @@ void Menu::draw() {
 void Menu::previous() {
     if (selectedItem - 1 >= 0) {
         selectedItem--;
-        clickSound->playOnce();
+    } else {
+        selectedItem = menuItens.size() - 1;
     }
+    clickSound->playOnce();
 }
 
 void Menu::next() {
     if (selectedItem + 1 < menuItens.size()) {
         selectedItem++;
-        clickSound->playOnce();
+    } else {
+        selectedItem = 0;
     }
+    clickSound->playOnce();
 }
 
