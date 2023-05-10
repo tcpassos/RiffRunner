@@ -17,6 +17,7 @@ public:
     int addItem(string label);
     void previous();
     void next();
+    void setSelectedItem(int index);
     void setAlignmentVertical() { this->isVertical = true; };
     void setAlignmentHorizontal() { this->isVertical = false; };
     int getItemIndex() { return selectedItem; }

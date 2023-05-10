@@ -3,6 +3,9 @@
 void accept(GLFWwindow* window, SceneId id) {
     while (!glfwWindowShouldClose(window)) {
         switch (id) {
+        case SceneLoading:
+            id = acceptLoading(window);
+            break;
         case SceneMenu:
             id = acceptMenu(window);
             break;

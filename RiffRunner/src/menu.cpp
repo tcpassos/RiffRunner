@@ -68,3 +68,8 @@ void Menu::next() {
     clickSound->playOnce();
 }
 
+void Menu::setSelectedItem(int index) {
+    if (index > 0 && index < menuItens.size()) {
+        this->selectedItem = index;
+    }
+}

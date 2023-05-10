@@ -111,6 +111,9 @@
     <ClCompile Include="src\midifile\MidiMessage.cpp">
       <Filter>Arquivos de Origem\dependencies</Filter>
     </ClCompile>
+    <ClCompile Include="src\scenes\scene_loading.cpp">
+      <Filter>Arquivos de Origem\scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\menu.h">

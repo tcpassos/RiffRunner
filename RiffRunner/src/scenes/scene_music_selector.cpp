@@ -55,28 +55,18 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
 
     // Load album covers
     std::vector<Sprite> albumCovers;
-    GameInfo::loadSongs();
     for (auto songPath : GameInfo::songFolders) {
         string musicName = songPath.filename().string();
-        std::string albumCoverImage;
-        // Search for album cover
-        for (fs::directory_iterator it(songPath), end; it != end; ++it) {
-            if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") || (it->path().extension() == ".jpg") || (it->path().extension() == ".JPG")) {
-                albumCoverImage = it->path().string();
-                break;
-            }
-        }
-
-        Texture2D coverTexture = ResourceManager::loadTexture(albumCoverImage.c_str(), musicName);
+        Texture2D coverTexture = ResourceManager::getTexture(musicName);
         Sprite cover(coverTexture);
         float coverWidth = width * 0.4;
         float coverHeight = height * 0.5;
         cover.setPosition((width / 2) - (coverWidth / 2), height / 6);
         cover.setSize(coverWidth, coverHeight);
         albumCovers.push_back(cover);
-
         musicSelectorMenu.addItem(musicName);
     }
+    musicSelectorMenu.setSelectedItem(GameInfo::selectedSong);
 
     // Background
     Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/music_selector_background.jpg", "musicSelectorBackground");

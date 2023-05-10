@@ -153,6 +153,7 @@
     <ClCompile Include="src\scenes\scene_difficulty_selector.cpp" />
     <ClCompile Include="src\scenes\scene_failure.cpp" />
     <ClCompile Include="src\scenes\scene_game.cpp" />
+    <ClCompile Include="src\scenes\scene_loading.cpp" />
     <ClCompile Include="src\scenes\scene_menu.cpp" />
     <ClCompile Include="src\scenes\scene_music_selector.cpp" />
     <ClCompile Include="src\scenes\scene_pause.cpp" />
