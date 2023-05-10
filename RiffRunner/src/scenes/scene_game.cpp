@@ -251,11 +251,11 @@ SceneId acceptGame(GLFWwindow* window) {
         backgroundSounds.push_back(new Sound((selectedSongFolder + "vocals.ogg").c_str()));
     if (fileExists(selectedSongFolder + "drums_1.ogg"))
         backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_1.ogg").c_str()));
-    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+    if (fileExists(selectedSongFolder + "drums_2.ogg"))
         backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_2.ogg").c_str()));
-    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+    if (fileExists(selectedSongFolder + "drums_3.ogg"))
         backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_3.ogg").c_str()));
-    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+    if (fileExists(selectedSongFolder + "drums_4.ogg"))
         backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_4.ogg").c_str()));
 
     for (auto backgroundSound : backgroundSounds) {
