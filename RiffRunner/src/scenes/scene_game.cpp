@@ -116,16 +116,31 @@ SceneId acceptGame(GLFWwindow* window) {
 
     // Track lines
     std::vector<RectangleShape> trackLines;
-    for (int i = 0; i < 6; i++) {
-        float trackLinePosition = track.getBounds().left + (track.getSize().x / 5) * i;
+    for (int i = 0; i < 5; i++) {
+        float trackLinePosition = track.getBounds().left + (i * track.getSize().x / 5) + track.getSize().x / 10;
         RectangleShape trackLine(track.getSize().x, track.getSize().y);
         trackLine.setSize(1.0f, trackLine.getSize().y);
         trackLine.setOrigin(trackLine.getSize() / 2.0f);
         trackLine.setPosition(trackLinePosition, track.getPosition().y);
+        trackLine.setOpacity(0.6f);
         trackLine.setProjection(*track.getProjection());
-
         trackLines.push_back(trackLine);
     }
+    
+    RectangleShape trackLineLeft(track.getSize().x, track.getSize().y);
+    trackLineLeft.setSize(2.0f, trackLineLeft.getSize().y);
+    trackLineLeft.setOrigin(trackLineLeft.getSize() / 2.0f);
+    trackLineLeft.setPosition(track.getBounds().left, track.getPosition().y);
+    trackLineLeft.setProjection(*track.getProjection());
+    trackLines.push_back(trackLineLeft);
+    
+    RectangleShape trackLineRight(track.getSize().x, track.getSize().y);
+    trackLineRight.setSize(2.0f, trackLineRight.getSize().y);
+    trackLineRight.setOrigin(trackLineRight.getSize() / 2.0f);
+    trackLineRight.setPosition(track.getBounds().width, track.getPosition().y);
+    trackLineRight.setProjection(*track.getProjection());
+    trackLines.push_back(trackLineRight);
+
 
     // Input zone
     Rect inputBounds(track.getBounds().left, track.getBounds().height - 40, track.getBounds().width, track.getBounds().height + 15);
@@ -142,11 +157,11 @@ SceneId acceptGame(GLFWwindow* window) {
         detector.setProjection(*track.getProjection());
         detectors.push_back(detector);
     }
-    detectors[0].setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.3f));
-    detectors[1].setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.3f));
-    detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.3f));
-    detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.3f));
-    detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.3f));
+    detectors[0].setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.4f));
+    detectors[1].setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.4f));
+    detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.4f));
+    detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.4f));
+    detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.4f));
 
     // Flames
     Texture2D flamesTexture = ResourceManager::loadTexture("assets/img/flames.png", "flames");
@@ -175,7 +190,7 @@ SceneId acceptGame(GLFWwindow* window) {
         AnimatedSprite* sparkle = new AnimatedSprite(sparklesTexture);
         sparkle->setSize(40, 20);
         sparkle->setOrigin(sparkle->getSize() / 2.0f);
-        sparkle->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 25);
+        sparkle->setPosition(track.getBounds().left + i * 42.5 + 16, track.getSize().y - 25);
         sparkle->setEffect(EffectShine);
         sparkle->setEffectIntensity(1.0f);
         sparkle->setEffectSpeed(2.0f);
@@ -202,7 +217,7 @@ SceneId acceptGame(GLFWwindow* window) {
             midiKeyOffeset = 72;
             break;
         case 2: // Hard
-            pixelsPerSecond = 550;
+            pixelsPerSecond = 600;
             midiKeyOffeset = 84;
             break;
         case 3: // Chuck Norris
