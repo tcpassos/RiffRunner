@@ -241,16 +241,25 @@ SceneId acceptGame(GLFWwindow* window) {
     // Load song
     Sound pluck("assets/sound/click02.wav");
     Sound guitar((selectedSongFolder + "guitar.ogg").c_str());
-    Sound* song = nullptr;
-    Sound* rhythm = nullptr;
+    
+    std::vector<Sound*> backgroundSounds;
+    if (fileExists(selectedSongFolder + "song.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "song.ogg").c_str()));
+    if (fileExists(selectedSongFolder + "rhythm.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "rhythm.ogg").c_str()));
+    if (fileExists(selectedSongFolder + "vocals.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "vocals.ogg").c_str()));
+    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_1.ogg").c_str()));
+    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_2.ogg").c_str()));
+    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_3.ogg").c_str()));
+    if (fileExists(selectedSongFolder + "drums_1.ogg"))
+        backgroundSounds.push_back(new Sound((selectedSongFolder + "drums_4.ogg").c_str()));
 
-    if (fileExists(selectedSongFolder + "song.ogg")) {
-        song = new Sound((selectedSongFolder + "song.ogg").c_str());
-        song->play();
-    }
-    if (fileExists(selectedSongFolder + "rhythm.ogg")) {
-        rhythm = new Sound((selectedSongFolder + "rhythm.ogg").c_str());
-        rhythm->play();
+    for (auto backgroundSound : backgroundSounds) {
+        backgroundSound->play();
     }
     guitar.play();
 
@@ -284,8 +293,9 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Pause
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            if (song != nullptr) song->pause();
-            if (rhythm != nullptr) rhythm->pause();
+            for (auto backgroundSound : backgroundSounds) {
+                backgroundSound->pause();
+            }
             guitar.pause();
             double pauseTime = glfwGetTime();
 
@@ -296,8 +306,9 @@ SceneId acceptGame(GLFWwindow* window) {
             }
 
             offsetTime += (glfwGetTime() - pauseTime);
-            if (song != nullptr) song->play();
-            if (rhythm != nullptr) rhythm->play();
+            for (auto backgroundSound : backgroundSounds) {
+                backgroundSound->play();
+            }
             guitar.play();
             // Re-bind key callback
             glfwSetKeyCallback(window, key_callback_game);

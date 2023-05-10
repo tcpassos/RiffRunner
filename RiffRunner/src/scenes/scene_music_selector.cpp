@@ -41,6 +41,12 @@ void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int 
 // ======================================================================================
 SceneId acceptMusicSelector(GLFWwindow* window) {
 
+    // If there is no song to load
+    if (GameInfo::songFolders.empty()) {
+        std::cout << "Song list is empty!" << std::endl;
+        return SceneMenu;
+    }
+
     // Screen size
     int width, height;
     glfwGetWindowSize(window, &width, &height);

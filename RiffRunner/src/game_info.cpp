@@ -12,10 +12,13 @@ void GameInfo::loadSongs() {
 		return;
 	}
     // Load file paths containing song.ini
-    for (fs::recursive_directory_iterator it("songs"), end; it != end; ++it) {
-        if (it->path().string().find("song.ini") != std::string::npos) {
-            fs::path songPath = it->path().parent_path();
-            songFolders.push_back(songPath);
+    fs::path searchPath("songs");
+    if (fs::exists(searchPath) && fs::is_directory(searchPath)) {
+        for (const auto& entry : fs::recursive_directory_iterator(searchPath)) {
+            if (entry.is_regular_file() && entry.path().filename() == "song.ini") {
+                fs::path songPath = entry.path().parent_path();
+                songFolders.push_back(songPath);
+            }
         }
     }
 }
