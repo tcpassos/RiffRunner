@@ -145,23 +145,43 @@ SceneId acceptGame(GLFWwindow* window) {
     // Input zone
     Rect inputBounds(track.getBounds().left, track.getBounds().height - 40, track.getBounds().width, track.getBounds().height + 15);
 
-    std::vector<RectangleShape> detectors;
-    for (int i = 0; i < 5; i++) {
-        float detectorWidth = track.getSize().x / 5;
-        float detectorHeight = (inputBounds.height - inputBounds.top) * 0.2;
-        float detectorPosition = track.getBounds().left + detectorWidth * i + detectorWidth / 2;
-        RectangleShape detector(track.getSize().x, track.getSize().y);
-        detector.setSize(detectorWidth, detectorHeight);
-        detector.setOrigin(detector.getSize().x / 2.0f, detector.getSize().y);
-        detector.setPosition(detectorPosition, inputBounds.height - 30);
-        detector.setProjection(*track.getProjection());
-        detectors.push_back(detector);
-    }
-    detectors[0].setColor(glm::vec4(0.0f, 1.0f, 0.0f, 0.4f));
-    detectors[1].setColor(glm::vec4(1.0f, 0.0f, 0.0f, 0.4f));
-    detectors[2].setColor(glm::vec4(1.0f, 1.0f, 0.0f, 0.4f));
-    detectors[3].setColor(glm::vec4(0.0f, 0.0f, 1.0f, 0.4f));
-    detectors[4].setColor(glm::vec4(1.0f, 0.65f, 0.0f, 0.4f));
+    // Fret buttons
+    Texture2D fretButtonsTexture = ResourceManager::loadTexture("assets/img/fret_buttons.png", "fret_buttons");
+    Sprite fretButtons(fretButtonsTexture);
+    fretButtons.setSize(200.0, 10.0);
+    fretButtons.setOrigin(0.0f, fretButtons.getSize().y);
+    fretButtons.setPosition(track.getBounds().left, track.getBounds().height - 17);
+    fretButtons.setProjection(*track.getProjection());
+
+    Sprite fretButtonGreen(ResourceManager::loadTexture("assets/img/fret_button_green.png", "fret_button_green"));
+    fretButtonGreen.setSize(fretButtons.getSize());
+    fretButtonGreen.setOrigin(fretButtons.getOrigin());
+    fretButtonGreen.setPosition(fretButtons.getPosition());
+    fretButtonGreen.setProjection(*track.getProjection());
+
+    Sprite fretButtonRed(ResourceManager::loadTexture("assets/img/fret_button_red.png", "fret_button_red"));
+    fretButtonRed.setSize(fretButtons.getSize());
+    fretButtonRed.setOrigin(fretButtons.getOrigin());
+    fretButtonRed.setPosition(fretButtons.getPosition());
+    fretButtonRed.setProjection(*track.getProjection());
+
+    Sprite fretButtonYellow(ResourceManager::loadTexture("assets/img/fret_button_yellow.png", "fret_button_yellow"));
+    fretButtonYellow.setSize(fretButtons.getSize());
+    fretButtonYellow.setOrigin(fretButtons.getOrigin());
+    fretButtonYellow.setPosition(fretButtons.getPosition());
+    fretButtonYellow.setProjection(*track.getProjection());
+
+    Sprite fretButtonBlue(ResourceManager::loadTexture("assets/img/fret_button_blue.png", "fret_button_blue"));
+    fretButtonBlue.setSize(fretButtons.getSize());
+    fretButtonBlue.setOrigin(fretButtons.getOrigin());
+    fretButtonBlue.setPosition(fretButtons.getPosition());
+    fretButtonBlue.setProjection(*track.getProjection());
+
+    Sprite fretButtonOrange(ResourceManager::loadTexture("assets/img/fret_button_orange.png", "fret_button_orange"));
+    fretButtonOrange.setSize(fretButtons.getSize());
+    fretButtonOrange.setOrigin(fretButtons.getOrigin());
+    fretButtonOrange.setPosition(fretButtons.getPosition());
+    fretButtonOrange.setProjection(*track.getProjection());
 
     // Flames
     Texture2D flamesTexture = ResourceManager::loadTexture("assets/img/flames.png", "flames");
@@ -171,7 +191,7 @@ SceneId acceptGame(GLFWwindow* window) {
         AnimatedSprite* flame = new AnimatedSprite(flamesTexture);
         flame->setSize(40, 40);
         flame->setOrigin(flame->getSize() / 2.0f);
-        flame->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 30);
+        flame->setPosition(track.getBounds().left + i * 43 + 14, track.getSize().y - 30);
         flame->setEffect(EffectShine);
         flame->setEffectIntensity(0.8f);
         flame->setEffectSpeed(3.0f);
@@ -190,7 +210,7 @@ SceneId acceptGame(GLFWwindow* window) {
         AnimatedSprite* sparkle = new AnimatedSprite(sparklesTexture);
         sparkle->setSize(40, 20);
         sparkle->setOrigin(sparkle->getSize() / 2.0f);
-        sparkle->setPosition(track.getBounds().left + i * 42.5 + 16, track.getSize().y - 25);
+        sparkle->setPosition(track.getBounds().left + i * 42 + 17, track.getSize().y - 25);
         sparkle->setEffect(EffectShine);
         sparkle->setEffectIntensity(1.0f);
         sparkle->setEffectSpeed(2.0f);
@@ -440,10 +460,13 @@ SceneId acceptGame(GLFWwindow* window) {
             trackLine.draw(window);
         }
 
-        // Detectors
-        for (auto& detector : detectors) {
-            detector.draw(window);
-        }
+        // Fret buttons
+        fretButtons.draw(window);
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) fretButtonGreen.draw(window);
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) fretButtonRed.draw(window);
+        if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS) fretButtonYellow.draw(window);
+        if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS) fretButtonBlue.draw(window);
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) fretButtonOrange.draw(window);
 
         // Draw notes
         for (auto it = notes.rbegin(); it != notes.rend(); ++it) {
@@ -455,8 +478,9 @@ SceneId acceptGame(GLFWwindow* window) {
         // Sparkles
         for (auto& sparkle : sparkles) {
             sparkle->update();
-            if (sparkle->isRunning())
+            if (sparkle->isRunning()) {
                 sparkle->draw(window);
+            }
         }
 
         // Flames
