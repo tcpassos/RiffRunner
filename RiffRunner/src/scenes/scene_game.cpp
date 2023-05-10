@@ -168,19 +168,21 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Sparkles
-    Texture2D sparkleTexture = ResourceManager::loadTexture("assets/img/sparkle.png", "sparkle");
-    std::vector<Sprite*> sparkles;
+    Texture2D sparklesTexture = ResourceManager::loadTexture("assets/img/sparkles.png", "sparkles");
+    std::vector<AnimatedSprite*> sparkles;
 
     for (int i = 0; i < 5; i++) {
-        Sprite* sparkle = new AnimatedSprite(sparkleTexture);
-        sparkle->setSize(55, 15);
+        AnimatedSprite* sparkle = new AnimatedSprite(sparklesTexture);
+        sparkle->setSize(40, 20);
         sparkle->setOrigin(sparkle->getSize() / 2.0f);
-        sparkle->setPosition(track.getBounds().left + i * 40 + 20, track.getSize().y - 22);
-        sparkle->setOpacity(0.0f);
+        sparkle->setPosition(track.getBounds().left + i * 45 + 10, track.getSize().y - 25);
         sparkle->setEffect(EffectShine);
-        sparkle->setEffectIntensity(1.2f);
-        sparkle->setEffectSpeed(6.0f);
-        sparkle->setProjection(*track.getProjection());
+        sparkle->setEffectIntensity(1.0f);
+        sparkle->setEffectSpeed(2.0f);
+        sparkle->setProjection(*track.getProjection(), true);
+        for (int sparkleOffset = 0; sparkleOffset < 5; sparkleOffset++) {
+            sparkle->addFrame(Frame(0.02f + sparkleOffset * 0.002f, sparkle->getSize().x / 5, sparkle->getSize().y - 1, sparkleOffset));
+        }
         sparkles.push_back(sparkle);
     }
 
@@ -322,7 +324,6 @@ SceneId acceptGame(GLFWwindow* window) {
 // ======================================================================================
 
         for (auto note = notes.begin(); note != notes.end(); ) {
-            sparkles[note->getIndex()]->setOpacity(0.0f);
 
             /* ========= Note BEFORE detector ========= */
             if (note->isBefore(inputBounds)) {
@@ -341,7 +342,9 @@ SceneId acceptGame(GLFWwindow* window) {
                             flames[note->getIndex()]->resetAnimation();
                         }
                         hud.addPoints(note->hold(inputBounds.top + 15));
-                        sparkles[note->getIndex()]->setOpacity(0.8f);
+                        if (!sparkles[note->getIndex()]->isRunning()) {
+                            sparkles[note->getIndex()]->resetAnimation();
+                        }
                         ++note;
                     // ----------------------------------------------------------------
                     } else {
@@ -425,7 +428,9 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Sparkles
         for (auto& sparkle : sparkles) {
-            sparkle->draw(window);
+            sparkle->update();
+            if (sparkle->isRunning())
+                sparkle->draw(window);
         }
 
         // Flames
