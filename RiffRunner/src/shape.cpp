@@ -24,6 +24,12 @@ Rect Shape::getBounds() {
     return bounds;
 }
 
+void Shape::draw(GLFWwindow* window) {
+    postProcessor.begin();
+    drawElements(window);
+    postProcessor.end();
+}
+
 void Shape::initRenderData() {
     GLfloat vertices[] = {
         //x     y    z    s	  t

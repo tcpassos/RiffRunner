@@ -19,6 +19,9 @@
     <Filter Include="Arquivos de Origem\scenes">
       <UniqueIdentifier>{8f75c289-1619-4ce2-bd77-a7429288503e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Arquivos de Cabeçalho\effects">
+      <UniqueIdentifier>{a1dd15ce-8802-4720-81ff-0d3a172cb639}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -172,6 +175,27 @@
     </ClInclude>
     <ClInclude Include="include\animated_sprite.h">
       <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="include\post_processing_pipeline.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="include\framebuffer.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="include\effects\effect_shine.hpp">
+      <Filter>Arquivos de Cabeçalho\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\effects\effect.h">
+      <Filter>Arquivos de Cabeçalho\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\effects.h">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClInclude>
+    <ClInclude Include="include\effects\effect_grayscale.hpp">
+      <Filter>Arquivos de Cabeçalho\effects</Filter>
+    </ClInclude>
+    <ClInclude Include="include\effects\effect_neon.hpp">
+      <Filter>Arquivos de Cabeçalho\effects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

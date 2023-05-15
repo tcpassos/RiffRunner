@@ -4,7 +4,7 @@ RectangleShape::RectangleShape(unsigned int width, unsigned int heigth) : Shape(
     this->shader = ResourceManager::loadShader("assets/shaders/shape.vs", "assets/shaders/shape.fs", nullptr, "shaderShape");
 };
 
-void RectangleShape::draw(GLFWwindow* window) {
+void RectangleShape::drawElements(GLFWwindow* window) {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 

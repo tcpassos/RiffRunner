@@ -98,8 +98,8 @@ SceneId acceptMenu(GLFWwindow* window) {
     menuMusic.play();
 
     // Background image
-    Sprite* menuImage = new Sprite(ResourceManager::loadTexture("assets/img/menu.jpg", "menu"));
-
+    Sprite menuImage(ResourceManager::loadTexture("assets/img/menu.jpg", "menu"));
+    
     // Indicates that an item has been selected from the menu with enter
     MenuType previousMenuType;
 
@@ -128,7 +128,7 @@ SceneId acceptMenu(GLFWwindow* window) {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        menuImage->draw(window);
+        menuImage.draw(window);
         menu->draw();
 
         // Swap front and back buffers

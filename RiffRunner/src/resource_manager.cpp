@@ -7,9 +7,25 @@
 #include <stb/stb_image.h>
 
 // Instantiate static variables
+std::map<std::string, FrameBuffer>  ResourceManager::frameBuffers;
 std::map<std::string, Texture2D>    ResourceManager::textures;
 std::map<std::string, Shader>       ResourceManager::shaders;
 
+FrameBuffer ResourceManager::loadFrameBuffer(unsigned int width, unsigned int height, std::string name) {
+    auto frameBufferIt = frameBuffers.find(name);
+    // If isn't present
+    if (frameBufferIt == frameBuffers.end()) {
+        FrameBuffer frameBuffer;
+        frameBuffer.generate(width, height);
+        frameBuffers[name] = frameBuffer;
+        return frameBuffers[name];
+    }
+    return frameBufferIt->second;
+}
+
+FrameBuffer ResourceManager::getFrameBuffer(std::string name) {
+    return frameBuffers[name];
+}
 
 Shader ResourceManager::loadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name)
 {
@@ -43,8 +59,13 @@ Texture2D ResourceManager::getTexture(std::string name)
     return textures[name];
 }
 
-void ResourceManager::clear()
-{
+void ResourceManager::clear() {
+    // (properly) delete all frame buffers
+    for (auto iter : frameBuffers) {
+        if (iter.second.id != 0)
+            glDeleteTextures(1, &iter.second.texture.id);
+        glDeleteFramebuffers(1, &iter.second.id);
+    }
     // (properly) delete all shaders	
     for (auto iter : shaders)
         glDeleteProgram(iter.second.ID);

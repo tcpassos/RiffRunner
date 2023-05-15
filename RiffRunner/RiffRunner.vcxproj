@@ -170,7 +170,14 @@
   <ItemGroup>
     <ClInclude Include="include\animated_sprite.h" />
     <ClInclude Include="include\animation.h" />
+    <ClInclude Include="include\effects.h" />
+    <ClInclude Include="include\effects\effect.h" />
+    <ClInclude Include="include\effects\effect_neon.hpp" />
+    <ClInclude Include="include\effects\effect_grayscale.hpp" />
+    <ClInclude Include="include\effects\effect_shine.hpp" />
+    <ClInclude Include="include\framebuffer.hpp" />
     <ClInclude Include="include\game_info.h" />
+    <ClInclude Include="include\post_processing_pipeline.hpp" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\hud.h" />

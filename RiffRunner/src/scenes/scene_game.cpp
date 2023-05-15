@@ -9,16 +9,17 @@
 #include <thread>
 
 #include "animated_sprite.h"
-#include "sound.h"
+#include "effects.h"
+#include "game_info.h"
 #include "hud.h"
 #include "rectangle_shape.h"
 #include "resource_manager.h"
 #include "scene.h"
 #include "song_note.h"
+#include "sound.h"
 #include "sprite.h"
 #include "text_renderer.h"
 #include "timed_dispatcher.h"
-#include "game_info.h"
 
 bool fileExists(const std::string& filename) {
     std::ifstream file(filename);
@@ -192,10 +193,13 @@ SceneId acceptGame(GLFWwindow* window) {
         flame->setSize(40, 40);
         flame->setOrigin(flame->getSize() / 2.0f);
         flame->setPosition(track.getBounds().left + i * 43 + 14, track.getSize().y - 30);
-        flame->setEffect(EffectShine);
-        flame->setEffectIntensity(0.8f);
-        flame->setEffectSpeed(3.0f);
         flame->setProjection(*track.getProjection(), true);
+
+        EffectShine flameShine;
+        flameShine.setIntensity(0.8);
+        flameShine.setSpeed(3.0);
+        flame->addEffect(&flameShine);
+
         for (int flameOffset = 0; flameOffset < 8; flameOffset++) {
             flame->addFrame(Frame(0.02f + flameOffset * 0.002f, flame->getSize().x / 8, flame->getSize().y - 1, flameOffset));
         }
@@ -211,10 +215,13 @@ SceneId acceptGame(GLFWwindow* window) {
         sparkle->setSize(40, 20);
         sparkle->setOrigin(sparkle->getSize() / 2.0f);
         sparkle->setPosition(track.getBounds().left + i * 42 + 17, track.getSize().y - 25);
-        sparkle->setEffect(EffectShine);
-        sparkle->setEffectIntensity(1.0f);
-        sparkle->setEffectSpeed(2.0f);
         sparkle->setProjection(*track.getProjection(), true);
+
+        EffectShine sparkleShine;
+        sparkleShine.setIntensity(1.0);
+        sparkleShine.setSpeed(2.0);
+        sparkle->addEffect(&sparkleShine);
+
         for (int sparkleOffset = 0; sparkleOffset < 5; sparkleOffset++) {
             sparkle->addFrame(Frame(0.02f + sparkleOffset * 0.002f, sparkle->getSize().x / 5, sparkle->getSize().y - 1, sparkleOffset));
         }

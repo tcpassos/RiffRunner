@@ -43,6 +43,7 @@ private:
     Sprite* multiplier;
     Sprite* specialBar;
     Sound* specialSound;
+    EffectShine shineEffect;
 
     void updatePerformanceIndicator();
     void updateMultiplier();

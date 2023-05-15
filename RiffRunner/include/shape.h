@@ -4,10 +4,14 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "texture.h"
-#include "shader.h"
+
+#include "effects.h"
+#include "framebuffer.hpp"
+#include "post_processing_pipeline.hpp"
 #include "projection.h"
 #include "rect.h"
+#include "shader.h"
+#include "texture.h"
 
 class Shape {
 public:
@@ -39,7 +43,11 @@ public:
     void setProjection(Projection& projection, bool preserveModel = false) { this->projection = &projection; this->preserveModel = preserveModel; }
     Projection* getProjection() { return this->projection; }
 
+    void addEffect(Effect* effect) { postProcessor.addEffect(effect); }
+
     Rect getBounds();
+
+    void draw(GLFWwindow* window);
 
 protected:
     GLuint VBO;
@@ -51,7 +59,10 @@ protected:
     glm::vec2 origin;
     float rotation;
     bool preserveModel;
+    PostProcessingPipeline postProcessor;
+    FrameBuffer frameBuffer;
 
+    virtual void drawElements(GLFWwindow* window) = 0;
     glm::mat4 getProjectionMatrix(float width, float height);
     glm::mat4 getModelMatrix();
 

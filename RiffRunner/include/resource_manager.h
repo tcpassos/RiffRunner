@@ -5,6 +5,7 @@
 
 #include <glad/glad.h>
 
+#include "framebuffer.hpp"
 #include "texture.h"
 #include "shader.h"
 
@@ -16,6 +17,10 @@
 class ResourceManager
 {
 public:
+    // loads (and generates) a frame buffer
+    static FrameBuffer loadFrameBuffer(unsigned int width, unsigned int height, std::string name);
+    // retrieves a stored frame buffer
+    static FrameBuffer getFrameBuffer(std::string name);
     // loads (and generates) a shader program from file loading vertex, fragment (and geometry) shader's source code. If gShaderFile is not nullptr, it also loads a geometry shader
     static Shader    loadShader(const char* vShaderFile, const char* fShaderFile, const char* gShaderFile, std::string name);
     // retrieves a stored sader
@@ -35,6 +40,7 @@ private:
     static Texture2D loadTextureFromFile(const char* file);
 
     // resource storage
-    static std::map<std::string, Shader>    shaders;
-    static std::map<std::string, Texture2D> textures;
+    static std::map<std::string, FrameBuffer> frameBuffers;
+    static std::map<std::string, Shader>      shaders;
+    static std::map<std::string, Texture2D>   textures;
 };

@@ -10,8 +10,9 @@
 class RectangleShape : public Shape {
 public:
 	RectangleShape(unsigned int width, unsigned int heigth);
-	void draw(GLFWwindow* window);
 
 private:
 	Shader shader;
+
+	void drawElements(GLFWwindow* window) override;
 };
