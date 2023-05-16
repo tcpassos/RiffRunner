@@ -29,16 +29,16 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
     // Tail
     if (tailLength > 0) {
         switch (index) {
-            case 0: this->originalColor = glm::vec4(0.0f, 1.0f, 0.0f, 0.6f); break;
-            case 1: this->originalColor = glm::vec4(1.0f, 0.0f, 0.0f, 0.6f); break;
-            case 2: this->originalColor = glm::vec4(1.0f, 1.0f, 0.0f, 0.6f); break;
-            case 3: this->originalColor = glm::vec4(0.0f, 0.0f, 1.0f, 0.6f); break;
-            case 4: this->originalColor = glm::vec4(1.0f, 0.65f, 0.0f, 0.6f); break;
+            case 0: this->originalColor = glm::vec3(0.0f, 1.0f, 0.0f); break;
+            case 1: this->originalColor = glm::vec3(1.0f, 0.0f, 0.0f); break;
+            case 2: this->originalColor = glm::vec3(1.0f, 1.0f, 0.0f); break;
+            case 3: this->originalColor = glm::vec3(0.0f, 0.0f, 1.0f); break;
+            case 4: this->originalColor = glm::vec3(1.0f, 0.65f, 0.0f); break;
         }
-        this->tail = new RectangleShape(8, tailLength);
+        this->tail = new LightStripe();
         this->tail->setColor(originalColor);
-        this->tail->setOrigin(this->tail->getSize().x / 2, this->tail->getSize().y);
-        this->tail->setPosition(this->note->getPosition().x, 0.0f);
+        this->tail->setSize(tailLength);
+        this->tail->setPosition(note->getPosition().x, 0);
         this->tail->setProjection(*track.getProjection());
     } else {
         this->tail = nullptr;
@@ -79,7 +79,7 @@ unsigned int SongNote::getValue() {
 
 Rect SongNote::getBounds() {
     float left = this->note->getBounds().left;
-    float top = hasTail() ? this->tail->getBounds().top : this->note->getBounds().top;
+    float top = hasTail() ? tail->getPosition().y - tail->getSize() : this->note->getBounds().top;
     float width = this->note->getBounds().width;
     float height = this->note->getBounds().height;
     return Rect(left, top, width, height);
@@ -93,9 +93,7 @@ void SongNote::disable() {
     this->state = NoteDisabled;
 
     if (hasTail()) {
-        glm::vec4 tailColor = originalColor;
-        tailColor.a = 0.3f;
-        this->tail->setColor(tailColor);
+        tail->setColor(glm::vec3(0.3, 0.3, 0.3));
     }
 }
 
@@ -114,17 +112,24 @@ unsigned int SongNote::hold(unsigned int positionY) {
     this->consumed = true;
     // Hide note
     note->setColor(glm::vec4(0.0f));
-    // Increases tail opacity
-    glm::vec4 tailColor = originalColor;
-    tailColor.a = 0.8f;
-    tail->setColor(tailColor);
-    // Update tail length
+    // Update tail length and color
     if (hasTail()) {
-        float newLength = tail->getSize().y - (tail->getBounds().height - positionY);
+        float newLength = tail->getSize() - (tail->getPosition().y - positionY);
         if (newLength > 0) {
-            tail->setSize(tail->getSize().x, newLength);
+            tail->setSize(newLength);
             note->setPosition(note->getPosition().x, positionY);
+            tail->setPosition(note->getPosition().x, positionY);
         }
+        tail->setColor(glm::vec3(0.0, 0.85, 1.0));
+
+        // Calculate intensity based on current time
+        double duration = 2.0;
+        double minIntensity = 0.5;
+        double maxIntensity = 1.0;
+        double t = fmod(glfwGetTime(), duration) / duration;
+        double angle = t * glm::two_pi<double>();
+        double intensity = glm::mix(minIntensity, maxIntensity, (sin(angle) + 1.0) * 0.5);
+        tail->setIntensity(intensity);
     }
     return points;
 }
@@ -137,17 +142,12 @@ void SongNote::move(float value) {
 void SongNote::draw(GLFWwindow* window, bool specialActive) {
     // Draw tail
     if (hasTail()) {
-        glm::vec4 tailColor = tail->getColor();
-        if (specialActive) {
-            tailColor.r = 0.0f;
-            tailColor.g = 0.85f;
-            tailColor.b = 1.0f;
-            tail->setColor(tailColor);
-        } else {
-            tailColor.r = originalColor.r;
-            tailColor.g = originalColor.g;
-            tailColor.b = originalColor.b;
-            tail->setColor(tailColor);
+        if (state == NoteUnpressed) {
+            if (specialActive) {
+                tail->setColor(glm::vec3(0.0, 0.85, 1.0));
+            } else {
+                tail->setColor(originalColor);
+            }
         }
         tail->draw(window);
     }

@@ -4,7 +4,7 @@
 #include "menu.h"
 #include "resource_manager.h"
 #include "scene.h"
-#include "sprite.h"
+#include "sprite.hpp"
 #include "text_renderer.h"
 #include "game_info.h"
 

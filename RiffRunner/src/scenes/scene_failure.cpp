@@ -2,7 +2,7 @@
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
-#include "sprite.h"
+#include "sprite.hpp"
 
 const int FAILURE_RESTART = 0;
 const int FAILURE_GIVEUP = 1;

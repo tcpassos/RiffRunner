@@ -135,8 +135,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\light_stripe.hpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\game_info.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\hud.cpp" />
@@ -147,7 +147,6 @@
     <ClCompile Include="src\midifile\MidiFile.cpp" />
     <ClCompile Include="src\midifile\MidiMessage.cpp" />
     <ClCompile Include="src\rect.cpp" />
-    <ClCompile Include="src\rectangle_shape.cpp" />
     <ClCompile Include="src\resource_manager.cpp" />
     <ClCompile Include="src\scenes\scene.cpp" />
     <ClCompile Include="src\scenes\scene_difficulty_selector.cpp" />
@@ -159,20 +158,17 @@
     <ClCompile Include="src\scenes\scene_pause.cpp" />
     <ClCompile Include="src\scenes\scene_results.cpp" />
     <ClCompile Include="src\shader.cpp" />
-    <ClCompile Include="src\shape.cpp" />
     <ClCompile Include="src\song_note.cpp" />
     <ClCompile Include="src\sound.cpp" />
-    <ClCompile Include="src\sprite.cpp" />
     <ClCompile Include="src\stb.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\text_renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\animated_sprite.h" />
-    <ClInclude Include="include\animation.h" />
+    <ClInclude Include="include\animated_sprite.hpp" />
+    <ClInclude Include="include\animation.hpp" />
     <ClInclude Include="include\effects.h" />
     <ClInclude Include="include\effects\effect.h" />
-    <ClInclude Include="include\effects\effect_neon.hpp" />
     <ClInclude Include="include\effects\effect_grayscale.hpp" />
     <ClInclude Include="include\effects\effect_shine.hpp" />
     <ClInclude Include="include\framebuffer.hpp" />
@@ -184,16 +180,17 @@
     <ClInclude Include="include\menu.h" />
     <ClInclude Include="include\projection.h" />
     <ClInclude Include="include\rect.h" />
-    <ClInclude Include="include\rectangle_shape.h" />
+    <ClInclude Include="include\rectangle_shape.hpp" />
     <ClInclude Include="include\resource_manager.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />
-    <ClInclude Include="include\shape.h" />
+    <ClInclude Include="include\shape.hpp" />
     <ClInclude Include="include\song_note.h" />
-    <ClInclude Include="include\sprite.h" />
+    <ClInclude Include="include\sprite.hpp" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\text_renderer.h" />
     <ClInclude Include="include\timed_dispatcher.h" />
+    <ClInclude Include="include\transformable.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

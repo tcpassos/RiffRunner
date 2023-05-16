@@ -8,7 +8,7 @@
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
-#include "sprite.h"
+#include "sprite.hpp"
 
 const int MENU_MAIN_START    = 0;
 const int MENU_MAIN_SETTINGS = 1;
@@ -98,7 +98,8 @@ SceneId acceptMenu(GLFWwindow* window) {
     menuMusic.play();
 
     // Background image
-    Sprite menuImage(ResourceManager::loadTexture("assets/img/menu.jpg", "menu"));
+    Texture2D menuTexture = ResourceManager::loadTexture("assets/img/menu.jpg", "menu");
+    Sprite menuImage(menuTexture);
     
     // Indicates that an item has been selected from the menu with enter
     MenuType previousMenuType;

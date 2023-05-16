@@ -2,7 +2,7 @@
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
-#include "sprite.h"
+#include "sprite.hpp"
 
 // ======================================================================================
 // Keyboard navigation keys callback

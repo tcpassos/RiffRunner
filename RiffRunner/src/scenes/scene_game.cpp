@@ -8,16 +8,16 @@
 #include <string>
 #include <thread>
 
-#include "animated_sprite.h"
+#include "animated_sprite.hpp"
 #include "effects.h"
 #include "game_info.h"
 #include "hud.h"
-#include "rectangle_shape.h"
+#include "rectangle_shape.hpp"
 #include "resource_manager.h"
 #include "scene.h"
 #include "song_note.h"
 #include "sound.h"
-#include "sprite.h"
+#include "sprite.hpp"
 #include "text_renderer.h"
 #include "timed_dispatcher.h"
 
@@ -154,31 +154,36 @@ SceneId acceptGame(GLFWwindow* window) {
     fretButtons.setPosition(track.getBounds().left, track.getBounds().height - 17);
     fretButtons.setProjection(*track.getProjection());
 
-    Sprite fretButtonGreen(ResourceManager::loadTexture("assets/img/fret_button_green.png", "fret_button_green"));
+    Texture2D fretButtonGreenTexture = ResourceManager::loadTexture("assets/img/fret_button_green.png", "fret_button_green");
+    Sprite fretButtonGreen(fretButtonGreenTexture);
     fretButtonGreen.setSize(fretButtons.getSize());
     fretButtonGreen.setOrigin(fretButtons.getOrigin());
     fretButtonGreen.setPosition(fretButtons.getPosition());
     fretButtonGreen.setProjection(*track.getProjection());
 
-    Sprite fretButtonRed(ResourceManager::loadTexture("assets/img/fret_button_red.png", "fret_button_red"));
+    Texture2D fretButtonRedTexture = ResourceManager::loadTexture("assets/img/fret_button_red.png", "fret_button_red");
+    Sprite fretButtonRed(fretButtonRedTexture);
     fretButtonRed.setSize(fretButtons.getSize());
     fretButtonRed.setOrigin(fretButtons.getOrigin());
     fretButtonRed.setPosition(fretButtons.getPosition());
     fretButtonRed.setProjection(*track.getProjection());
 
-    Sprite fretButtonYellow(ResourceManager::loadTexture("assets/img/fret_button_yellow.png", "fret_button_yellow"));
+    Texture2D fretButtonYellowTexture = ResourceManager::loadTexture("assets/img/fret_button_yellow.png", "fret_button_yellow");
+    Sprite fretButtonYellow(fretButtonYellowTexture);
     fretButtonYellow.setSize(fretButtons.getSize());
     fretButtonYellow.setOrigin(fretButtons.getOrigin());
     fretButtonYellow.setPosition(fretButtons.getPosition());
     fretButtonYellow.setProjection(*track.getProjection());
 
-    Sprite fretButtonBlue(ResourceManager::loadTexture("assets/img/fret_button_blue.png", "fret_button_blue"));
+    Texture2D fretButtonBlueTexture = ResourceManager::loadTexture("assets/img/fret_button_blue.png", "fret_button_blue");
+    Sprite fretButtonBlue(fretButtonBlueTexture);
     fretButtonBlue.setSize(fretButtons.getSize());
     fretButtonBlue.setOrigin(fretButtons.getOrigin());
     fretButtonBlue.setPosition(fretButtons.getPosition());
     fretButtonBlue.setProjection(*track.getProjection());
 
-    Sprite fretButtonOrange(ResourceManager::loadTexture("assets/img/fret_button_orange.png", "fret_button_orange"));
+    Texture2D fretButtonOrangeTexture = ResourceManager::loadTexture("assets/img/fret_button_orange.png", "fret_button_orange");
+    Sprite fretButtonOrange(fretButtonOrangeTexture);
     fretButtonOrange.setSize(fretButtons.getSize());
     fretButtonOrange.setOrigin(fretButtons.getOrigin());
     fretButtonOrange.setPosition(fretButtons.getPosition());
@@ -394,7 +399,7 @@ SceneId acceptGame(GLFWwindow* window) {
                             GameInfo::hitNotes++;
                             flames[note->getIndex()]->resetAnimation();
                         }
-                        hud.addPoints(note->hold(inputBounds.top + 15));
+                        hud.addPoints(note->hold(inputBounds.top + 10));
                         if (!sparkles[note->getIndex()]->isRunning()) {
                             sparkles[note->getIndex()]->resetAnimation();
                         }

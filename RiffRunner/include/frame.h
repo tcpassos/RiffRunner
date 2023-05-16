@@ -1,6 +1,5 @@
 #pragma once
 
-#include "sprite.h"
 #include "rect.h"
 
 class Frame {

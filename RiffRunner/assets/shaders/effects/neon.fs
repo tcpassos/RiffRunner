@@ -3,8 +3,7 @@
 in vec2 texCoord;
 out vec4 fragColor;
 
-uniform sampler2D texBuff;
-uniform vec3 neonColor = vec3(0.0, 1.0, 1.0);
+uniform vec3 neonColor = vec3(1.0, 1.0, 1.0);
 uniform float radius = 0.005;
 uniform float intensity = 1.3;
 

@@ -3,9 +3,9 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "animation.h"
+#include "animation.hpp"
 #include "frame.h"
-#include "sprite.h"
+#include "sprite.hpp"
 
 class AnimatedSprite : public Sprite {
 public:

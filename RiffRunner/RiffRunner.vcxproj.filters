@@ -48,22 +48,10 @@
     <ClCompile Include="src\resource_manager.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\sprite.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="src\hud.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
-    <ClCompile Include="src\animation.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
     <ClCompile Include="src\rect.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\shape.cpp">
-      <Filter>Arquivos de Origem</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rectangle_shape.cpp">
       <Filter>Arquivos de Origem</Filter>
     </ClCompile>
     <ClCompile Include="src\song_note.cpp">
@@ -117,6 +105,9 @@
     <ClCompile Include="src\scenes\scene_loading.cpp">
       <Filter>Arquivos de Origem\scenes</Filter>
     </ClCompile>
+    <ClCompile Include="include\light_stripe.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\menu.h">
@@ -134,7 +125,7 @@
     <ClInclude Include="include\resource_manager.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="include\sprite.h">
+    <ClInclude Include="include\sprite.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="include\scene.h">
@@ -146,7 +137,7 @@
     <ClInclude Include="include\hud.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="include\animation.h">
+    <ClInclude Include="include\animation.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="include\frame.h">
@@ -155,10 +146,10 @@
     <ClInclude Include="include\projection.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="include\shape.h">
+    <ClInclude Include="include\shape.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="include\rectangle_shape.h">
+    <ClInclude Include="include\rectangle_shape.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="include\song_note.h">
@@ -173,7 +164,7 @@
     <ClInclude Include="include\game_info.h">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
-    <ClInclude Include="include\animated_sprite.h">
+    <ClInclude Include="include\animated_sprite.hpp">
       <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
     <ClInclude Include="include\post_processing_pipeline.hpp">
@@ -194,8 +185,8 @@
     <ClInclude Include="include\effects\effect_grayscale.hpp">
       <Filter>Arquivos de Cabeçalho\effects</Filter>
     </ClInclude>
-    <ClInclude Include="include\effects\effect_neon.hpp">
-      <Filter>Arquivos de Cabeçalho\effects</Filter>
+    <ClInclude Include="include\transformable.hpp">
+      <Filter>Arquivos de Cabeçalho</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

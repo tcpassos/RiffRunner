@@ -3,12 +3,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
+#include <vector>
 
 #include "resource_manager.h"
 #include "texture.h"
 #include "sound.h"
-#include "sprite.h"
+#include "sprite.hpp"
 #include "text_renderer.h"
+#include "texture.h"
 
 class HUD {
 public:
@@ -44,6 +46,8 @@ private:
     Sprite* specialBar;
     Sound* specialSound;
     EffectShine shineEffect;
+
+    std::vector<Texture2D> multiplierTextures;
 
     void updatePerformanceIndicator();
     void updateMultiplier();

@@ -7,7 +7,7 @@
 #include "menu.h"
 #include "resource_manager.h"
 #include "scene.h"
-#include "sprite.h"
+#include "sprite.hpp"
 
 // ======================================================================================
 // Results scene

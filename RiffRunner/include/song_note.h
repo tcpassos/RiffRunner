@@ -2,11 +2,12 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/constants.hpp>
 #include <cmath>
 
-#include "sprite.h"
+#include "light_stripe.hpp"
+#include "sprite.hpp"
 #include "rect.h"
-#include "rectangle_shape.h"
 #include "resource_manager.h"
 
 enum NoteState {
@@ -39,10 +40,10 @@ private:
     NoteState state;
     bool consumed;
     Sprite* note;
-    RectangleShape* tail;
+    LightStripe* tail;
     unsigned int tailLength;
     double lastHoldingPointTime;
     Rect* noteNormalTextureRect;
     Rect* noteSpecialTextureRect;
-    glm::vec4 originalColor;
+    glm::vec3 originalColor;
 };
