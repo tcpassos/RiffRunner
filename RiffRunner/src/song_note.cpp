@@ -38,6 +38,7 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
         this->tail = new LightStripe();
         this->tail->setColor(originalColor);
         this->tail->setSize(tailLength);
+        this->tail->setRadius(0.003);
         this->tail->setPosition(note->getPosition().x, 0);
         this->tail->setProjection(*track.getProjection());
     } else {
@@ -124,8 +125,8 @@ unsigned int SongNote::hold(unsigned int positionY) {
 
         // Calculate intensity based on current time
         double duration = 2.0;
-        double minIntensity = 0.5;
-        double maxIntensity = 1.0;
+        double minIntensity = 0.35;
+        double maxIntensity = 0.8;
         double t = fmod(glfwGetTime(), duration) / duration;
         double angle = t * glm::two_pi<double>();
         double intensity = glm::mix(minIntensity, maxIntensity, (sin(angle) + 1.0) * 0.5);

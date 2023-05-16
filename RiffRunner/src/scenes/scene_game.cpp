@@ -12,6 +12,7 @@
 #include "effects.h"
 #include "game_info.h"
 #include "hud.h"
+#include "light_stripe.hpp"
 #include "rectangle_shape.hpp"
 #include "resource_manager.h"
 #include "scene.h"
@@ -35,6 +36,8 @@ void loadNotes(std::string filename, TimedDispatcher<SongNote> &noteDispatcher, 
 
     midifile.doTimeAnalysis();
     midifile.linkNotePairs();
+
+    const float scale = 0.95;
     
     for (int trackIndex = 0; trackIndex < midifile.getTrackCount(); trackIndex++) {
         for (int event = 0; event < midifile[trackIndex].size(); event++) {
@@ -45,11 +48,11 @@ void loadNotes(std::string filename, TimedDispatcher<SongNote> &noteDispatcher, 
             double noteDuration = midifile[trackIndex][event].getDurationInSeconds();
             if (noteDuration < 0.5) noteDuration = 0.0;
 
-            if (key == 0) noteDispatcher.add(noteStart, SongNote(track, 1, noteDuration * pixelsPerSecond));
-            else if (key == 1) noteDispatcher.add(noteStart, SongNote(track, 2, noteDuration * pixelsPerSecond));
-            else if (key == 2) noteDispatcher.add(noteStart, SongNote(track, 4, noteDuration * pixelsPerSecond));
-            else if (key == 3) noteDispatcher.add(noteStart, SongNote(track, 8, noteDuration * pixelsPerSecond));
-            else if (key == 4) noteDispatcher.add(noteStart, SongNote(track, 16, noteDuration * pixelsPerSecond));
+            if (key == 0) noteDispatcher.add(noteStart, SongNote(track, 1, noteDuration * pixelsPerSecond * scale));
+            else if (key == 1) noteDispatcher.add(noteStart, SongNote(track, 2, noteDuration * pixelsPerSecond * scale));
+            else if (key == 2) noteDispatcher.add(noteStart, SongNote(track, 4, noteDuration * pixelsPerSecond * scale));
+            else if (key == 3) noteDispatcher.add(noteStart, SongNote(track, 8, noteDuration * pixelsPerSecond * scale));
+            else if (key == 4) noteDispatcher.add(noteStart, SongNote(track, 16, noteDuration * pixelsPerSecond * scale));
         }
         if (!noteDispatcher.isEmpty()) {
             break;
@@ -111,6 +114,7 @@ SceneId acceptGame(GLFWwindow* window) {
     Sprite track(trackTexture);
     track.setOrigin(track.getSize() / 2.0f);
     track.setPosition(windowWidth / 2, windowHeight / 2);
+    track.setOpacity(0.8);
     track.getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
     track.getProjection()->moveY(-100.0f);
     track.getProjection()->moveZ(-55.0f);
@@ -127,21 +131,20 @@ SceneId acceptGame(GLFWwindow* window) {
         trackLine.setProjection(*track.getProjection());
         trackLines.push_back(trackLine);
     }
-    
-    RectangleShape trackLineLeft(track.getSize().x, track.getSize().y);
-    trackLineLeft.setSize(2.0f, trackLineLeft.getSize().y);
-    trackLineLeft.setOrigin(trackLineLeft.getSize() / 2.0f);
-    trackLineLeft.setPosition(track.getBounds().left, track.getPosition().y);
-    trackLineLeft.setProjection(*track.getProjection());
-    trackLines.push_back(trackLineLeft);
-    
-    RectangleShape trackLineRight(track.getSize().x, track.getSize().y);
-    trackLineRight.setSize(2.0f, trackLineRight.getSize().y);
-    trackLineRight.setOrigin(trackLineRight.getSize() / 2.0f);
-    trackLineRight.setPosition(track.getBounds().width, track.getPosition().y);
-    trackLineRight.setProjection(*track.getProjection());
-    trackLines.push_back(trackLineRight);
 
+    LightStripe trackLineNeonLeft;
+    trackLineNeonLeft.setSize(track.getSize().y);
+    trackLineNeonLeft.setPosition(track.getBounds().left, track.getBounds().height);
+    trackLineNeonLeft.setProjection(*track.getProjection());
+    trackLineNeonLeft.setRadius(0.003);
+
+    LightStripe trackLineNeonRight;
+    trackLineNeonRight.setSize(track.getSize().y);
+    trackLineNeonRight.setPosition(track.getBounds().width, track.getBounds().height);
+    trackLineNeonRight.setProjection(*track.getProjection());
+    trackLineNeonRight.setRadius(0.003);
+
+    float sideTrackLinesHitEffectTime = 0.0;
 
     // Input zone
     Rect inputBounds(track.getBounds().left, track.getBounds().height - 40, track.getBounds().width, track.getBounds().height + 15);
@@ -397,6 +400,7 @@ SceneId acceptGame(GLFWwindow* window) {
                     if (note->hasTail()) {
                         if (note->getState() == NoteUnpressed) {
                             GameInfo::hitNotes++;
+                            sideTrackLinesHitEffectTime = 1.5;
                             flames[note->getIndex()]->resetAnimation();
                         }
                         hud.addPoints(note->hold(inputBounds.top + 10));
@@ -410,6 +414,7 @@ SceneId acceptGame(GLFWwindow* window) {
                        the score will increase by 2 points (plus multiplication),
                        the flame animation will be reset, and the note and its sprite will be destroyed */
                         GameInfo::hitNotes++;
+                        sideTrackLinesHitEffectTime = 1.0;
                         input &= ~note->getValue(); // Release input
                         hud.incrementPerformance();
                         hud.incrementStreak();
@@ -458,6 +463,28 @@ SceneId acceptGame(GLFWwindow* window) {
 
         // Background
         backgroundImage.draw(window);
+
+        // Side track lines
+        if (sideTrackLinesHitEffectTime > 0.0) {
+            float glowIntensity = glm::mix(0.35f, 0.8f, 1.0f - glm::smoothstep(0.0f, 1.0f, glm::clamp(sideTrackLinesHitEffectTime, 0.0f, 1.0f)));
+            trackLineNeonLeft.setIntensity(glowIntensity);
+            trackLineNeonRight.setIntensity(glowIntensity);
+
+            sideTrackLinesHitEffectTime -= frameTime;
+            if (sideTrackLinesHitEffectTime < 0) sideTrackLinesHitEffectTime = 0;
+        } else {
+            trackLineNeonLeft.setIntensity(0.8);
+            trackLineNeonRight.setIntensity(0.8);
+        }
+        if (hud.isSpecialActive()) {
+            trackLineNeonLeft.setColor(glm::vec3(0.0, 0.85, 1.0));
+            trackLineNeonRight.setColor(glm::vec3(0.0, 0.85, 1.0));
+        } else {
+            trackLineNeonLeft.setColor(glm::vec3(1.0, 1.0, 1.0));
+            trackLineNeonRight.setColor(glm::vec3(1.0, 1.0, 1.0));
+        }
+        trackLineNeonLeft.draw(window);
+        trackLineNeonRight.draw(window);
 
         // Track
         Rect trackTextureRect = track.getTextureRect();
