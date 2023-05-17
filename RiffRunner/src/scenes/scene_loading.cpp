@@ -13,16 +13,15 @@ void loadTextures(GLFWwindow* sharedContext) {
 
     // Load album cover textures
     GameInfo::loadSongs();
-    for (auto songPath : GameInfo::songFolders) {
-        std::string musicName = songPath.filename().string();
+    for (auto song : GameInfo::songs) {
         std::string albumCoverImage;
-        for (fs::directory_iterator it(songPath), end; it != end; ++it) {
+        for (fs::directory_iterator it(song.path), end; it != end; ++it) {
             if (it->path().extension() == ".png" || (it->path().extension() == ".PNG") || (it->path().extension() == ".jpg") || (it->path().extension() == ".JPG")) {
                 albumCoverImage = it->path().string();
                 break;
             }
         }
-        ResourceManager::loadTexture(albumCoverImage.c_str(), musicName);
+        ResourceManager::loadTexture(albumCoverImage.c_str(), song.path);
     }
 
     texturesLoaded = true;
@@ -39,8 +38,7 @@ SceneId acceptLoading(GLFWwindow* window) {
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
     
     // Text renderer
-    TextRenderer loadingTextRenderer(windowWidth, windowHeight);
-    loadingTextRenderer.load("assets/fonts/Queen of Clubs.otf", 60);
+    TextRenderer loadingTextRenderer(windowWidth, windowHeight, Font("assets/fonts/Queen of Clubs.otf", 60));
 
     int counter = 0;
 

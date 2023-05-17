@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "menu.h"
+#include "menu.hpp"
 #include "rect.h"
 #include "resource_manager.h"
 #include "scene.h"
@@ -75,13 +75,15 @@ SceneId acceptMenu(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     // Main menu
-    Menu mainMenu(width, height, 0, 0);
+    Menu mainMenu(width, height);
+    mainMenu.setPosition(width / 2, height * 0.3);
     mainMenu.addItem("<Iniciar>");
     mainMenu.addItem("<Opcoes>");
     mainMenu.addItem("<Sair>");
 
     // Settings menu
-    Menu settingsMenu(width, height, 0, 0);
+    Menu settingsMenu(width, height);
+    settingsMenu.setPosition(width / 2, height * 0.3);
     settingsMenu.addItem("<Voltar>");
 
     // Current menu

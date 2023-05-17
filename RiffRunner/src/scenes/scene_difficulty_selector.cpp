@@ -1,7 +1,7 @@
 #include <vector>
 #include <string>
 
-#include "menu.h"
+#include "menu.hpp"
 #include "resource_manager.h"
 #include "scene.h"
 #include "sprite.hpp"
@@ -59,8 +59,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     // Difficulty selector menu
-    Menu difficultySelectorMenu(width, height, 0, 0, "assets/fonts/Queen of Clubs.otf");
-    difficultySelectorMenu.setAlignmentHorizontal();
+    Menu difficultySelectorMenu(width, height);
 
     // Menu key callback
     glfwSetKeyCallback(window, key_callback_difficulty_selector);
@@ -96,7 +95,6 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
 
         backgroundImage.draw(window);
         difficulties[difficultySelectorMenu.getItemIndex()].draw(window);
-        difficultySelectorMenu.draw();
 
         // ==========================================================
         // Switch buffers

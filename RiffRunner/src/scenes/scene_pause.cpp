@@ -1,4 +1,4 @@
-#include "menu.h"
+#include "menu.hpp"
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
@@ -34,7 +34,8 @@ SceneId acceptPause(GLFWwindow* window) {
     backgroundImage.setPosition(glm::vec2(width / 2, height / 2));
 
     // Pause menu
-    Menu pauseMenu(width, height, 0, 0);
+    Menu pauseMenu(width, height);
+    pauseMenu.setPosition(width / 2, height * 0.3);
 
     const int PAUSE_CONTINUE = pauseMenu.addItem("<Continuar>");;
     const int PAUSE_RESTART = pauseMenu.addItem("<Reiniciar>");;

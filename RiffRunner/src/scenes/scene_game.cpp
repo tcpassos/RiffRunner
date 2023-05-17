@@ -37,7 +37,7 @@ void loadNotes(std::string filename, TimedDispatcher<SongNote> &noteDispatcher, 
     midifile.doTimeAnalysis();
     midifile.linkNotePairs();
 
-    const float scale = 0.95;
+    const float scale = 0.9;
     
     for (int trackIndex = 0; trackIndex < midifile.getTrackCount(); trackIndex++) {
         for (int event = 0; event < midifile[trackIndex].size(); event++) {
@@ -237,7 +237,7 @@ SceneId acceptGame(GLFWwindow* window) {
     }
 
     // Song information
-    std::string selectedSongFolder = GameInfo::songFolders[GameInfo::selectedSong].string() + "/";
+    std::string selectedSongFolder = GameInfo::songs[GameInfo::selectedSong].path + "/";
     int pixelsPerSecond;
     int keyOffeset = 0;
     int midiKeyOffeset = 0;
@@ -300,8 +300,7 @@ SceneId acceptGame(GLFWwindow* window) {
 
 
     // FPS/Timer text
-    TextRenderer textRenderer(windowWidth, windowHeight);
-    textRenderer.load("assets/fonts/digital-7.ttf", 30);
+    TextRenderer textRenderer(windowWidth, windowHeight, Font("assets/fonts/digital-7.ttf", 30));
     textRenderer.setHorizontalAlignment(TextLeft);
     double offsetTime = glfwGetTime();
     double currentTime = offsetTime;

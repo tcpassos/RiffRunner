@@ -38,8 +38,7 @@ HUD::HUD() {
 	this->display->setPosition(0.0, this->indicator->getBounds().height);
 	this->display->setSize(displayTexture.width * 0.8, displayTexture.height * 0.8);
 	this->display->setColor(glm::vec4(1.0, 1.0, 1.0, 0.5));
-	this->scoreText = new TextRenderer(800, 600);
-	this->scoreText->load("assets/fonts/digital-7.ttf", 45);
+	this->scoreText = new TextRenderer(800, 600, Font("assets/fonts/digital-7.ttf", 45));
 	this->scoreText->setHorizontalAlignment(TextRight);
 
 	// Special Multiplier

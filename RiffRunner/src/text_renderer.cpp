@@ -8,7 +8,7 @@
 #include "resource_manager.h"
 
 
-TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
+TextRenderer::TextRenderer(unsigned int width, unsigned int height, Font font) {
     this->horizontalAlignment = TextCenter;
     this->color = glm::vec4(1.0f);
     this->scale = 1.0f;
@@ -27,6 +27,9 @@ TextRenderer::TextRenderer(unsigned int width, unsigned int height) {
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+
+    // Load font characters
+    load(font.source, font.size);
 }
 
 void TextRenderer::load(std::string font, unsigned int fontSize)

@@ -1,4 +1,4 @@
-#include "menu.h"
+#include "menu.hpp"
 #include "resource_manager.h"
 #include "scene.h"
 #include "sound.h"
@@ -47,7 +47,8 @@ SceneId acceptFailure(GLFWwindow* window) {
     glfwGetWindowSize(window, &width, &height);
 
     // Failure menu
-    Menu failureMenu(width, height, width / 12 * 3, height / 8 * 6);
+    Menu failureMenu(width, height);
+    failureMenu.setPosition(width / 12 * 3, height / 8 * 6);
 
     failureMenu.addItem("<Reiniciar>");
     failureMenu.addItem("<Desistir>");

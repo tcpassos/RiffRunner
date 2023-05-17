@@ -4,8 +4,9 @@
 #include <glm/glm.hpp>
 #include <map>
 
-#include "texture.h"
+#include "font.h"
 #include "shader.h"
+#include "texture.h"
 
 
 /// Holds all state information relevant to a character as loaded using FreeType
@@ -34,9 +35,8 @@ public:
     // shader used for text rendering
     Shader shader;
 
-    TextRenderer(unsigned int width, unsigned int height);
-    // pre-compiles a list of characters from the given font
-    void load(std::string font, unsigned int fontSize);
+    TextRenderer(unsigned int width, unsigned int height, Font font);
+
     // renders a string of text using the precompiled list of characters
     void renderText(std::string text, float x, float y);
 
@@ -52,5 +52,7 @@ private:
     glm::vec4 color;
     float scale;
     
+    // pre-compiles a list of characters from the given font
+    void load(std::string font, unsigned int fontSize);
     unsigned int getPositionX(unsigned int posX, std::string text, float scale);
 };

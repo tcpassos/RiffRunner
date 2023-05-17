@@ -4,7 +4,7 @@
 #include <sstream>
 
 #include "game_info.h"
-#include "menu.h"
+#include "menu.hpp"
 #include "resource_manager.h"
 #include "scene.h"
 #include "sprite.hpp"
@@ -18,8 +18,7 @@ SceneId acceptResults(GLFWwindow* window) {
     int width, height;
     glfwGetWindowSize(window, &width, &height);
 
-    TextRenderer textRenderer(width, height);
-    textRenderer.load("assets/fonts/Queen of Clubs.otf", 52);
+    TextRenderer textRenderer(width, height, Font("assets/fonts/Queen of Clubs.otf", 52));
 
     while (!glfwWindowShouldClose(window)) {
 

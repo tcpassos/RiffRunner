@@ -140,7 +140,6 @@
     <ClCompile Include="src\game_info.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\hud.cpp" />
-    <ClCompile Include="src\menu.cpp" />
     <ClCompile Include="src\midifile\Binasc.cpp" />
     <ClCompile Include="src\midifile\MidiEvent.cpp" />
     <ClCompile Include="src\midifile\MidiEventList.cpp" />
@@ -171,13 +170,16 @@
     <ClInclude Include="include\effects\effect.h" />
     <ClInclude Include="include\effects\effect_grayscale.hpp" />
     <ClInclude Include="include\effects\effect_shine.hpp" />
+    <ClInclude Include="include\font.h" />
     <ClInclude Include="include\framebuffer.hpp" />
     <ClInclude Include="include\game_info.h" />
+    <ClInclude Include="include\inipp.h" />
     <ClInclude Include="include\post_processing_pipeline.hpp" />
+    <ClInclude Include="include\song_info.h" />
     <ClInclude Include="include\sound.h" />
     <ClInclude Include="include\frame.h" />
     <ClInclude Include="include\hud.h" />
-    <ClInclude Include="include\menu.h" />
+    <ClInclude Include="include\menu.hpp" />
     <ClInclude Include="include\projection.h" />
     <ClInclude Include="include\rect.h" />
     <ClInclude Include="include\rectangle_shape.hpp" />
