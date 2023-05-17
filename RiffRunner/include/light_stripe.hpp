@@ -12,8 +12,11 @@
 class LightStripe {
 public:
 	LightStripe() {
+        int screenWidth, screenHeight;
+        glfwGetWindowSize(glfwGetCurrentContext(), &screenWidth, &screenHeight);
+
 		this->shader = ResourceManager::loadShader("assets/shaders/light_stripe.vs", "assets/shaders/light_stripe.fs", nullptr, "shaderLightStripe");
-        this->frameBuffer = ResourceManager::loadFrameBuffer(800, 600, "neon");
+        this->frameBuffer = ResourceManager::loadFrameBuffer(screenWidth, screenHeight, "neon");
         this->sprite = new Sprite(frameBuffer.texture);
         this->position = glm::vec2(400, 300);
         this->size = 1;

@@ -10,11 +10,16 @@
 class Transformable {
 public:
 	Transformable() {
+        // Calculates the required distance from the view on the z-axis to be able to see the full frame
+        int screenWidth, screenHeight;
+        glfwGetWindowSize(glfwGetCurrentContext(), &screenWidth, &screenHeight);
+        float distanceZ = (screenHeight / 2.0f) / glm::tan(glm::radians(120.0) / 2.0f);
+
 		this->position = glm::vec2(0.0f);
 		this->size = glm::vec2(0);
 		this->origin = glm::vec2(0.0f);
 		this->rotation = 0.0f;
-        this->projection = new Projection(glm::vec3(0.0f, 0.0f, -172.0f), glm::vec3(0.0f));
+        this->projection = new Projection(glm::vec3(0.0f, 0.0f, -distanceZ), glm::vec3(0.0f), glm::radians(120.0), 10.0, screenHeight);
         this->preserveModel = false;
 	}
 

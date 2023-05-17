@@ -102,6 +102,7 @@ SceneId acceptMenu(GLFWwindow* window) {
     // Background image
     Texture2D menuTexture = ResourceManager::loadTexture("assets/img/menu.jpg", "menu");
     Sprite menuImage(menuTexture);
+    menuImage.setSize(width, height);
     
     // Indicates that an item has been selected from the menu with enter
     MenuType previousMenuType;

@@ -88,6 +88,7 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     // Background
     Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/music_selector_background.jpg", "musicSelectorBackground");
     Sprite backgroundImage(backgroundTexture);
+    backgroundImage.setSize(screenWidth, screenHeight);
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, screenWidth, screenHeight);

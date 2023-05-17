@@ -15,13 +15,16 @@ HUD::HUD() {
 	this->specialActive = false;
 	this->specialCounter = 0;
 
+	int screenWidth, screenHeight;
+	glfwGetWindowSize(glfwGetCurrentContext(), &screenWidth, &screenHeight);
+
 	// Indicator
 							  ResourceManager::loadTexture("assets/img/hud/green.png", "performanceGreen");
     Texture2D yellowTexture = ResourceManager::loadTexture("assets/img/hud/yellow.png", "performanceYellow");
 							  ResourceManager::loadTexture("assets/img/hud/red.png", "performanceRed");
 	this->indicator = new Sprite(yellowTexture);
-	this->indicator->setSize(yellowTexture.width * 0.55, yellowTexture.height * 0.55);
-	this->indicator->setPosition(0, 200);
+	this->indicator->setSize(screenWidth * 0.3, screenHeight * 0.23);
+	this->indicator->setPosition(0, screenHeight / 3);
 
 	// Pointer
 	Texture2D pointerTexture = ResourceManager::loadTexture("assets/img/hud/pointer.png", "performancePointer");
@@ -36,9 +39,9 @@ HUD::HUD() {
 	Texture2D displayTexture = ResourceManager::loadTexture("assets/img/hud/display.png", "scoreDisplay");
 	this->display = new Sprite(displayTexture);
 	this->display->setPosition(0.0, this->indicator->getBounds().height);
-	this->display->setSize(displayTexture.width * 0.8, displayTexture.height * 0.8);
+	this->display->setSize(indicator->getSize().x, indicator->getSize().y * 0.6);
 	this->display->setColor(glm::vec4(1.0, 1.0, 1.0, 0.5));
-	this->scoreText = new TextRenderer(800, 600, Font("assets/fonts/digital-7.ttf", 45));
+	this->scoreText = new TextRenderer(screenWidth, screenHeight, Font("assets/fonts/digital-7.ttf", 45));
 	this->scoreText->setHorizontalAlignment(TextRight);
 
 	// Special Multiplier
@@ -51,7 +54,7 @@ HUD::HUD() {
 	multiplierTextures.push_back(ResourceManager::loadTexture("assets/img/hud/sx6.png", "sx6"));
 	multiplierTextures.push_back(ResourceManager::loadTexture("assets/img/hud/sx8.png", "sx8"));
 	this->multiplier = new Sprite(multiplierTextures[0]);
-	this->multiplier->setPosition(800.0f - this->multiplier->getSize().x, this->indicator->getPosition().y);
+	this->multiplier->setPosition(screenWidth - this->multiplier->getSize().x, this->indicator->getPosition().y);
 
 	Texture2D specialBarTexture = ResourceManager::loadTexture("assets/img/hud/special_bar.png", "specialBar");
 	this->specialBar = new Sprite(specialBarTexture);
@@ -178,7 +181,7 @@ void HUD::draw(GLFWwindow* window) {
 	this->pointer->draw(window);
 	this->display->draw(window);
 	this->scoreText->renderText(std::to_string(this->score),
-								this->display->getPosition().x + this->display->getSize().x - 30, this->display->getBounds().top + 35);
+								this->display->getPosition().x + this->display->getSize().x - 30, this->display->getBounds().top + 30);
 	this->specialBar->draw(window);
 	this->multiplier->draw(window);
 }

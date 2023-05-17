@@ -60,6 +60,7 @@ SceneId acceptFailure(GLFWwindow* window) {
     // Background
     Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/sadPepe.jpg", "Failure");
     Sprite backgroundImage(backgroundTexture);
+    backgroundImage.setSize(width, height);
 
     // Failure audios
     Sound failureSong("assets/sound/musicaTristeDoNaruto.wav");

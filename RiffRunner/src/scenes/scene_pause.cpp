@@ -30,12 +30,13 @@ SceneId acceptPause(GLFWwindow* window) {
     // Background
     Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/pauseMenu.png", "Pause");
     Sprite backgroundImage(backgroundTexture);
-    backgroundImage.setOrigin(glm::vec2(backgroundTexture.width / 2, backgroundTexture.height / 2));
+    backgroundImage.setSize(width * 0.8, height * 0.8);
+    backgroundImage.setOrigin(glm::vec2(backgroundImage.getSize().x / 2, backgroundImage.getSize().y / 2));
     backgroundImage.setPosition(glm::vec2(width / 2, height / 2));
 
     // Pause menu
     Menu pauseMenu(width, height);
-    pauseMenu.setPosition(width / 2, height * 0.3);
+    pauseMenu.setPosition(width / 2, height * 0.35);
 
     const int PAUSE_CONTINUE = pauseMenu.addItem("<Continuar>");;
     const int PAUSE_RESTART = pauseMenu.addItem("<Reiniciar>");;

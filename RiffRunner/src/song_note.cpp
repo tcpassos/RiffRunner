@@ -38,7 +38,7 @@ SongNote::SongNote(Sprite& track, unsigned int value, unsigned int tailLength) {
         this->tail = new LightStripe();
         this->tail->setColor(originalColor);
         this->tail->setSize(tailLength);
-        this->tail->setRadius(0.003);
+        this->tail->setRadius(0.002);
         this->tail->setPosition(note->getPosition().x, 0);
         this->tail->setProjection(*track.getProjection());
     } else {

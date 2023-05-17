@@ -23,7 +23,10 @@ public:
 
     void begin() {
         if (!effects.empty()) {
-            initialFrameBuffer = ResourceManager::loadFrameBuffer(800, 600, "initialFrameBuffer");
+            int screenWidth, screenHeight;
+            glfwGetWindowSize(glfwGetCurrentContext(), &screenWidth, &screenHeight);
+
+            initialFrameBuffer = ResourceManager::loadFrameBuffer(screenWidth, screenHeight, "initialFrameBuffer");
             initialFrameBuffer.bind();
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

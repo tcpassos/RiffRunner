@@ -112,12 +112,21 @@ SceneId acceptGame(GLFWwindow* window) {
     // Track
     Texture2D trackTexture = ResourceManager::loadTexture("assets/img/track.jpg", "track");
     Sprite track(trackTexture);
-    track.setOrigin(track.getSize() / 2.0f);
-    track.setPosition(windowWidth / 2, windowHeight / 2);
+    track.setSize(windowWidth / 4, windowHeight);
+    track.setOrigin(track.getSize().x / 2, track.getSize().y);
+    track.setPosition(windowWidth / 2, windowHeight);
     track.setOpacity(0.8);
     track.getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
-    track.getProjection()->moveY(-100.0f);
-    track.getProjection()->moveZ(-55.0f);
+
+    // Fckin math
+    if (windowHeight <= 800) {
+        track.getProjection()->moveY(-100.0f);
+        track.getProjection()->moveZ(-55.0f);
+    }
+    else if (windowHeight <= 1080) {
+        track.getProjection()->moveY(-300.0f);
+        track.getProjection()->moveZ(50.0f);
+    }
 
     // Track lines
     std::vector<RectangleShape> trackLines;
@@ -125,7 +134,7 @@ SceneId acceptGame(GLFWwindow* window) {
         float trackLinePosition = track.getBounds().left + (i * track.getSize().x / 5) + track.getSize().x / 10;
         RectangleShape trackLine(track.getSize().x, track.getSize().y);
         trackLine.setSize(1.0f, trackLine.getSize().y);
-        trackLine.setOrigin(trackLine.getSize() / 2.0f);
+        trackLine.setOrigin(trackLine.getSize().x / 2, track.getSize().y);
         trackLine.setPosition(trackLinePosition, track.getPosition().y);
         trackLine.setOpacity(0.6f);
         trackLine.setProjection(*track.getProjection());
@@ -200,7 +209,7 @@ SceneId acceptGame(GLFWwindow* window) {
         AnimatedSprite* flame = new AnimatedSprite(flamesTexture);
         flame->setSize(40, 40);
         flame->setOrigin(flame->getSize() / 2.0f);
-        flame->setPosition(track.getBounds().left + i * 43 + 14, track.getSize().y - 30);
+        flame->setPosition(track.getBounds().left + i * 43 + 14, track.getBounds().height - 30);
         flame->setProjection(*track.getProjection(), true);
 
         EffectShine flameShine;
@@ -222,7 +231,7 @@ SceneId acceptGame(GLFWwindow* window) {
         AnimatedSprite* sparkle = new AnimatedSprite(sparklesTexture);
         sparkle->setSize(40, 20);
         sparkle->setOrigin(sparkle->getSize() / 2.0f);
-        sparkle->setPosition(track.getBounds().left + i * 42 + 17, track.getSize().y - 25);
+        sparkle->setPosition(track.getBounds().left + i * 42 + 17, track.getBounds().height - 25);
         sparkle->setProjection(*track.getProjection(), true);
 
         EffectShine sparkleShine;

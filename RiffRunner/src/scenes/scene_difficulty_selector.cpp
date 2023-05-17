@@ -84,6 +84,7 @@ SceneId acceptDifficultySelector(GLFWwindow* window) {
     // Background
     Texture2D backgroundTexture = ResourceManager::loadTexture("assets/img/difficulty/fundo.png", "difficultySelectorBackground");
     Sprite backgroundImage(backgroundTexture);
+    backgroundImage.setSize(width, height);
 
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, width, height);
