@@ -48,16 +48,6 @@ void sortMenuItems(Menu* menu) {
 void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
 
-    // Up and Down to select the song
-    if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
-        menu->previous();
-        GameInfo::selectedSong = menu->getItemIndex();
-    }
-    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
-        menu->next();
-        GameInfo::selectedSong = menu->getItemIndex();
-    }
-
     // Left and right to change ordering
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
         musicSelectSortType--;
@@ -132,10 +122,26 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     Sprite backgroundImage(backgroundTexture);
     backgroundImage.setSize(screenWidth, screenHeight);
 
+    double lastPressTime = 0.0;
+
     while (!glfwWindowShouldClose(window)) {
         glViewport(0, 0, screenWidth, screenHeight);
         glfwPollEvents();
 
+        double currentTime = glfwGetTime();
+
+        // Up and Down to select the song
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS && (currentTime - lastPressTime) > 0.1) {
+            lastPressTime = currentTime;
+            musicSelectorMenu.previous();
+            GameInfo::selectedSong = musicSelectorMenu.getItemIndex();
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS && (currentTime - lastPressTime) > 0.1) {
+            lastPressTime = currentTime;
+            musicSelectorMenu.next();
+            GameInfo::selectedSong = musicSelectorMenu.getItemIndex();
+        }
+        
         // Clear color buffer
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);

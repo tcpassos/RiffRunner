@@ -121,7 +121,7 @@ unsigned int SongNote::hold(unsigned int positionY) {
             note->setPosition(note->getPosition().x, positionY);
             tail->setPosition(note->getPosition().x, positionY);
         }
-        tail->setColor(glm::vec3(0.0, 0.85, 1.0));
+        tail->setRadius(0.0035);
 
         // Calculate intensity based on current time
         double duration = 2.0;

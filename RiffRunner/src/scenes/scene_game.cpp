@@ -115,7 +115,7 @@ SceneId acceptGame(GLFWwindow* window) {
     track.setSize(windowWidth / 4, windowHeight);
     track.setOrigin(track.getSize().x / 2, track.getSize().y);
     track.setPosition(windowWidth / 2, windowHeight);
-    track.setOpacity(0.8);
+    track.setColor(glm::vec4(0.6, 0.6, 0.6, 0.6));
     track.getProjection()->setRotation(glm::vec3(glm::radians(-50.0f), 0.0f, 0.0f));
 
     // Fckin math
