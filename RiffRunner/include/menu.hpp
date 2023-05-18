@@ -54,7 +54,7 @@ public:
         return sortedItems[selectedItem].item.label;
     }
 
-    int addItem(string label, string groupName = "Outros") {
+    int addItem(string label, string groupName = "") {
         int newItemIndex = menuItems.size();
         menuItems.push_back({ label, true });
         sortedItems.push_back({ { label, true }, newItemIndex });
@@ -71,6 +71,12 @@ public:
         }
 
         return newItemIndex;
+    }
+
+    void clearItems() {
+        groups.clear();
+        sortedItems.clear();
+        menuItems.clear();
     }
 
     void previous() {
@@ -115,7 +121,9 @@ public:
     void sort() {
         sortedItems.clear();
         for (auto group : groups) {
-            sortedItems.push_back({ { group.first, false }, -1 });
+            if (!group.first.empty()) {
+                sortedItems.push_back({ { group.first, false }, -1 });
+            }
             for (int itemIndex : group.second) {
                 sortedItems.push_back({ menuItems[itemIndex], itemIndex });
             }

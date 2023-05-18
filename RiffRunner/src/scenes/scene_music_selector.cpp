@@ -11,12 +11,44 @@
 namespace fs = std::filesystem;
 
 // ======================================================================================
+// Sort menu items
+// ======================================================================================
+#define MENU_SORT_BY_ARTIST 0
+#define MENU_SORT_BY_NAME 1
+#define MENU_SORT_BY_FOLDER 2
+int musicSelectSortType = 0;
+
+void sortMenuItems(Menu* menu) {
+    menu->clearItems();
+
+    for (auto song : GameInfo::songs) {
+        if (musicSelectSortType == MENU_SORT_BY_ARTIST) {
+            menu->addItem(song.name, song.artist);
+        } else if (musicSelectSortType == MENU_SORT_BY_NAME) {
+            menu->addItem(song.name, song.name.substr(0, 1));
+        } else if (musicSelectSortType == MENU_SORT_BY_FOLDER) {
+            fs::path songPath(song.path);
+            std::string songParent = songPath.parent_path().string();
+            menu->addItem(song.name, songParent.substr(songParent.find("songs") + 5));
+        }
+    }
+
+    menu->sort();
+
+    if (GameInfo::selectedSong >= 0) {
+        menu->setSelectedItem(GameInfo::selectedSong);
+    } else {
+        GameInfo::selectedSong = menu->getItemIndex();
+    }
+}
+
+// ======================================================================================
 // Keyboard navigation keys callback
 // ======================================================================================
 void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int action, int mods) {
     Menu* menu = (Menu*)glfwGetWindowUserPointer(window);
 
-    //Left and Right to select the song
+    // Up and Down to select the song
     if (key == GLFW_KEY_UP && action == GLFW_PRESS) {
         menu->previous();
         GameInfo::selectedSong = menu->getItemIndex();
@@ -24,6 +56,22 @@ void key_callback_music_selector(GLFWwindow* window, int key, int scancode, int 
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS) {
         menu->next();
         GameInfo::selectedSong = menu->getItemIndex();
+    }
+
+    // Left and right to change ordering
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS) {
+        musicSelectSortType--;
+        if (musicSelectSortType < 0) {
+            musicSelectSortType = 2;
+        }
+        sortMenuItems(menu);
+    }
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS) {
+        musicSelectSortType++;
+        if (musicSelectSortType > 2) {
+            musicSelectSortType = 0;
+        }
+        sortMenuItems(menu);
     }
 
     //Go to difficulty selector with ENTER
@@ -66,14 +114,8 @@ SceneId acceptMusicSelector(GLFWwindow* window) {
     std::vector<Texture2D> albumCoverTextures;
     for (auto song : GameInfo::songs) {
         albumCoverTextures.push_back(ResourceManager::getTexture(song.path));
-        musicSelectorMenu.addItem(song.name, song.artist);
     }
-    musicSelectorMenu.sort();
-    if (GameInfo::selectedSong >= 0) {
-        musicSelectorMenu.setSelectedItem(GameInfo::selectedSong);
-    } else {
-        GameInfo::selectedSong = musicSelectorMenu.getItemIndex();
-    }
+    sortMenuItems(&musicSelectorMenu);
 
     // Album cover
     Sprite albumCover(albumCoverTextures[GameInfo::selectedSong]);
